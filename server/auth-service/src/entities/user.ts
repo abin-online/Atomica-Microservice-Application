@@ -1,4 +1,4 @@
-export interface IUser {
+export interface Iuser {
     _id?: string,
     role?: string,
     name: string,
