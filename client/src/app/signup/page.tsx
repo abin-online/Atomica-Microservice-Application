@@ -1,6 +1,52 @@
+"use client";
+
 import React from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+
 
 const SignUpPage: React.FC = () => {
+    
+    const router = useRouter();
+    const handleSignup = ()=> {
+        router.push(`signup`)
+    };
+
+    type signup = {
+        firstName: String
+        lastName: String
+        email: String
+        password: String
+        confirmPassword: String
+        phone: number
+
+    }
+
+    const { register, handleSubmit, getValues, formState: { errors }} = useForm<Login>();
+
+    const onSubmit = async (data: signup) => {
+        try {
+            let response = await axios.post(`${AUTH_SERVICE_URL}/user-login`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+
+            const user = response.data.user;
+            if(response.data.success) {
+                localStorage.setItem('user', JSON.stringify(user));
+                toast.success('user registered');
+                setTimeout(()=> {
+                    router.replace(`home`)
+                },3000)
+            }
+        } catch (error) {
+            
+        }
+    }
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             {/* Centered Container */}
@@ -23,22 +69,28 @@ const SignUpPage: React.FC = () => {
                         <p className="text-sm text-center text-gray-500">
                             Fill in the details to sign up
                         </p>
-                        <form className="space-y-4 mt-6">
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
                             {/* Name Input */}
                             <div>
                                 <label
                                     htmlFor="name"
                                     className="block text-sm font-medium text-gray-700"
                                 >
-                                    Full Name
+                                    First Name
                                 </label>
                                 <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    required
-                                    className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                />
+                            {...register("firstName", {
+                                required: "First name is required",
+                                pattern: {
+                                    value: /^(?=.{1,15}$)[A-Za-z][A-Za-z0-9._]*$/,
+                                    message:
+                                        "Username can only contain letters, numbers, periods, and underscores. It must start with a letter.",
+                                },
+                            })}
+                            type='text'
+                            placeholder="First Name"
+                            className="w-full px-4 py-2 text-lg text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
                             </div>
 
                             {/* Email Input */}
