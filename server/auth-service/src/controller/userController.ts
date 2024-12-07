@@ -1,6 +1,7 @@
 import { Req, Res, Next } from "../framework/types/serverTypes";
 import { Iuser_use_case } from "../usecases/interface/usecase/user_use_case";
 import { access_token_options, refresh_token_options } from "../framework/api/middleware/token";
+import ErrorHandler from "../usecases/middlewares/errorHandler";
 
 export class UserController {
     private user_use_case: Iuser_use_case
@@ -24,7 +25,22 @@ export class UserController {
                 })
             }
         } catch (error : any) {
-            return error
+            return next(new ErrorHandler(error.status, error.message))
+        }
+    }
+
+    async create_user(req: Req, res: Res, next: Next) {
+        try {
+            const token = req.headers['x-verify-token']
+            if(typeof token != 'string'){
+                throw new ErrorHandler(400, 'Invalid token')
+            }
+            const user = await this.user_use_case.create_user(token as string, req.body.otp, next)
+            if(user) {
+                res.clearCookie('verification_token').send(user)
+            }
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status, error.message))
         }
     }
 
