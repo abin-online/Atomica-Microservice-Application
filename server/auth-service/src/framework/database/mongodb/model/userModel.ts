@@ -1,7 +1,7 @@
 import { Model, model, Schema } from "mongoose";
-import { IUser } from '../../../../entities/user';
+import { Iuser } from '../../../../entities/user';
 
-const userSchema: Schema<IUser> = new Schema({
+const userSchema: Schema<Iuser> = new Schema({
     name: {
         type: String,
         required: true
@@ -24,5 +24,5 @@ const userSchema: Schema<IUser> = new Schema({
     }
 })
 
-const userModel: Model<IUser> = model('user', userSchema)
+const userModel: Model<Iuser> = model('user', userSchema)
 export default userModel
