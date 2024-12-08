@@ -43,8 +43,6 @@ export class UserController {
             return next(new ErrorHandler(error.status, error.message))
         }
     }
-
-    
 }
 
 
