@@ -1,16 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
-
+import { useRouter } from "next/navigation";
+import { AUTH_SERVICE_URL } from "@/utils/constants";
 
 const SignUpPage: React.FC = () => {
-    
+
+    const [isSubmitting , setSubmitting] = useState(false)
     const router = useRouter();
-    const handleSignup = ()=> {
+    const handleSignup = () => {
         router.push(`signup`)
     };
 
@@ -24,7 +25,7 @@ const SignUpPage: React.FC = () => {
 
     }
 
-    const { register, handleSubmit, getValues, formState: { errors }} = useForm<Login>();
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<signup>();
 
     const onSubmit = async (data: signup) => {
         try {
@@ -36,15 +37,15 @@ const SignUpPage: React.FC = () => {
             });
 
             const user = response.data.user;
-            if(response.data.success) {
+            if (response.data.success) {
                 localStorage.setItem('user', JSON.stringify(user));
                 toast.success('user registered');
-                setTimeout(()=> {
+                setTimeout(() => {
                     router.replace(`home`)
-                },3000)
+                }, 3000)
             }
         } catch (error) {
-            
+
         }
     }
     return (
@@ -79,20 +80,40 @@ const SignUpPage: React.FC = () => {
                                     First Name
                                 </label>
                                 <input
-                            {...register("firstName", {
-                                required: "First name is required",
-                                pattern: {
-                                    value: /^(?=.{1,15}$)[A-Za-z][A-Za-z0-9._]*$/,
-                                    message:
-                                        "Username can only contain letters, numbers, periods, and underscores. It must start with a letter.",
-                                },
-                            })}
-                            type='text'
-                            placeholder="First Name"
-                            className="w-full px-4 py-2 text-lg text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                        />
+                                    {...register("firstName", {
+                                        required: "First name is required",
+                                        pattern: {
+                                            value: /^(?=.{1,15}$)[A-Za-z][A-Za-z0-9._]*$/,
+                                            message:
+                                                "Username can only contain letters, numbers, periods, and underscores. It must start with a letter.",
+                                        },
+                                    })}
+                                    type='text'
+                                    placeholder="First Name"
+                                    className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                />
                             </div>
-
+                            {/* Last Name */}
+                            <div>
+                                <label
+                                    htmlFor="name"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Last Name
+                                </label>
+                                <input
+                                    {...register("lastName", {
+                                        required: "last name is required",
+                                        pattern: {
+                                            value: /^(?=.{1,15}$)[A-Za-z][A-Za-z0-9._]*$/,
+                                            message:
+                                                "Username can only contain letters, numbers, periods, and underscores. It must start with a letter.",
+                                        },
+                                    })}
+                                    type='text'
+                                    className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                />
+                            </div>
                             {/* Email Input */}
                             <div>
                                 <label
@@ -102,6 +123,13 @@ const SignUpPage: React.FC = () => {
                                     Email
                                 </label>
                                 <input
+                                    {...register("email", {
+                                        required: "Email is required",
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                            message: "Please enter a valid email address.",
+                                        },
+                                    })}
                                     type="email"
                                     id="email"
                                     name="email"
@@ -109,7 +137,29 @@ const SignUpPage: React.FC = () => {
                                     className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 />
                             </div>
-
+                            {/* Phone */}
+                            <div>
+                                <label
+                                    htmlFor="email"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Phone
+                                </label>
+                                <input
+                                    {...register("phone", {
+                                        required: "Phone number is required",
+                                        pattern: {
+                                            value: /^\d{10}$/,
+                                            message: "Please enter a valid 10-digit mobile number.",
+                                        },
+                                    })}
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    required
+                                    className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                />
+                            </div>
                             {/* Password Input */}
                             <div>
                                 <label
@@ -119,6 +169,15 @@ const SignUpPage: React.FC = () => {
                                     Password
                                 </label>
                                 <input
+                                    {...register("password", {
+                                        required: "Enter password",
+                                        pattern: {
+                                            value:
+                                                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*()_+~`|}{[\]:;?><,./-]).{8,}$/,
+                                            message:
+                                                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character",
+                                        },
+                                    })}
                                     type="password"
                                     id="password"
                                     name="password"
@@ -136,6 +195,16 @@ const SignUpPage: React.FC = () => {
                                     Confirm Password
                                 </label>
                                 <input
+                                    {...register("confirmPassword", {
+                                        required: "Confirm Password",
+                                        validate: (value) => value === getValues("password") || "Passwords do not match",
+                                        pattern: {
+                                            value:
+                                                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*()_+~`|}{[\]:;?><,./-]).{8,}$/,
+                                            message:
+                                                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character",
+                                        },
+                                    })}
                                     type="password"
                                     id="confirmPassword"
                                     name="confirmPassword"
@@ -149,6 +218,7 @@ const SignUpPage: React.FC = () => {
                                 <button
                                     type="submit"
                                     className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    disabled={isSubmitting}
                                 >
                                     Sign Up
                                 </button>
@@ -176,7 +246,7 @@ const SignUpPage: React.FC = () => {
 
                         <p className="text-sm text-center text-gray-500 mt-6">
                             Already have an account?{" "}
-                            <a href="/login" className="text-blue-500 hover:underline">
+                            <a href={"/login"} className="text-blue-500 hover:underline">
                                 Log in here
                             </a>
                         </p>
