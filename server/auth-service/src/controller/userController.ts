@@ -11,7 +11,7 @@ export class UserController {
     async signup(req: Req, res: Res, next: Next) {
         try {
             const {name, email, password} = req.body;
-            const token = await this.user_use_case.user_signup({name, email, password}, next)
+            const token = await this.user_use_case.userSignup({name, email, password}, next)
             if(token) {
                 res.cookie('verification_token', 'token', {
                     httpOnly: true,
