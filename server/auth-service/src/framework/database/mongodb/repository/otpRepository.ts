@@ -4,7 +4,9 @@ import otpModel from "../model/otpModel";
 
 
 export class OtpRepository implements IotpRepository {
-    constructor() { }
+    constructor() {
+        
+    }
     async createOtp(email: string, otp: string): Promise<Iotp> {
         try {
             const result = await otpModel.create({ email, otp })
