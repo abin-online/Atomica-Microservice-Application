@@ -1,3 +1,7 @@
+----------------------
+AUTHENTICATION SERVICE 
+----------------------
+
 auth-service/src/
 │
 ├── controller/                             # Handles HTTP request logic
