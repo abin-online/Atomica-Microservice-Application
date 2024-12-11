@@ -4,15 +4,17 @@ import { access_token_options, refresh_token_options } from "../framework/api/mi
 import ErrorHandler from "../usecases/middlewares/errorHandler";
 
 export class UserController {
-    private user_use_case: Iuser_use_case
-    constructor(user_use_case: Iuser_use_case) {
-        this.user_use_case = user_use_case
+    private userUserCase: Iuser_use_case
+    constructor(userUserCase: Iuser_use_case) {
+        this.userUserCase = userUserCase
     }
     async signup(req: Req, res: Res, next: Next) {
         try {
-            const {name, email, password} = req.body;
-            const token = await this.user_use_case.userSignup({name, email, password}, next)
-            if(token) {
+            console.log('Haii', req.body)
+            const { name, email, password } = req.body;
+            const token = await this.userUserCase.userSignup({ name, email, password }, next)
+            console.log('token kidachaach => ' , token)
+            if (token) {
                 res.cookie('verification_token', 'token', {
                     httpOnly: true,
                     sameSite: 'none',
@@ -21,22 +23,24 @@ export class UserController {
                 res.status(200).json({
                     success: true,
                     message: 'verification otp has been send to this email',
-                    verify_token: token
+                    verifyToken: token
                 })
             }
-        } catch (error : any) {
+        } catch (error: any) {
             return next(new ErrorHandler(error.status, error.message))
         }
     }
 
     async create_user(req: Req, res: Res, next: Next) {
         try {
+            console.log(req.headers)
             const token = req.headers['x-verify-token']
-            if(typeof token != 'string'){
+            console.log('created user ===> ', token)
+            if (typeof token != 'string') {
                 throw new ErrorHandler(400, 'Invalid token')
             }
-            const user = await this.user_use_case.create_user(token as string, req.body.otp, next)
-            if(user) {
+            const user = await this.userUserCase.create_user(token as string, req.body.otp, next)
+            if (user) {
                 res.clearCookie('verification_token').send(user)
             }
         } catch (error: any) {
