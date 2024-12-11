@@ -27,7 +27,11 @@ export class UserUseCase implements Iuser_use_case {
                 this.jwt,
                 this.otpRepository,
                 this.userRepository,
-                user, next
+                this.otpGenerate,
+                this.hashPassword,
+                user,
+                this.sentEmail,
+                next
             )
             console.log('the toke', toke)
             return toke
@@ -55,7 +59,7 @@ export class UserUseCase implements Iuser_use_case {
         }
     }
 
-    async login(email : string, password: string, next: Next): Promise<any | void> {
+    async login(email: string, password: string, next: Next): Promise<any | void> {
         try {
             return await login(this.userRepository, this.jwt, this.hashPassword, email, password, next)
         } catch (error) {
