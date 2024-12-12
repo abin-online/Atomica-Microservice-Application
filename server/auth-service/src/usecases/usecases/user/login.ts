@@ -16,11 +16,16 @@ export const login = async (userRepository: IuserRepository, jwt: IJwt, hashPass
             return next(new ErrorHandler(400, 'access denied'))
         }
         const comparePassword = await hashPassword.compareHashPassword(password, user.password)
+
         if (!comparePassword) {
             return next(new ErrorHandler(400, 'incorrect password'))
         }
         const token: any = await jwt.create_access_and_refresh_token(user._id as string)
         token.role = 'user'
+        return {
+            user, 
+            token
+        }
     } catch (error) {
         throw error
     }
