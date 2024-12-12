@@ -13,7 +13,7 @@ export class UserController {
             console.log('Haii', req.body)
             const { name, email, password } = req.body;
             const token = await this.userUserCase.userSignup({ name, email, password }, next)
-            console.log('token kidachaach => ' , token)
+            console.log('token go => ' , token)
             if (token) {
                 res.cookie('verification_token', 'token', {
                     httpOnly: true,
@@ -45,6 +45,91 @@ export class UserController {
             }
         } catch (error: any) {
             return next(new ErrorHandler(error.status, error.message))
+        }
+    }
+
+    async login(req: Req, res: Res, next: Next) {
+        try {
+            console.log(req.body, 'user login')
+            const user = await this.userUserCase.login(req.body.email, req.body.password, next)
+            //console.log(user, 'user in controller')
+
+            if (user) {
+                //console.log(user.token, 'user token')
+                //console.log(access_token_options, 'the access token option')
+                res.cookie('accesToken', {accessToken:user.token.access_token, accessTokenOptions:access_token_options}, {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    expires: new Date(Date.now() + 300 * 60 * 1000)
+                })
+                res.json(user)
+
+            }
+        } catch (error: any) {
+            console.log('comming in login err')
+        }
+    }
+
+    // async resendOTP(req: Req, res:Res, next: Next) {
+    //     try {
+    //         const newOtp = this.userUserCase.resendOtp(req.body.email, next)
+
+    //     } catch (error: any) {
+            
+    //     }
+    // }
+
+    async forgotPassword(req: Req, res: Res, next: Next) {
+        try {
+            const result = await this.userUserCase.forgotPasswordRemainder(req.body.email, next)
+            if (result) {
+                console.log(result)
+                res.send(result).status(201)
+            }
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status, error.message))
+        }
+    }
+
+    async createNewPassword(req: Req, res: Res, next: Next) {
+        try {
+
+            const result = await this.userUserCase.emailVerify(req.body.email, req.body.otp, next)
+            if (result) {
+                console.log(result)
+                res.send(result).status(201)
+            }
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status, error.message))
+        }
+
+    }
+
+    async googleLogin(req: Req, res: Res, next: Next) {
+        try {
+            console.log('google login in controller', req.body)
+            const user: any = await this.userUserCase.googleLogin(req.body.name, req.body.email, req.body.password, next)
+            console.log(user, 'the user afther creation in controller google')
+            if (user) {
+                console.log(user.token, 'user token')
+
+                res.cookie('accesToken', user.token.accessToken, access_token_options)
+                res.send(user)
+            }
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status, error.message))
+        }
+    }
+
+
+    async logout(req: Req, res: Res, next: Next) {
+        try {
+            res.clearCookie('accessToken', access_token_options)
+            res.clearCookie('refreshToken', refresh_token_options)
+            res.status(200).json({ succuss: true, message: 'logout success' })
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status, error.message))
+
         }
     }
 }
