@@ -1,4 +1,4 @@
-const DOMAIN = `http://localhost:3000/`
+const DOMAIN = `http://localhost:4001/`
 
 const AUTH_SERVICE_DOMAIN = DOMAIN;
 
