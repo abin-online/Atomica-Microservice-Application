@@ -9,13 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.1",
+    "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
+    "firebase": "^11.0.2",
+    "framer-motion": "^11.13.5",
+    "jwt-decode": "^4.0.0",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-hook-form": "^7.54.0",
-    "react-toastify": "^10.0.6"
+    "react-hot-toast": "^2.4.1",
+    "react-redux": "^9.2.0",
+    "react-toastify": "^10.0.6",
+    "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
+    "toastify": "^2.0.1"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
