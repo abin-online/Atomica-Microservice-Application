@@ -6,8 +6,10 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { signup } from "@/api/user";
+import userAuth from "@/api/middleware/middleware";
 
 const SignUpPage: React.FC = () => {
+  userAuth()
   const [isSubmitting, setSubmitting] = useState(false);
   const router = useRouter();
 

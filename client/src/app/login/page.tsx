@@ -8,9 +8,14 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { login } from "@/api/user";
+import { useAppDispatch } from "@/lib/hook";
+import { setUser } from "@/lib/features/users/userSlice";
+import userAuth from "@/api/middleware/middleware";
 
 function Page() {
+  userAuth()
   const router = useRouter();
+  const dispatch = useAppDispatch()
   const handleSignup = () => {
     router.push(`signup`);
   };
@@ -35,7 +40,15 @@ const onSubmit = async (data: Login) => {
     if (user) {
       // Store user data in localStorage and show success toast
       localStorage.setItem("user", JSON.stringify(user));
-      toast.success("Welcome");
+      toast.success("Welcome to atomica");
+      console.log('user data ___________>', user)
+      
+      dispatch((setUser({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        blocked: user.is_blocked
+      })))
 
       // Redirect to home page after a brief delay
       setTimeout(() => {
