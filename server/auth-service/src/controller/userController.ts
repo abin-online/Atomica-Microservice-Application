@@ -14,6 +14,7 @@ export class UserController {
             const { name, email, password } = req.body;
             const token = await this.userUserCase.userSignup({ name, email, password }, next)
             console.log('token go => ' , token)
+
             if (token) {
                 res.cookie('verification_token', 'token', {
                     httpOnly: true,
@@ -124,9 +125,11 @@ export class UserController {
 
     async logout(req: Req, res: Res, next: Next) {
         try {
+            console.log('user logged out')
+            console.log(access_token_options , refresh_token_options)
             res.clearCookie('accessToken', access_token_options)
             res.clearCookie('refreshToken', refresh_token_options)
-            res.status(200).json({ succuss: true, message: 'logout success' })
+            res.status(200).json({ success: true, message: 'logout success' })
         } catch (error: any) {
             return next(new ErrorHandler(error.status, error.message))
 
