@@ -37,8 +37,8 @@ export function UserRoute(router:  Route) {
         userController.googleLogin(req, res, next);
     })
 
-    router.post('/logout', isUser, async (req: Req, res: Res, next: Next) => {
-        console.log('comming into logout')
+    router.post('/logout', async (req: Req, res: Res, next: Next) => {
+        console.log('coming into logout')
         userController.logout(req, res, next);
     })
 }
