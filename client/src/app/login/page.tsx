@@ -11,8 +11,10 @@ import { login } from "@/api/user";
 import { useAppDispatch } from "@/lib/hook";
 import { setUser } from "@/lib/features/users/userSlice";
 import userAuth from "@/api/middleware/middleware";
+import { RootState } from "@/lib/store";
 
 function Page() {
+
   userAuth()
   const router = useRouter();
   const dispatch = useAppDispatch()
