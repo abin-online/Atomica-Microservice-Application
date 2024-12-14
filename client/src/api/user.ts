@@ -49,3 +49,14 @@ export const resendOtp = async (email : string)=> {
         return error
     }
 }
+
+export const logOut = async () => {
+    try {
+        
+        const response = await API.post(userRoutes.logOut)
+        return response.data
+
+    } catch (error) {
+        return error
+    }
+}
