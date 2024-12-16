@@ -23,7 +23,7 @@ export class AdminController {
         try {
             res.clearCookie('accessToken', access_token_options)
             res.clearCookie('refreshToken', refresh_token_options)
-            res.status(200).json({ succuss: true, message: 'logout success' })
+            res.status(200).json({ success: true, message: 'logout success' })
         } catch (error: any) {
             return next(new ErrorHandler(error.status, error.message))
 
@@ -41,6 +41,8 @@ export class AdminController {
     }
     async blockUser(req: Req, res: Res, next: Next) {
         try {
+            console.log('inside the block user' , req.body.userId)
+
             const user = await this.adminUseCase.blockUser(req.body.userId, next)
             console.log(user)
             if (user) {

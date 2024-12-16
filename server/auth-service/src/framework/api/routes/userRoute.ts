@@ -23,9 +23,10 @@ export function UserRoute(router:  Route) {
         userController.forgotPassword(req, res, next)
     })
 
-    // router.post('/resendOtp' , async(req: Req, res: Res, next: Next) => {
-    //     userController.resendOTP(req, res, next)
-    // })
+    router.post('/resendOtp' , async(req: Req, res: Res, next: Next) => {
+        console.log('resending')
+        userController.resendOTP(req, res, next)
+    })
     
     router.post('/createNewPassword', async (req: Req, res: Res, next: Next) => {
         console.log('comming in createNew password')

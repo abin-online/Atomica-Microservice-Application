@@ -8,4 +8,5 @@ export interface Iuser_use_case {
     forgotPasswordRemainder(email: string, next: Next): Promise<object | void>
     googleLogin(name: string, email: string, passsword: string, next: Next): Promise<object | void>
     emailVerify(email: string, otp: string, next: Next): Promise<object | void>
+    resendOtp(email : string , next : Next) : Promise<object | void>
 }

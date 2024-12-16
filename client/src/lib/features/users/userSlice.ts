@@ -28,8 +28,8 @@ const userSlice = createSlice({
             state.name = ''
             state.role = ''
             state.email = ''
-            state.blocked = false
-        }
+        },
+
 
     }
 })

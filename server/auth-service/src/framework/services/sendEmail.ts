@@ -50,7 +50,7 @@ export class SentEmail implements IsentEmail {
                 `,
             };
             
-            
+
         
             try {
                 const info = await transporter.sendMail(mailOptions);

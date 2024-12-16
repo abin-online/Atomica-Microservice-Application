@@ -4,7 +4,7 @@ import { access_token_options, refresh_token_options } from "../framework/api/mi
 import ErrorHandler from "../usecases/middlewares/errorHandler";
 
 export class UserController {
-    private userUserCase: Iuser_use_case
+    private   userUserCase: Iuser_use_case
     constructor(userUserCase: Iuser_use_case) {
         this.userUserCase = userUserCase
     }
@@ -34,6 +34,8 @@ export class UserController {
 
     async create_user(req: Req, res: Res, next: Next) {
         try {
+            console.log('request______>',req)
+
             console.log(req.headers)
             const token = req.headers['x-verify-token']
             console.log('created user ===> ', token)
@@ -71,14 +73,21 @@ export class UserController {
         }
     }
 
-    // async resendOTP(req: Req, res:Res, next: Next) {
-    //     try {
-    //         const newOtp = this.userUserCase.resendOtp(req.body.email, next)
-
-    //     } catch (error: any) {
-            
-    //     }
-    // }
+    async resendOTP(req: Req, res: Res, next: Next) {
+        try {
+            console.log("resend otp------------------>",req.body)
+            const newOtp = await this.userUserCase.resendOtp(req.body.email, next);
+            console.log('----------------', newOtp)
+            if (newOtp) {
+                res.status(201).json({ success: true, message: "OTP resent successfully", otp: newOtp });
+            } else {
+                throw new ErrorHandler(500, "Failed to resend OTP");
+            }
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status || 500, error.message || "Internal Server Error"));
+        }
+    }
+    
 
     async forgotPassword(req: Req, res: Res, next: Next) {
         try {
@@ -126,7 +135,7 @@ export class UserController {
     async logout(req: Req, res: Res, next: Next) {
         try {
             console.log('user logged out')
-            console.log(access_token_options , refresh_token_options)
+            //console.log(access_token_options , refresh_token_options)
             res.clearCookie('accessToken', access_token_options)
             res.clearCookie('refreshToken', refresh_token_options)
             res.status(200).json({ success: true, message: 'logout success' })

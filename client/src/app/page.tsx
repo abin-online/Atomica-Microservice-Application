@@ -11,8 +11,11 @@ import { removeUser } from '@/lib/features/users/userSlice';
 import { useRouter } from 'next/navigation';
 import { logOut } from '@/api/user';
 import toast from 'react-hot-toast';
+import { useConfirmationDialog } from './customHooks/useConfirmationDialog';
 
 const NavBar = () => {
+
+  const { dialog, openDialog } = useConfirmationDialog();
 
   const router = useRouter(); 
   const user = useAppSelector((state: RootState) => state.user);
@@ -30,13 +33,23 @@ const NavBar = () => {
 
    const response = await logOut()
     if(response.message == 'logout success') {
-      dispatch(removeUser())
+      console.log('user logouted',dispatch(removeUser()))
       toast.success('Logged out successfully')
     }else{
       toast.error('Something error')
     }
 
+
+
   }
+
+  const confirmLogOut = () => {
+    openDialog({
+      title: "Logout Confirmation",
+      message: "Are you sure you want to log out?",
+      onConfirm: handleLogOut,
+    });
+  };
 
   return (
     <div className="flex justify-between sm:justify-start shadow-lg mb-1 p-4">
@@ -48,7 +61,7 @@ const NavBar = () => {
       {/* Desktop Navigation */}
       <div className="sm:flex hidden">
         <div className="flex items-center">
-          <ul className="flex p-4 m-12 gap-10 text-xl font-medium">
+          <ul className="flex p-4 m-3 gap-10 text-base font-medium">
             <li className="transform hover:scale-105 transition duration-300">
               <Link href="/">ATOMICA</Link>
             </li>
@@ -66,7 +79,7 @@ const NavBar = () => {
                 onClick={() => {
                   if (user.id) {
                     
-                    handleLogOut();
+                    confirmLogOut();
                   } else {
                     
                     router.push('/login'); // Redirect to /login route
@@ -107,7 +120,7 @@ const NavBar = () => {
                 onClick={() => {
                   if (user.id) {
                     
-                    handleLogOut();
+                    confirmLogOut();
                   } else {
                     
                     router.push('/login'); // Redirect to /login route
@@ -123,6 +136,7 @@ const NavBar = () => {
           </div>
         )}
       </div>
+      {dialog}
     </div>
   );
   

@@ -9,6 +9,7 @@ export class UserRepository implements IuserRepository {
     ){}
 
     async blockUser(id: string) : Promise <Iuser | void> {
+        console.log("user repo =>",id)
         return await block(id, this.userModels)
     }
 

@@ -1,3 +1,3 @@
 export interface IotpGenerate {
-    createOtp(): Promise <string>
+    createOtpDigit(): Promise <string>
 }

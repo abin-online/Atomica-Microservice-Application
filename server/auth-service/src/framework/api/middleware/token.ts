@@ -1,4 +1,4 @@
-const access_token_expire = parseInt(process.env.ACCESS_TOKEN_EXPIRE || '3000', 100);
+const access_token_expire = parseInt(process.env.ACCESS_TOKEN_EXPIRE || '3000', 10);
 const refresh_token_expire = parseInt(process.env.REFRESH_TOKEN_EXPIRE || '1200', 10)
 
 interface Itoken_options {

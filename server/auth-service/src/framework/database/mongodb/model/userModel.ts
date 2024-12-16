@@ -15,7 +15,7 @@ const userSchema: Schema<Iuser> = new Schema({
         required: true
     },
     is_blocked: {
-        type: String,
+        type: Boolean,
         default: false
     },
     is_verified: {
