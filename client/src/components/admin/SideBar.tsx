@@ -3,7 +3,7 @@
 // components/Sidebar.js
 import { useState } from 'react';
 import Link from 'next/link';
-import { FiHome, FiSettings, FiUsers, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiUsers,FiArrowRightCircle,FiArrowLeftCircle,  FiLogOut, FiAlertTriangle, FiOctagon } from 'react-icons/fi';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -15,7 +15,8 @@ const Sidebar = () => {
   const menuItems = [
     { name: 'Home', icon: <FiHome />, path: '/' },
     { name: 'Users', icon: <FiUsers />, path: '/admin/users' },
-    { name: 'Settings', icon: <FiSettings />, path: '/settings' },
+    { name: 'Quick Test', icon: <FiOctagon />, path: '/admin/quickTest' },
+    { name: 'Problem', icon: <FiAlertTriangle />, path: '/admin/problem' },
     { name: 'Logout', icon: <FiLogOut />, path: '/logout' },
   ];
 
@@ -40,7 +41,7 @@ const Sidebar = () => {
             key={index}
             className="flex items-center gap-x-4 p-2 my-4 hover:bg-gray-700 rounded-lg cursor-pointer"
           >
-            <div className="text-xl">{item.icon}</div>
+            <div className="text-2xl">{item.icon}</div>
             <Link href={item.path}>
               <span className={`text-base font-medium ${isOpen ? '' : 'hidden'}`}>
                 {item.name}
@@ -51,8 +52,8 @@ const Sidebar = () => {
       </ul>
 
       <div className="flex items-center gap-x-4">
-        <button onClick={toggleSidebar} className="text-xl">
-          {isOpen ? '◁' : '▷'}
+        <button onClick={toggleSidebar} className="text-4xl">
+          {isOpen ? <FiArrowRightCircle/> : <FiArrowLeftCircle/>}
         </button>
       </div>
     </div>
