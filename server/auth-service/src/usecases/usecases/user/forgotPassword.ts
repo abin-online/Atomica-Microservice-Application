@@ -12,7 +12,7 @@ export const forgotPassword = async (sentEmail: IsentEmail, otpRepository: IotpR
             return next(new ErrorHandler(400, 'Invalid user'));
 
         }
-        const otp = await otpGenerate.createOtp()
+        const otp = await otpGenerate.createOtpDigit()
         await otpRepository.createOtp(user.email, otp)
         await sentEmail.sentEmailVerification(user.name, user.email, otp)
         return {

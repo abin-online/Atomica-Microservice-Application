@@ -11,7 +11,7 @@ export const forgotPassword = async (sentEmail: IsentEmail, otpRepository: IotpR
 
         const user = await userRepository.findByEmail(email)
         if (!user) return next(new ErrorHandler(400, 'invalid email id'))
-        const otp = await OtpGenerate.createOtp()
+        const otp = await OtpGenerate.createOtpDigit() //otp creation function
         await otpRepository.createOtp(user.email, otp)
         await sentEmail.sentEmailVerification(user.name, user.email, otp)
         return { message: 'otp sent succesfully' }
