@@ -8,14 +8,14 @@ import { catchError } from "../../middlewares/catchError";
 import { IotpGenerate } from "../../interface/service/otpGenerate";
 import { IhashPassword } from "../../interface/service/hashPassword";
 import { IsentEmail } from "../../interface/service/sentEmail";
-
+ 
 export const userSignup = async (jwt : IJwt, otpRepository: IotpRepository, userRepository: IuserRepository,otpGenerate:IotpGenerate, hashPassword:IhashPassword, user: Iuser, sentEmail:IsentEmail,  next: Next) : Promise <string | void> => {
     try {
         const userExist = await userRepository.findByEmail(user.email)
         if(userExist){
             return next(new ErrorHandler(400, 'user already exist'))
         }
-        const otp = await otpGenerate.createOtp()
+        const otp = await otpGenerate.createOtpDigit()
         await otpRepository.createOtp(user.email, otp)
         await sentEmail.sentEmailVerification(user.name,user.email,otp)
         const hashPasswords = await hashPassword.createHash(user.password as string)
