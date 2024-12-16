@@ -12,6 +12,7 @@ import { userSignup, createUser, login } from "./user/index";
 import { forgotPassword } from "./user/forgotPassword";
 import { googleLogin } from "./user/googleLogin";
 import { emailVerify } from "./user/emailVerify";
+import { resendOtp } from "./user/resendOtp";
 
 export class UserUseCase implements Iuser_use_case {
     constructor(
@@ -94,6 +95,25 @@ export class UserUseCase implements Iuser_use_case {
             catchError(error, next)
         }
     }
+
+    async resendOtp(email : string , next : Next) : Promise<object | void> {
+        try {
+            //export const resendOtp = async ( otpRepository: IotpRepository, userRepository: IuserRepository,otpGenerate: IotpGenerate,sentEmail: IsentEmail,email: string,next: Next
+
+            const result =  await resendOtp(this.otpRepository, this.userRepository, this.otpGenerate , this.sentEmail , email , next)
+            
+            if (typeof result === "string") {
+                console.log('otttp')
+                return { message: result }; 
+            }
+            return result;
+
+              
+        } catch (error) {
+            
+        }
+    }
+
 
 
 }
