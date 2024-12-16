@@ -4,87 +4,87 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { resendOtp, verifyOTP } from '@/api/user';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import axios from 'axios';
 
-const OTPPage: React.FC<{ params: { email: string } }> = ({ params }) => {  const router = useRouter();
-  
-  const [email, setEmail] = useState<string>('');
+const OTPPage: React.FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const email = pathname.split('/').pop() || ''
+
   const [otp, setOtp] = useState<string[]>(Array(4).fill(''));
-  const [counter, setCounter] = useState<number>(60);
+  const [counter, setCounter] = useState<number>(10);
   const [resendDisabled, setResendDisabled] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (params) {
-      setEmail(params.email);
-    }
-  }, [params]);
-
-
-  useEffect(() => {
-    const timer: any =
-      counter > 0 &&
-      setInterval(() => {
+    if (counter > 0) {
+      const timer = setInterval(() => {
         setCounter((prev) => prev - 1);
       }, 1000);
-
-    if (counter === 0) {
+      return () => clearInterval(timer);
+    } else {
       setResendDisabled(false);
     }
-
-    return () => clearInterval(timer);
   }, [counter]);
 
-  type otpData = {
-    email : string;
-  }
-
-  const handleResend = async() => {
-    
-    setCounter(60);
-    setResendDisabled(true);
-    toast.success('OTP resent successfully!');
-    // Add functionality to resend OTP via API if required
+  const handleResend = async () => {
+    try {
+      console.log("Resending OTP for:", email);
+        // const response = await resendOtp(email);
+        let payload = {
+          "email": "abinbabuonline@gmail.com"
+        }
+        const response = await axios.post('http://localhost:4001/auth/user/resendOtp', payload);
+        console.log("Response from server:", response);
+      setCounter(10);
+      setResendDisabled(true);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to resend OTP');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
-    if (!/^\d*$/.test(value)) return; // otp validation
+    if (!/^\d*$/.test(value)) return;
 
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Automatic focus 
     if (value && index < otp.length - 1) {
       const nextSibling = document.getElementById(`otp-input-${index + 1}`);
       nextSibling?.focus();
+    } else if (!value && index > 0) {
+      const prevSibling = document.getElementById(`otp-input-${index - 1}`);
+      prevSibling?.focus();
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     const otpValue = otp.join('');
-    console.log(otpValue)
-    if (!email) {
-      console.log('email  =>', email)
-      toast.error('Email ID is missing or invalid');
+    if (otpValue.length !== otp.length) {
+      toast.error(`Please enter ${otp.length} digits`);
+      setIsSubmitting(false);
       return;
     }
 
-    if (otpValue.length === 4) {
-      try {
-        console.log("daaaaaaa",otpValue)
-        const response: any = await verifyOTP(otpValue, email);
-        if (response._id) {
-          toast.success('User Registered Successfully ');
-          return router.replace('/');
-        }
-        toast.error(response.response.data.message || 'Your verification is failed.');
-      } catch (error: any) {
-        toast.error(error.message || 'Something went wrong.');
+    try {
+      const response: any = await verifyOTP(otpValue, email);
+      if (response._id) {
+        toast.success('User Registered Successfully');
+        router.replace('/');
+      } else {
+        toast.error(response.response?.data?.message || 'Verification failed');
       }
-    } else {
-      toast.error(`Please enter ${otp.length} digits`);
+    } catch (error: any) {
+      toast.error(error.message || 'Something went wrong.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -107,7 +107,7 @@ const OTPPage: React.FC<{ params: { email: string } }> = ({ params }) => {  cons
                 maxLength={1}
                 value={value}
                 onChange={(e) => handleChange(e, index)}
-                className="w-12 h-12 text-xl text-center border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-12 h-12 text-xl text-center border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ))}
           </div>
@@ -127,12 +127,15 @@ const OTPPage: React.FC<{ params: { email: string } }> = ({ params }) => {  cons
             </span>
           </div>
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
+            whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isSubmitting}
+            className={`w-full px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 ${
+              isSubmitting ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
+            }`}
           >
-            Submit
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </motion.button>
         </form>
       </motion.div>
