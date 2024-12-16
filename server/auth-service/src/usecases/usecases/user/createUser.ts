@@ -27,6 +27,7 @@ export const createUser = async (token: string, otp: string, otpRepository: Iotp
         }
 
         const newUser = await userRepository.createUser(decode)
+        await otpRepository.findAndDeleteUser(decode.email)
         return newUser
     } catch (error) {
 
