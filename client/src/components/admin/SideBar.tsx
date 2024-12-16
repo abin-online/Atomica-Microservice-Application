@@ -22,9 +22,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`bg-gray-800 text-white h-screen p-5 pt-8 ${
-        isOpen ? 'w-64' : 'w-16'
-      } duration-300 relative`}
+      className={`bg-gray-800 text-white h-screen p-5 pt-8 ${isOpen ? 'w-64' : 'w-16'} duration-300 relative`}
     >
       {/* Logo */}
       <div className="flex items-center gap-x-4">
@@ -34,7 +32,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Menu Items */}
+      {/* Menu  */}
       <ul className="mt-10">
         {menuItems.map((item, index) => (
           <li
@@ -43,7 +41,7 @@ const Sidebar = () => {
           >
             <div className="text-2xl">{item.icon}</div>
             <Link href={item.path}>
-              <span className={`text-base font-medium ${isOpen ? '' : 'hidden'}`}>
+              <span className={`text-base font-medium  ${isOpen ? '' : 'hidden'} duration-700 relative`}>
                 {item.name}
               </span>
             </Link>
@@ -53,7 +51,7 @@ const Sidebar = () => {
 
       <div className="flex items-center gap-x-4">
         <button onClick={toggleSidebar} className="text-4xl">
-          {isOpen ? <FiArrowRightCircle/> : <FiArrowLeftCircle/>}
+          {isOpen ? <FiArrowLeftCircle/>  : <FiArrowRightCircle/>}
         </button>
       </div>
     </div>
