@@ -5,11 +5,19 @@ import otpModel from "../model/otpModel";
 
 export class OtpRepository implements IotpRepository {
     constructor() {
-        
+
     }
-    async createOtp(email: string, otp: string): Promise<Iotp> {
+    async createOtp( email: string, otp: string): Promise<Iotp> {
         try {
-            const result = await otpModel.create({ email, otp })
+            const result = await otpModel.findOneAndUpdate(
+                { email },
+                { email, otp },
+                {
+                    upsert: true,
+                    new: true
+                }
+            );
+            console.log('otp created' , result)
             setTimeout(async () => {
                 if (result?._id) {
                     await otpModel.findByIdAndDelete(result._id);
@@ -34,9 +42,8 @@ export class OtpRepository implements IotpRepository {
         }
     }
 
-    async findAndDeleteUser(email: string, otp: string): Promise<boolean> {
+    async findAndDeleteUser(email: string): Promise<boolean> {
         try {
-            const checking = await otpModel.findOne({ email })
             const result = await otpModel.findOneAndDelete({ email })
             if (result) {
                 if (result.otp) {
@@ -47,15 +54,6 @@ export class OtpRepository implements IotpRepository {
             } else {
                 return false
             }
-        } catch (error) {
-            throw error
-        }
-    }
-
-    async resendOtp(email: string, otp: string): Promise<void> {
-        try {
-            const resend = await otpModel.updateOne({ email: email }, { otp: otp }, { upsert: true })
-            return
         } catch (error) {
             throw error
         }

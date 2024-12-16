@@ -9,17 +9,17 @@ import { IsentEmail } from "../../interface/service/sentEmail";
 export const resendOtp = async ( otpRepository: IotpRepository, userRepository: IuserRepository,otpGenerate: IotpGenerate,sentEmail: IsentEmail,email: string,next: Next
 ): Promise<string | void> => {
   try {
-    
-    const user = await userRepository.findByEmail(email);
+    console.log('resendingggggg')
+    console.log(email)
+    // const user = await userRepository.findByEmail(email);
 
-    if (!user) {
-      return next(new ErrorHandler(404, "User not found"));
-    }
+    // if (!user) {
+    //   return next(new ErrorHandler(404, "User not found"));
+    // }
 
-    const newOtp = await otpGenerate.createOtp();
-  
-    await otpRepository.resendOtp(email, newOtp);
-    await sentEmail.sentEmailVerification(user.name, email, newOtp);
+    const newOtp = await otpGenerate.createOtpDigit();
+    await otpRepository.createOtp(email, newOtp)
+    await sentEmail.sentEmailVerification("", email, newOtp);
 
     return "OTP resented";
   } catch (error) {
