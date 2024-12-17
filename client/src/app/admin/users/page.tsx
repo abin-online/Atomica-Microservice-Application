@@ -48,47 +48,50 @@ const UsersPage = () => {
     }, [users]);
 
     return (
-        <div className="flex">
-            <Header />
-            <Sidebar />
-            <div className="flex-1 bg-gray-100 p-4">
-                <h1 className="text-xl font-bold mb-4">Users</h1>
-                <table className="w-full my-24 bg-white rounded-lg shadow-md overflow-hidden">
-                    <thead className="bg-gray-800 text-white">
-                        <tr>
-                            <th className="p-3 text-left">Name</th>
-                            <th className="p-3 text-left">Email</th>
-                            <th className="p-3 text-left">Status</th>
-                            <th className="p-3 text-left">Action</th>
-                            <th className="p-3 text-left">Joined</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user, index) => (
-                            <tr
-                                key={index}
-                                className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}
-                            >
-                                <td className="p-3">{user.name}</td>
-                                <td className="p-3">{user.email}</td>
-                                <td className="p-3">{user.is_blocked ? 'BLOCKED' : 'ACTIVE'}</td>
-                                <td className="p-3">
-                                    <button
-                                        onClick={() => handleBlock(user._id)}
-                                        className={`w-20 h-8 rounded-lg text-white ${
-                                            user.is_blocked ? 'bg-red-500' : 'bg-green-500'
-                                        }`}
-                                    >
-                                        {user.is_blocked ? 'UNBLOCK' : 'BLOCK'}
-                                    </button>
-                                </td>
-                                <td className="p-3">{user.joined || '13/12/2024'}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div className="flex bg-gray-100">
+  <Header />
+  <Sidebar />
+  <div className="flex-1 bg-gray-800 text-white p-4">
+    <h1 className="text-xl font-bold mb-4">Users</h1>
+    <table className="w-full my-24 bg-gray-700 rounded-lg shadow-md overflow-hidden">
+      <thead className="bg-gray-800">
+        <tr>
+          <th className="p-3 text-left text-white">Name</th>
+          <th className="p-3 text-left text-white">Email</th>
+          <th className="p-3 text-left text-white">Status</th>
+          <th className="p-3 text-left text-white">Action</th>
+          <th className="p-3 text-left text-white">Joined</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user, index) => (
+          <tr
+            key={index}
+            className={`${
+              index % 2 === 0 ? 'bg-gray-600' : 'bg-gray-700'
+            } hover:bg-gray-500 transition`}
+          >
+            <td className="p-3">{user.name}</td>
+            <td className="p-3">{user.email}</td>
+            <td className="p-3">{user.is_blocked ? 'BLOCKED' : 'ACTIVE'}</td>
+            <td className="p-3">
+              <button
+                onClick={() => handleBlock(user._id)}
+                className={`w-20 h-8 rounded-lg text-white ${
+                  user.is_blocked ? 'bg-red-500 hover:bg-red-400' : 'bg-green-500 hover:bg-green-400'
+                } transition`}
+              >
+                {user.is_blocked ? 'UNBLOCK' : 'BLOCK'}
+              </button>
+            </td>
+            <td className="p-3">{user.joined || '13/12/2024'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
     );
 };
 
