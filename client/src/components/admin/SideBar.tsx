@@ -22,7 +22,9 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`bg-gray-800 text-white h-screen p-5 pt-8 ${isOpen ? 'w-64' : 'w-16'} duration-300 relative`}
+      className={`bg-gray-800 text-white h-screen p-5 pt-8 ${
+        isOpen ? 'w-64' : 'w-16'
+      } duration-300 relative shadow-2xl`} // Added shadow here
     >
       {/* Logo */}
       <div className="flex items-center gap-x-4">
@@ -31,31 +33,39 @@ const Sidebar = () => {
           {isOpen ? '◁' : '▷'}
         </button>
       </div>
-
-      {/* Menu  */}
+  
+      {/* Menu */}
       <ul className="mt-10">
         {menuItems.map((item, index) => (
+          <Link key={index} href={item.path}>
           <li
-            key={index}
+            
             className="flex items-center gap-x-4 p-2 my-4 hover:bg-gray-700 rounded-lg cursor-pointer"
           >
             <div className="text-2xl">{item.icon}</div>
-            <Link href={item.path}>
-              <span className={`text-base font-medium  ${isOpen ? '' : 'hidden'} duration-700 relative`}>
+            
+              <span
+                className={`text-base font-medium ${
+                  isOpen ? '' : 'hidden'
+                } duration-700 relative`}
+              >
                 {item.name}
               </span>
-            </Link>
+            
           </li>
+          </Link>
         ))}
       </ul>
-
+  
+      {/* Toggle Button */}
       <div className="flex items-center gap-x-4">
         <button onClick={toggleSidebar} className="text-4xl">
-          {isOpen ? <FiArrowLeftCircle/>  : <FiArrowRightCircle/>}
+          {isOpen ? <FiArrowLeftCircle /> : <FiArrowRightCircle />}
         </button>
       </div>
     </div>
   );
+  
 };
 
 export default Sidebar;
