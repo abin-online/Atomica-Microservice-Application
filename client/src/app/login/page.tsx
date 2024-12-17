@@ -6,12 +6,14 @@ import axios from "axios";
 import { AUTH_SERVICE_URL } from "@/utils/constants";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { login } from "@/api/user";
 import { useAppDispatch } from "@/lib/hook";
 import { setUser } from "@/lib/features/users/userSlice";
 import userAuth from "@/api/middleware/middleware";
 import { RootState } from "@/lib/store";
+import { userGoogleLogin } from "@/api/user";
+import { jwtDecode } from 'jwt-decode';
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 function Page() {
 
@@ -29,104 +31,90 @@ function Page() {
 
   const { register, handleSubmit, formState: { errors } } = useForm<Login>();
 
-const onSubmit = async (data: Login) => {
-  try {
-    // Perform the login request
-    const response = await login(data); // Assuming `login` is an API function
-    console.log("Response received:", response);
+  const onSubmit = async (data: Login) => {
+    try {
+      // Perform the login request
+      const response = await login(data); // Assuming `login` is an API function
+      console.log("Response received:", response);
 
-    const user = response?.user;
-    const success = response?.data?.success;
-    const errorMessage = response?.data?.errorMessage;
+      const user = response?.user;
+      const success = response?.data?.success;
+      const errorMessage = response?.data?.errorMessage;
 
-    if (user) {
-      // Store user data in localStorage and show success toast
-      localStorage.setItem("user", JSON.stringify(user));
-      toast.success("Welcome to atomica");
-      console.log('user data ___________>', user)
-      
-      dispatch((setUser({
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        blocked: user.is_blocked
-      })))
+      if (user) {
+        // Store user data in localStorage and show success toast
+        localStorage.setItem("user", JSON.stringify(user));
+        toast.success("Welcome to atomica");
+        console.log('user data ___________>', user)
 
-      // Redirect to home page after a brief delay
-      setTimeout(() => {
-        router.replace(`/`);
-      }, 3000);
-    } else {
-      // Log error and handle different error messages
-      
-          toast.error("Invalid credentials.");
-      
-    }
-  } catch (error) {
-    // Handle Axios errors based on status codes
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response);
-      switch (error.response?.status) {
-        case 403:
-          toast.error("User is blocked");
-          break;
-        case 401:
-          toast.error("Invalid credentials");
-          break;
-        default:
-          toast.error("An unexpected server error occurred");
+        dispatch((setUser({
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          blocked: user.is_blocked
+        })))
+
+        // Redirect to home page after a brief delay
+        setTimeout(() => {
+          router.replace(`/`);
+        }, 3000);
+      } else {
+        // Log error and handle different error messages
+        console.log("res msg =>>>>",response?.response.data.message)
+        if(response?.response.data.message == "access denied"){
+          toast.error("Access denied");
+        }else if(response?.response.data.message == 'incorrect password'){
+          toast.error("Incorrect password");
+        }else if(response?.response.data.message == 'invalid email id') {
+          toast.error("Invalid email");
+        }else{
+          toast.error('An unexpected error occured')
+        }
+
       }
-    } else {
-      // Handle any non-Axios errors
-      console.error("Unexpected error:", error);
-      toast.error("An unexpected error occurred");
+    } catch (error) {
+     console.log(error)
+    }
+  };
+
+
+  const googleSubmit = async (credentialResponse: any) => {
+   
+    console.log('gooogle')
+    try {
+      const decoded: any = jwtDecode(credentialResponse.credential)
+      console.log("decoded",decoded);
+      let response = await userGoogleLogin({ name: decoded.name, email: decoded.email, password: decoded.sub })
+      console.log(response.user);
+      if (response.user) {
+        localStorage.setItem('accesToken', response.token.accessToken)
+        localStorage.setItem('refreshToken', response.token.refreshToken)
+        localStorage.setItem('role', response.token.role)
+        dispatch(setUser({
+          role: response.token.role,
+          name: response.user.name,
+          email: response.user.email,
+          id: response.user._id,
+          blocked: response.user.blocked,
+
+        }
+        ))
+        router.push('/')
+
+      } else {
+        const { message } = response.response?.data
+        toast.error(message)
+      }
+      const user = response.data.user;
+    } catch (error) {
+        console.log(error)
     }
   }
-};
 
-  
-
-  // const handleGoogleLogin = async () => {
-  //   const auth = getAuth(app);
-  //   const provider = new GoogleAuthProvider();
-  //   provider.setCustomParameters({ prompt: 'select_account' }); 
-
-
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     const user = result.user;
-  //     console.log("User Info:", user);
-  //     let response = await axios.post(`${AUTH_SERVICE_URL}/googleLogin`, user, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       withCredentials: true,
-  //     });
-  //     console.log(response);
-  //     const googleUser = response.data.googleUser;
-  //     if (response.data.success) {
-  //       localStorage.setItem("user", JSON.stringify(googleUser));
-  //       toast.success("Welcome");
-  //       setTimeout(() => {
-  //         router.replace(`jobListingPage`);
-  //       }, 3000);
-  //     }
-  //     if (response.data.errorMessage === "User is blocked") {
-  //       toast.error("You are blocked");
-  //     }
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.error("Axios Error:", error.response?.data || error.message);
-  //       toast.error("Login failed due to network or server issues");
-  //     } else {
-  //       console.error("Unexpected Error:", error);
-  //     }
-  //   }
-  // };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      
+
       {/* Centered Container */}
       <div className="flex flex-col lg:flex-row w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Left Section - Image */}
@@ -220,18 +208,36 @@ const onSubmit = async (data: Login) => {
             </div>
 
             {/* Google Sign-In Button */}
-            <button
+
+
+            {/* <button
               type="button"
               className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center space-x-2 mt-4"
-              // onClick={googleSubmit}
+             onClick={googleSubmit}
             >
+                          <GoogleLogin 
+              onSuccess={googleSubmit}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />
               <img
                 src="https://www.svgrepo.com/show/355037/google.svg"
                 alt="Google Icon"
                 className="w-5 h-5"
               />
               <span>Sign in with Google</span>
-            </button>
+            </button> */}
+
+<GoogleOAuthProvider clientId={"1073073114282-ccjtnlqjjigs9qjubh397ml6p6rhakl3.apps.googleusercontent.com"}>
+      <div>
+        <h2>Login with Google</h2>
+        <GoogleLogin
+          onSuccess={googleSubmit}
+          onError={() => console.error("Google Login Failed")}
+        />
+      </div>
+    </GoogleOAuthProvider>
 
             <p className="text-sm text-center text-gray-500 mt-6">
               Are you new?{" "}
