@@ -3,7 +3,7 @@ const userRoutes = {
     verifyOTP: '/auth/user/createUser',
     login : '/auth/user/login',
     logOut : '/auth/user/logout',
-    googleLogin:'/user/googleLogin',
+    googleLogin:'/auth/user/googleLogin',
     resendOtp : '/auth/user/resendOtp'
 }
 
