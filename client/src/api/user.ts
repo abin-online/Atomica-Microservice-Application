@@ -34,7 +34,7 @@ export const login = async (loginData: loginData) => {
 
 export const userGoogleLogin = async (loginData:object)=>{
     try {
-        const response = await API.post(userRoutes.googleLogin,loginData)
+        const response = await API.post(userRoutes.googleLogin, loginData)
         return response.data
     } catch (error:any) {
         return error
