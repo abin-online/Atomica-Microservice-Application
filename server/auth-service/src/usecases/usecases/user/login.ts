@@ -13,6 +13,7 @@ export const login = async (userRepository: IuserRepository, jwt: IJwt, hashPass
             return next(new ErrorHandler(400, 'invalid email id'))
         }
         if (user.is_blocked == true) {
+            console.log('user is blocked')
             return next(new ErrorHandler(400, 'access denied'))
         }
         const comparePassword = await hashPassword.compareHashPassword(password, user.password)
