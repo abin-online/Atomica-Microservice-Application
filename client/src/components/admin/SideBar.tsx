@@ -15,7 +15,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: 'Home', icon: <FiHome />, path: '/' },
     { name: 'Users', icon: <FiUsers />, path: '/admin/users' },
-    { name: 'Quick Test', icon: <FiOctagon />, path: '/admin/quickTest' },
+    { name: 'QuickTest', icon: <FiOctagon />, path: '/admin/quickTest' },
     { name: 'Problem', icon: <FiAlertTriangle />, path: '/admin/problem' },
     { name: 'Logout', icon: <FiLogOut />, path: '/logout' },
   ];
