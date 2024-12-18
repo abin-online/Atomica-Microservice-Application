@@ -9,12 +9,11 @@ import { useRouter } from "next/navigation";
 import { login } from "@/api/user";
 import { useAppDispatch } from "@/lib/hook";
 import { setUser } from "@/lib/features/users/userSlice";
-import userAuth from "@/api/middleware/middleware";
 import { RootState } from "@/lib/store";
 import { userGoogleLogin } from "@/api/user";
 import { jwtDecode } from 'jwt-decode';
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-
+import { userAuth } from "@/api/middleware/middleware";
 function Page() {
 
   userAuth()
@@ -57,7 +56,7 @@ function Page() {
         // Redirect to home page after a brief delay
         setTimeout(() => {
           router.replace(`/`);
-        }, 3000);
+        }, 1500);
       } else {
         // Log error and handle different error messages
         console.log("res msg =>>>>",response?.response.data.message)
@@ -184,7 +183,7 @@ function Page() {
                 />
                 <p className="text-red-600">{errors.password?.message as string}</p>
                 <div className="flex justify-end text-sm mt-2">
-                  <a href="#" className="text-blue-500 hover:underline">
+                  <a href="/forgotPassword" className="text-blue-500 hover:underline">
                     Forgot Password?
                   </a>
                 </div>
