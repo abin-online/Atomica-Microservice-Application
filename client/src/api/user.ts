@@ -43,7 +43,7 @@ export const userGoogleLogin = async (loginData:object)=>{
 
 export const resendOtp = async (email : string)=> {
     try {
-        const response = await API.post(userRoutes.resendOtp , email)
+        const response = await API.post(userRoutes.resendOtp , {email})
         return response.data
     } catch (error) {
         return error
