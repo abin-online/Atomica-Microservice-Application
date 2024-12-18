@@ -34,7 +34,7 @@ export class UserController {
 
     async create_user(req: Req, res: Res, next: Next) {
         try {
-            console.log('request______>',req)
+            console.log('request______>',req.body)
 
             console.log(req.headers)
             const token = req.headers['x-verify-token']
@@ -75,7 +75,7 @@ export class UserController {
 
     async resendOTP(req: Req, res: Res, next: Next) {
         try {
-            console.log("resend otp------------------>",req.body)
+            console.log("resend otp------------------>",req.body.email)
             const newOtp = await this.userUserCase.resendOtp(req.body.email, next);
             console.log('----------------', newOtp)
             if (newOtp) {
