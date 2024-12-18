@@ -6,6 +6,7 @@ import { findbyEmail } from "./admin/index";
 export class AdminRepository implements IadminRepository {
     constructor(private adminModels: typeof adminModel) { }
     async findAdmin(email: string): Promise<Iadmin | void> {
+        
         return await findbyEmail(this.adminModels, email);
     }
 

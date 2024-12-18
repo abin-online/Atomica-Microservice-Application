@@ -17,6 +17,7 @@ try {
     const token:any = await jwt.create_access_and_refresh_token(id as string)
     token.role='admin'
     return {admin,token}
+    
 } catch (error) {
     throw error
 }
