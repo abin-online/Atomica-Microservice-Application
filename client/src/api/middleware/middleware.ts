@@ -4,7 +4,7 @@ import { useAppSelector } from "@/lib/hook"
 import { RootState } from "@/lib/store"
 import { useRouter } from "next/navigation"
 
-const userAuth = () => {
+export const userAuth = () => {
     const user = useAppSelector((state: RootState) => state.user);
     const router = useRouter();
     console.log('userrrrrrrrr', user)
@@ -16,4 +16,15 @@ const userAuth = () => {
 
 }
 
-export default userAuth
+export const adminAuth = ()=> {
+    const user = useAppSelector((state: RootState) => state.user.role == 'admin')
+    console.log('admin======>', user)
+    const router = useRouter();
+    useEffect(()=> {
+        if(user) {
+            router.push('/admin/dashboard')
+        }
+    })
+}
+
+//export default userAuth
