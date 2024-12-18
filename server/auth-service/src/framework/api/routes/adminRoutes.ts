@@ -11,4 +11,11 @@ export function AdminRoute(router : Route) {
         adminController.blockUser(req, res, next)
     })
 
+    router.post('/adminLogin' , async(req: Req, res: Res, next)=> {
+        console.log('admIN loGIN')
+        adminController.adminLogin(req, res, next)
+    })
+    router.post('/adminLogout' , async(req: Req, res: Res, next) => {
+        adminController.logout(req, res, next)
+    })
 }

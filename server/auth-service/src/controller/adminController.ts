@@ -21,6 +21,7 @@ export class AdminController {
     }
     async logout(req: Req, res: Res, next: Next) {
         try {
+            console.log('logout')
             res.clearCookie('accessToken', access_token_options)
             res.clearCookie('refreshToken', refresh_token_options)
             res.status(200).json({ success: true, message: 'logout success' })
