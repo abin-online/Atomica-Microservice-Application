@@ -34,10 +34,12 @@ const OTPPage: React.FC = () => {
       console.log("Resending OTP for:", email);
         // const response = await resendOtp(email);
         let payload = {
-          "email": "abinbabuonline@gmail.com"
+          "email": email
         }
-        const response = await axios.post('http://localhost:4001/auth/user/resendOtp', payload);
-        console.log("Response from server:", response);
+     
+        const response2 = await resendOtp(email)
+        console.log("Response from server:", response2);
+
       setCounter(10);
       setResendDisabled(true);
     } catch (error: any) {
