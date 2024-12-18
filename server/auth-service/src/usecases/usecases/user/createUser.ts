@@ -21,8 +21,8 @@ export const createUser = async (token: string, otp: string, otpRepository: Iotp
         if (!result) {
             return next(new ErrorHandler(400, 'otp expired'))
         }
-        console.log(result.otp, "     ", result.otp )
-        if(result.otp !== result.otp){
+        console.log(result.otp, "     ", otp )
+        if(result.otp !== otp){
             return next(new ErrorHandler(400, 'invalid otp'))
         }
 
