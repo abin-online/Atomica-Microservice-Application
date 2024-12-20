@@ -1,10 +1,68 @@
 'use client'
 
-import React from 'react'
-import Header from '@/components/admin/Header'
-import Sidebar from '@/components/admin/SideBar'
+import React, { useState } from 'react';
+import axios from 'axios';
+import Header from '@/components/admin/Header';
+import Sidebar from '@/components/admin/SideBar';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
-const createQuickTest = () => {
+const CreateQuickTest = () => {
+    const router = useRouter()
+    const [formData, setFormData] = useState({
+        question: '',
+        options: {
+            option1: '',
+            option2: '',
+            option3: '',
+            option4: '',
+        },
+        correctAnswer: '',
+    });
+
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+        const { id, value } = e.target;
+
+        if (id === 'question' || id === 'correctAnswer') {
+            setFormData((prev) => ({
+                ...prev,
+                [id]: value,
+            }));
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                options: {
+                    ...prev.options,
+                    [id]: value, // Update the correct option
+                },
+            }));
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            console.log("Form Data Submitted:", formData); // Log the form data
+            const response = await axios.post('http://localhost:5001/mcq/addQuestion', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            console.log("responseeeeeeeeeeee",response)
+            if (response.status === 201) {
+                toast.success('Question created successfully')
+                router.push('/admin/quickTest')
+            } else {
+                toast.error('Error in creating question')
+            }
+        } catch (error) {
+            console.error('Error submitting the form:', error);
+            toast.error('Fill all the fields')
+        }
+    };
+    
+
     return (
         <div className="flex bg-gray-100">
             <Header />
@@ -21,25 +79,31 @@ const createQuickTest = () => {
                         <textarea
                             id="question"
                             rows={3}
+                            value={formData.question}
+                            onChange={handleInputChange}
                             className="w-full p-3 rounded-md bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter your question here..."
                         ></textarea>
                     </div>
 
-
-
                     {/* Options */}
                     <div className="mb-6">
-                        <label className="block text-lg  font-medium">Options:</label>
-                        {[...Array(4)].map((_, index) => (
-                            <input
-                                key={index}
-                                type="text"
-                                className="w-1/4 p-3 mb-3 rounded-md bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500"
-                                placeholder={`Option ${index + 1}`}
-                            />
-                        ))}
-                    </div>
+    <label className="block text-lg font-medium">Options:</label>
+    <div className="grid grid-cols-2 gap-4">
+        {Object.keys(formData.options).map((option, index) => (
+            <input
+                key={option} // Use the option name for the key
+                id={option} // Use the option name for the id
+                type="text"
+                value={formData.options[option as keyof typeof formData.options]}
+                onChange={handleInputChange}
+                className="w-full p-3 rounded-md bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500"
+                placeholder={`Option ${index + 1}`}
+            />
+        ))}
+    </div>
+</div>
+
 
                     {/* Correct Answer */}
                     <div className="mb-4">
@@ -49,40 +113,18 @@ const createQuickTest = () => {
                         <input
                             id="correctAnswer"
                             type="text"
+                            value={formData.correctAnswer}
+                            onChange={handleInputChange}
                             className="w-full p-3 rounded-md bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter the correct answer"
                         />
                     </div>
 
-                    {/* Difficulty Level and Tags */}
-                    <div className="flex mb-4 space-x-4">
-                        {/* Difficulty Level */}
-                        <div className="w-1/2">
-                            <label className="block text-lg mb-2 font-medium">Difficulty Level:</label>
-                            <select
-                                className="w-full p-3 rounded-md bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500"
-                            >
-                                <option value="easy">Easy</option>
-                                <option value="medium">Medium</option>
-                                <option value="hard">Hard</option>
-                            </select>
-                        </div>
-
-                        {/* Tags */}
-                        <div className="w-1/2">
-                            <label htmlFor="tags" className="block text-lg mb-2 font-medium">Tags:</label>
-                            <input
-                                id="tags"
-                                type="text"
-                                className="w-full p-3 rounded-md bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500"
-                                placeholder="e.g. Array, Algorithm"
-                            />
-                        </div>
-                    </div>
                     {/* Submit Button */}
                     <div>
                         <button
                             type="button"
+                            onClick={handleSubmit}
                             className="w-full py-3 px-6 bg-blue-500 hover:bg-blue-600 rounded-md font-semibold text-white shadow-md transition-all"
                         >
                             Submit
@@ -90,10 +132,8 @@ const createQuickTest = () => {
                     </div>
                 </div>
             </div>
-
         </div>
-
     );
-}
+};
 
-export default createQuickTest
+export default CreateQuickTest;
