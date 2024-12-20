@@ -6,7 +6,7 @@ import { setAdmin } from '@/lib/features/users/adminSlice';
 import { setUser } from '@/lib/features/users/userSlice';
 import { useAppDispatch } from '@/lib/hook';
 import { useRouter } from "next/navigation";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -15,7 +15,18 @@ export default function AdminLogin() {
   const [email, setEmail] = useState('')
   const [password,setPassword]=useState('')
   const router = useRouter()
-  adminAuth()
+  // adminAuth()
+  
+  useEffect(() => {
+      const storedAdmin = localStorage.getItem('admin');
+      if (storedAdmin) {
+        dispatch(setAdmin(JSON.parse(storedAdmin)));
+        router.push(`/admin/dashboard`)
+      }else{ 
+    }
+    }, [dispatch]);
+
+   
 
   const {
     register,
@@ -41,8 +52,18 @@ export default function AdminLogin() {
 
       if (admin) {
         // Store user data in localStorage and show success toast
-        localStorage.setItem("admin", JSON.stringify(admin));
-      
+        // localStorage.setItem("admin", JSON.stringify(admin));
+
+        const adminData = {
+          id: admin._id,
+          name: 'ATOM',
+          email: admin.email,
+          role: admin.role,
+        };
+        
+        dispatch(setAdmin(adminData));
+        localStorage.setItem('admin', JSON.stringify(adminData));
+
         toast.success("Welcome to Admin Dashboard");
         console.log('admin data ___________>', admin)
 
@@ -53,12 +74,7 @@ export default function AdminLogin() {
         //   blocked: user.is_blocked
         // })))
         
-        dispatch((setAdmin({
-          id: admin._id,
-          name: 'ATOM',
-          email: admin.email,
-          role: admin.role,
-        })))
+  
 
         // Redirect to home page after a brief delay
         setTimeout(() => {
@@ -86,9 +102,9 @@ export default function AdminLogin() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      {/* Centered Container */}
+      
       <div className="flex flex-col lg:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* Left Section - Image */}
+        {/* Left --> Image */}
         <div className="hidden lg:block lg:w-1/2 bg-blue-500">
           <img
             src="https://cdn.wallpapersafari.com/13/89/wb4WOU.jpg"
@@ -97,7 +113,7 @@ export default function AdminLogin() {
           />
         </div>
 
-        {/* Right Section - Login Form */}
+        {/* Right ---> Login Form */}
         <div className="flex items-center justify-center w-full lg:w-1/2 p-8 bg-white">
           <div className="w-full max-w-sm">
             <h2 className="text-2xl font-bold text-center text-gray-800">ATOMICA</h2>
@@ -105,7 +121,7 @@ export default function AdminLogin() {
 
             <p className="text-sm text-center text-gray-500 mt-2">Secure access to the admin dashboard</p>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-6">
-              {/* Email Input */}
+              {/* Email */}
               <div>
                 <label
                   htmlFor="email"
@@ -129,7 +145,7 @@ export default function AdminLogin() {
                 <p className="text-red-600 mt-1">{errors.email?.message as string}</p>
               </div>
 
-              {/* Password Input */}
+              {/* Password  */}
               <div>
                 <label
                   htmlFor="password"
