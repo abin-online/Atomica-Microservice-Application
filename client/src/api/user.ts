@@ -60,3 +60,12 @@ export const logOut = async () => {
         return error
     }
 }
+
+export const forgotPassword = async (email : string)=> {
+    try {
+        const response = await API.post(userRoutes.forgotPassword, {email})
+        return response.data
+    } catch (error) {
+        return error
+    }
+}
