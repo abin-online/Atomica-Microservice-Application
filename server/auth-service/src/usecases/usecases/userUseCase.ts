@@ -46,6 +46,7 @@ export class UserUseCase implements Iuser_use_case {
         }
     }
 
+    
     async create_user(token: string, otp: string, next: Next): Promise<Iuser | void> {
         try {
             const user = await createUser(
