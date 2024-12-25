@@ -59,30 +59,32 @@ function Page() {
         }, 1500);
       } else {
         // Log error and handle different error messages
-        console.log("res msg =>>>>",response?.response.data.message)
-        if(response?.response.data.message == "access denied"){
+        console.log("res msg =>>>>", response?.response.data.message)
+        if (response?.response.data.message == "access denied") {
           toast.error("Access denied");
-        }else if(response?.response.data.message == 'incorrect password'){
+        } else if (response?.response.data.message == 'incorrect password') {
           toast.error("Incorrect password");
-        }else if(response?.response.data.message == 'invalid email id') {
+        } else if (response?.response.data.message == 'invalid email id') {
           toast.error("Invalid email");
-        }else{
+        } else {
           toast.error('An unexpected error occured')
         }
 
       }
     } catch (error) {
-     console.log(error)
+      console.log(error)
     }
   };
 
+  
 
   const googleSubmit = async (credentialResponse: any) => {
-   
+
+
     console.log('gooogle')
     try {
       const decoded: any = jwtDecode(credentialResponse.credential)
-      console.log("decoded",decoded);
+      console.log("decoded", decoded);
       let response = await userGoogleLogin({ name: decoded.name, email: decoded.email, password: decoded.sub })
       console.log(response.user);
       if (response.user) {
@@ -106,7 +108,7 @@ function Page() {
       }
       const user = response.data.user;
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
   }
 
@@ -183,9 +185,9 @@ function Page() {
                 />
                 <p className="text-red-600">{errors.password?.message as string}</p>
                 <div className="flex justify-end text-sm mt-2">
-                  <a href="/forgotPassword" className="text-blue-500 hover:underline">
+                  {/* <a href="/forgotPassword" className="text-blue-500 hover:underline">
                     Forgot Password?
-                  </a>
+                  </a> */}
                 </div>
               </div>
 
@@ -206,37 +208,16 @@ function Page() {
               <span className="h-px w-16 bg-gray-300"></span>
             </div>
 
-            {/* Google Sign-In Button */}
+          
 
-
-            {/* <button
-              type="button"
-              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center space-x-2 mt-4"
-             onClick={googleSubmit}
-            >
-                          <GoogleLogin 
-              onSuccess={googleSubmit}
-              onError={() => {
-                console.log('Login Failed');
-              }}
-            />
-              <img
-                src="https://www.svgrepo.com/show/355037/google.svg"
-                alt="Google Icon"
-                className="w-5 h-5"
-              />
-              <span>Sign in with Google</span>
-            </button> */}
-
-<GoogleOAuthProvider clientId={"1073073114282-ccjtnlqjjigs9qjubh397ml6p6rhakl3.apps.googleusercontent.com"}>
-      <div>
-        <h2>Login with Google</h2>
-        <GoogleLogin
-          onSuccess={googleSubmit}
-          onError={() => console.error("Google Login Failed")}
-        />
-      </div>
-    </GoogleOAuthProvider>
+            <GoogleOAuthProvider clientId="419017382512-dhm3aao5ojq7lkshbpm5buablq016piq.apps.googleusercontent.com">
+              <div>
+                <GoogleLogin
+                  onSuccess={googleSubmit}
+                  onError={() => console.error("Google Login Failed")}
+                />
+              </div>
+            </GoogleOAuthProvider>
 
             <p className="text-sm text-center text-gray-500 mt-6">
               Are you new?{" "}
