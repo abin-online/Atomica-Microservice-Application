@@ -11,11 +11,13 @@ import { logOut } from '@/api/user';
 import toast from 'react-hot-toast';
 import { useConfirmationDialog } from './customHooks/useConfirmationDialog';
 import NavBar from '@/components/user/Navbar';
+import BannerSlider from '@/components/user/Banner';
 
 const HomePage = ()=> {
   return (
     <>
     <NavBar/>
+    <BannerSlider/>
     </>
   )
 }

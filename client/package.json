@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.5.0",
+    "@types/react-slick": "^0.23.13",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
@@ -24,9 +25,11 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.4.0",
     "react-redux": "^9.2.0",
+    "react-slick": "^0.30.3",
     "react-toastify": "^10.0.6",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "slick-carousel": "^1.8.1",
     "toastify": "^2.0.1"
   },
   "devDependencies": {
