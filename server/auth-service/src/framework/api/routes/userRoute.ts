@@ -2,8 +2,6 @@ import { Next, Req, Res, Route } from "../../types/serverTypes";
 import { Iuser } from "../../../entities/user";
 import { userController } from "./injections/injections";
 import { isUser } from "../middleware/roleAuth";
-
-
 export function UserRoute(router:  Route) {
 
     router.post('/register', async(req: Req, res: Res, next: Next)=> {
