@@ -35,7 +35,7 @@ app.use('/tag', tagRouter)
 const PORT = process.env.PORT || 5001
 
 app.listen(PORT, () => {
-    console.log(`Authentication server is running at http://localhost:${PORT}`);
+    console.log(`Test server is running at http://localhost:${PORT}`);
 })
 
 //http://localhost:5001/tag/addTag
