@@ -109,7 +109,7 @@ export default function QuizPage() {
                 <NavBar />
                 <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
                     <h1 className="text-2xl font-bold text-gray-700 mb-6">Quiz Results</h1>
-                    <p className="text-lg mb-4">You scored {totalCorrect} out of 5</p>
+                    <p className="text-lg mb-4">You scored {totalCorrect} out of {quiz.length}</p>
                     <div className="progress-bar bg-gray-200 rounded-full h-4 mb-6">
                         <div
                             className="bg-green-500 h-4 rounded-full"
@@ -179,6 +179,7 @@ export default function QuizPage() {
     }
 
     return (
+        
         <div className="quiz-page bg-gray-100 min-h-screen text-gray-800">
             <NavBar />
             <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
