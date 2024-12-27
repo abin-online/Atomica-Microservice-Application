@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { IMcqUseCase } from "../../application/interfaces/useCaseInterfaces/mcqUseCaseInterface";
 import ErrorHandler from "../../application/usecases/middleware/errorHandler";
-import { error } from "console";
-import { isObjectIdOrHexString } from "mongoose";
 
 export default class McqController {
   private mcqUseCase: IMcqUseCase;
