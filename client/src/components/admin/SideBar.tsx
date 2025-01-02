@@ -2,8 +2,7 @@
 
 // components/Sidebar.js
 import { useState } from 'react';
-import Link from 'next/link';
-import { FiHome, FiUsers, FiArrowRightCircle, FiArrowLeftCircle, FiLogOut, FiAlertTriangle, FiOctagon, FiTag } from 'react-icons/fi';
+import { FiHome, FiUsers, FiArrowRightCircle, FiArrowLeftCircle, FiLogOut, FiAlertTriangle, FiOctagon, FiTag, FiBriefcase } from 'react-icons/fi';
 import { adminLogout } from '@/api/admin';
 import { useAppDispatch } from '@/lib/hook';
 import { removeUser } from '@/lib/features/users/userSlice';
@@ -21,11 +20,12 @@ const Sidebar = () => {
   };
 
   const menuItems = [
-    { name: 'Home', icon: <FiHome />, path: '/' },
+    { name: 'Home', icon: <FiHome />, path: '/admin/dashboard' },
     { name: 'Users', icon: <FiUsers />, path: '/admin/users' },
     { name: 'QuickTest', icon: <FiOctagon />, path: '/admin/quickTest' },
     { name: 'Problem', icon: <FiAlertTriangle />, path: '/admin/problem' },
-    { name: 'Tags', icon: <FiTag />, path: '/admin/tags' }
+    { name: 'Tags', icon: <FiTag />, path: '/admin/tags' },
+    {name : 'Badge', icon: <FiBriefcase/>, path: '/admin/badges'}
   ];
 
   const handleLogout = async () => {
@@ -66,8 +66,8 @@ const Sidebar = () => {
         {/* Menu */}
         <ul className="mt-10">
           {menuItems.map((item, index) => (
-            <Link key={index} href={item.path}>
-              <li className="flex items-center gap-x-4 p-2 my-4 hover:bg-gray-700 rounded-lg cursor-pointer">
+            
+              <li key={index} onClick={() => router.push(item.path)} className="flex items-center gap-x-4 p-2 my-4 hover:bg-gray-700 rounded-lg cursor-pointer">
                 <div className="text-2xl">{item.icon}</div>
                 <span
                   className={`text-base font-medium ${isOpen ? "" : "hidden"
@@ -76,7 +76,7 @@ const Sidebar = () => {
                   {item.name}
                 </span>
               </li>
-            </Link>
+            
           ))}
           <li
             onClick={handleLogout}
