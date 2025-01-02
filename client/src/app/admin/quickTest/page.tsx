@@ -66,7 +66,9 @@ const Problem = () => {
     }
   }, [dispatch, router]); // Added `router` to dependencies
   
-
+  const handleCreateTest = ()=> {
+    router.push('/admin/createQuickTest')
+  }
   return (
     <div className="flex bg-gray-100">
       <Header />
@@ -74,8 +76,8 @@ const Problem = () => {
       <div className="flex-1 my-24 bg-gray-100 p-6">
         <div className="flex items-center justify-between my-8">
           <h1 className="text-2xl font-bold text-gray-800">Quick Test</h1>
-          <button className="px-5 py-3 bg-gray-800 text-white rounded-md hover:bg-gray-900 shadow-lg transition-all">
-            <Link href="/admin/createQuickTest">Create New</Link>
+          <button onClick={handleCreateTest} className="px-5 py-3 bg-gray-800 text-white rounded-md hover:bg-gray-900 shadow-lg transition-all">
+            Create New
           </button>
         </div>
         <div className="bg-gray-700 rounded-md shadow-md overflow-hidden">

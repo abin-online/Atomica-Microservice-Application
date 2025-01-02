@@ -53,7 +53,7 @@ function Page() {
           blocked: user.is_blocked
         })))
 
-        // Redirect to home page after a brief delay
+        // Redirect to home page after a  delay
         setTimeout(() => {
           router.replace(`/`);
         }, 1500);
