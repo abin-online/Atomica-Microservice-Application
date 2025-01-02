@@ -6,7 +6,7 @@ const initialState: admin = {
     name: '',
     email: '',
     role: ''
-}
+} 
 
 const adminSlice = createSlice({
     name: 'admin',
