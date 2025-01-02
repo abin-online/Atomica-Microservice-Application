@@ -79,6 +79,14 @@ export class UserController {
         }
     }
 
+    async leaderBoard(req: Request, res: Response, next: NextFunction) {
+       try {
+        const leaderBoard = await userModel.find().sort({points: -1})
+        res.status(200).json(leaderBoard)
+       } catch (error) {
+        
+       }
+    }
 }
 
 
