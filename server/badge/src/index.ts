@@ -4,8 +4,8 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import connectDb from './infrastructure/database/db'
 import router from './infrastructure/routes/badgeRoutes'
-import bodyParser from 'body-parser'
 import consume from './infrastructure/messaging/kafka/consume'
+import expressJson from 'express';
 
 dotenv.config()
 
@@ -27,9 +27,8 @@ app.use(cors(corsOptions))
 
 app.options('*', cors(corsOptions))
 
-app.use(bodyParser.json({ limit: '10mb' }))
+app.use(expressJson.json({ limit: '10mb' }));
 app.use(cookieParser())
-app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/badge', badgeRouter)

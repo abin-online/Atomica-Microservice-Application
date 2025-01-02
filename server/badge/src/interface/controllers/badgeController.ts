@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IBadgeUseCase } from "../../application/interfaces/useCaseInterfaces/IBadgeUseCase";
 import ErrorHandler from "../../application/use-cases/middleware/errorHandler";
+import s3Service from "../../infrastructure/aws/s3Service";
 
 export class BadgeController {
     private badgeUseCase: IBadgeUseCase;
@@ -17,8 +18,22 @@ export class BadgeController {
     // Method to create a new badge
     async createBadge(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-        const badgeData = req.body;
-        console.log(badgeData)
+        const { name, description, minQuestionsSolved } = req.body;
+        console.log("deii", req.body)
+        const image = req.file as Express.Multer.File;
+
+
+        if (!image) {
+          res.status(400).json({ message: 'No image file' });
+        }
+        const s3Response = await s3Service.uploadFile(image);
+
+        const badgeData = {
+          name,
+          description,
+          minQuestionsSolved,
+          imageURL: s3Response.Location
+        }
         const newBadge = await this.badgeUseCase.createBadge(badgeData);
         res.status(201).json({ message: "Badge created", badge: newBadge });
       } catch (error: any) {

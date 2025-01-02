@@ -10,44 +10,92 @@ const CreateBadge = () => {
     const [formData, setFormData] = useState({
         name: "",
         description: "",
-        minQuestionsSolved: 0
+        minQuestionsSolved: 0,
+        image: null as File | null, // Specify the type for image
     });
 
+    const [imagePreview, setImagePreview] = useState<string | null>(null); // State for image preview
     const [loading, setLoading] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: name === "minQuestionsSolved" ? Number(value) : value,
-        }));
+    // Handle input changes
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+        const { name, value, files } = e.target as  HTMLInputElement;
+
+        // Handling file input separately
+        if (e.target instanceof HTMLInputElement && e.target.type === "file") {
+            const file = files ? files[0] : null;
+
+            if (file) {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    [name]: file,
+                }));
+                
+                // Create an object URL for image preview
+                setImagePreview(URL.createObjectURL(file));
+            }
+        } else {
+            // Handle other inputs (text, number, etc.)
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: name === "minQuestionsSolved" ? Number(value) : value,
+            }));
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Check if the form is filled correctly
+        if (formData.name.trim() === '') {
+            toast.error('Fill out the tag name field');
+            return;
+        }
+        if (formData.description.trim() === '') {
+            toast.error('Fill out the description field');
+            return;
+        }
+        if (formData.minQuestionsSolved < 10) {
+            toast.error('Minimum questions should be greater than 10');
+            return;
+        }
+        if (!formData.image) {
+            toast.error('Please select an image');
+            return;
+        }
+
         try {
             setLoading(true);
-            if(formData.name.trim() == '') {
-                toast.error('Fill out the tag name field')
-                return
+
+            // Create FormData to send the form data along with the file
+            const uploadData = new FormData();
+            uploadData.append('name', formData.name);
+            uploadData.append('description', formData.description);
+            uploadData.append('minQuestionsSolved', formData.minQuestionsSolved.toString());
+            if (formData.image) {
+                uploadData.append('image', formData.image); // Append the image file to FormData
             }
-            if(formData.description.trim() == ''){
-                toast.error('Fill out the  description field')
-                return
-            }
-            if(formData.minQuestionsSolved < 10){
-                toast.error('Minimum question should greater than 10')
-                return 
-            }
-            const response = await axios.post("http://localhost:5003/badge/badge", formData);
+            uploadData.forEach((value, key) => {
+                console.log(key, value);
+            });
+            
+            const response = await axios.post("http://localhost:5003/badge/badge", uploadData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
             if (response.status === 201) {
                 toast.success("Badge created successfully!");
                 setFormData({
                     name: "",
                     description: "",
                     minQuestionsSolved: 0,
+                    image: null, // Reset image field
                 });
+                setImagePreview(null); // Reset image preview
             }
         } catch (error) {
             console.error("Error creating badge:", error);
@@ -75,7 +123,6 @@ const CreateBadge = () => {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                
                                 className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
                             />
                         </div>
@@ -88,7 +135,6 @@ const CreateBadge = () => {
                                 name="description"
                                 value={formData.description}
                                 onChange={handleChange}
-                                
                                 className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
                             />
                         </div>
@@ -102,11 +148,32 @@ const CreateBadge = () => {
                                 name="minQuestionsSolved"
                                 value={formData.minQuestionsSolved}
                                 onChange={handleChange}
-                                
                                 className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
                             />
                         </div>
-  
+                        <div>
+                            <label htmlFor="image" className="block text-sm font-medium mb-1">
+                                Badge Image
+                            </label>
+                            <input
+                                type="file"
+                                id="image"
+                                name="image"
+                                onChange={handleChange}
+                                accept="image/*"
+                                className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
+                            />
+                            {imagePreview && (
+                                <div className="mt-4">
+                                    <img
+                                        src={imagePreview}
+                                        alt="Image Preview"
+                                        className="max-w-xs h-auto rounded-md"
+                                    />
+                                </div>
+                            )}
+                        </div>
+
                         <div className="mt-4">
                             <button
                                 type="submit"
