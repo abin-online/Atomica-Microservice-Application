@@ -1,7 +1,10 @@
 'use client';
 
 import NavBar from '@/components/user/Navbar';
+import { setUser } from '@/lib/features/users/userSlice';
+import { useAppDispatch } from '@/lib/hook';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -22,15 +25,111 @@ interface Question {
 
 export default function QuizPage() {
     const [quiz, setQuiz] = useState<Question[]>([]);
-    const [currentIndex, setCurrentIndex] = useState(0); // Track current question
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [error, setError] = useState<string | null>(null);
-    const [selectedOptions, setSelectedOptions] = useState<(string | null)[]>([]); // Track selected options for each question
-    const [results, setResults] = useState<number[]>([]); // Store results (1 for correct, 0 for incorrect)
+    const [selectedOptions, setSelectedOptions] = useState<(string | null)[]>([]);
+    const [results, setResults] = useState<number[]>([]);
     const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+    const [elapsedTime, setElapsedTime] = useState(0); // Timer state
+    const [newBadgeData, setNewBadgeData] = useState<BadgeData | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const router = useRouter()
+    const dispatch = useAppDispatch()
+
+    type BadgeData = {
+        name: string;
+        description: string;
+        minQuestionsSolved: number;
+        imageUrl: string;
+    };
+
 
     useEffect(() => {
-        fetchQuizData();
-    }, []);
+        const validateAndFetchUser = async () => {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                try {
+                    const user = JSON.parse(storedUser);
+                    console.log('prased User:', user);
+                    dispatch(setUser(user));
+                } catch (error) {
+                    console.error("Error in parsingg", error);
+                    await router.push('/login');
+                }
+            } else {
+                await router.push('/login');
+            }
+
+            await fetchQuizData();
+        };
+
+        validateAndFetchUser();
+    }, [dispatch, router]);
+
+
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (!isQuizCompleted && quiz.length > 0) {
+            timer = setInterval(() => {
+                setElapsedTime((prevTime) => prevTime + 1);
+            }, 1000);
+        }
+        return () => clearInterval(timer); // Cleanup on unmount or when quiz completes
+    }, [isQuizCompleted, quiz.length]);
+
+    type IUserMcq = {
+        name: string;
+        email: string;
+        questionAttended: number;
+        wrongAnswers: number;
+        rightAnswers: number;
+    };
+
+
+
+
+    useEffect(() => {
+        if (isQuizCompleted) {
+            const sendQuizData = async () => {
+                if (!quiz.length || !results.length) return; // Ensure the quiz is completed
+
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                if (!user.name || !user.email) {
+                    console.error('User data missing!');
+                    return;
+                }
+
+                const totalCorrect = results.reduce((sum, r) => sum + r, 0);
+                const totalWrong = results.length - totalCorrect;
+
+                const userQuizData: IUserMcq = {
+                    name: user.name,
+                    email: user.email,
+                    questionAttended: results.length,
+                    rightAnswers: totalCorrect,
+                    wrongAnswers: totalWrong,
+                };
+
+                try {
+                    console.log("|-----------------> user Quiz Data____________|", userQuizData)
+                    const response = await axios.post('http://localhost:5003/badge/test', userQuizData);
+                    if (response.data.newBadge) {
+                        setNewBadgeData(response.data.badgeData);  // Store badge data
+                        setTimeout(() => {
+                            setIsModalOpen(true);
+                        }, 500);
+                    } 
+                } catch (err) {
+                    console.error('Error submitting quiz data:', err);
+                    toast.error('Failed to submit quiz results.');
+                }
+            };
+
+            sendQuizData();
+        }
+    }, [isQuizCompleted, quiz, results]);
+
 
     const fetchQuizData = async () => {
         const url = new URL(window.location.href);
@@ -43,12 +142,13 @@ export default function QuizPage() {
 
             setTimeout(() => {
                 setQuiz(response.data);
-            }, 500)
+            }, 500);
 
-            setSelectedOptions(new Array(response.data.length).fill(null)); // Reset selections
-            setResults([]); // Reset results
-            setCurrentIndex(0); // Reset index
-            setIsQuizCompleted(false); // Reset quiz status
+            setSelectedOptions(new Array(response.data.length).fill(null));
+            setResults([]);
+            setCurrentIndex(0);
+            setIsQuizCompleted(false);
+            setElapsedTime(0); // Reset timer
         } catch (err) {
             console.error(err);
             setError('Failed to fetch quiz data. Please try again later.');
@@ -68,7 +168,6 @@ export default function QuizPage() {
     const handleNextQuestion = () => {
         if (selectedOptions[currentIndex]) {
             if (currentIndex === quiz.length - 1) {
-                // Quiz is completed
                 const updatedResults = quiz.map((q, idx) =>
                     selectedOptions[idx] === q.correctAnswer ? 1 : 0
                 );
@@ -76,7 +175,7 @@ export default function QuizPage() {
                 setIsQuizCompleted(true);
                 toast.success('Quiz completed!');
             } else {
-                setCurrentIndex(currentIndex + 1); // Move to next question
+                setCurrentIndex(currentIndex + 1);
             }
         } else {
             toast.error('Please select an option.');
@@ -85,9 +184,11 @@ export default function QuizPage() {
 
     const handlePreviousQuestion = () => {
         if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1); // Move to previous question
+            setCurrentIndex(currentIndex - 1);
         }
     };
+
+    const closeModal = () => setIsModalOpen(false);
 
     if (quiz.length === 0) {
         return (
@@ -110,76 +211,58 @@ export default function QuizPage() {
                 <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
                     <h1 className="text-2xl font-bold text-gray-700 mb-6">Quiz Results</h1>
                     <p className="text-lg mb-4">You scored {totalCorrect} out of {quiz.length}</p>
+                    <p className="text-lg mb-4">Time taken: {Math.floor(elapsedTime / 60)} minutes {elapsedTime % 60} seconds</p>
                     <div className="progress-bar bg-gray-200 rounded-full h-4 mb-6">
                         <div
                             className="bg-green-500 h-4 rounded-full"
-                            style={{ width: `${(totalCorrect / 5) * 100}%` }}
+                            style={{ width: `${(totalCorrect / quiz.length) * 100}%` }}
                         />
                     </div>
                     <ul className="space-y-4">
                         {quiz.map((q, index) => (
                             <li
                                 key={q._id}
-                                className={`p-4 rounded-lg shadow ${results[index] ? 'bg-green-100' : 'bg-red-100'
-                                    }`}
+                                className={`p-4 rounded-lg shadow ${results[index] ? 'bg-green-100' : 'bg-red-100'}`}
                             >
                                 <p className="font-medium">
                                     {index + 1}. {q.question}
                                 </p>
                                 <p
-                                    className={`mt-2 ${results[index] ? 'text-green-600' : 'text-red-600'
-                                        }`}
+                                    className={`mt-2 ${results[index] ? 'text-green-600' : 'text-red-600'}`}
                                 >
                                     {results[index] ? 'Correct' : 'Incorrect'}
                                 </p>
                             </li>
                         ))}
                     </ul>
-                    <div className="mt-6 text-center flex justify-center space-x-4">
-                        <button
-                            onClick={fetchQuizData}
-                            className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-red-500 text-white font-semibold rounded-lg shadow-lg hover:bg-yellow-600 transition duration-300 ease-in-out flex items-center justify-center"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={2}
-                                stroke="currentColor"
-                                className="w-6 h-6 mr-2"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 10l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            Try Again
-                        </button>
-
-                        <button
-                            className="px-8 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold rounded-lg shadow-lg hover:bg-green-600 transition duration-300 ease-in-out flex items-center justify-center"
-                        >
-                            <a href='/quickTest' className="flex items-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={2}
-                                    stroke="currentColor"
-                                    className="w-6 h-6 mr-2"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                                </svg>
-                                Back to Home
-                            </a>
-                        </button>
-                    </div>
-
-
                 </div>
+                {newBadgeData && isModalOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 animate-modal-fade-in">
+                        <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center animate-scale-up">
+                            <h2 className="text-2xl font-bold text-green-500 mb-4">🎉 Congratulations!</h2>
+                            <h3 className="text-xl font-semibold text-gray-700 mb-2">{newBadgeData.name}</h3>
+                            <p className="text-gray-600 mb-4">{newBadgeData.description}</p>
+                            <img
+                                src={newBadgeData.imageUrl}
+                                alt={newBadgeData.name}
+                                className="w-32 h-32 rounded-full border-4 border-white mx-auto mb-4"
+                            />
+                            <p className="text-gray-600"> </p>
+                            <button
+                                onClick={closeModal}
+                                className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
+
             </div>
         );
     }
 
     return (
-        
         <div className="quiz-page bg-gray-100 min-h-screen text-gray-800">
             <NavBar />
             <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
@@ -207,14 +290,14 @@ export default function QuizPage() {
                         {currentIndex > 0 && (
                             <button
                                 onClick={handlePreviousQuestion}
-                                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-lg shadow-md hover:from-purple-600 hover:to-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out"
+                                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-lg shadow-md"
                             >
                                 Previous
                             </button>
                         )}
                         <button
                             onClick={handleNextQuestion}
-                            className="px-6 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold rounded-lg shadow-md hover:from-green-600 hover:to-teal-600 transform hover:scale-105 transition-all duration-300 ease-in-out"
+                            className="px-6 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold rounded-lg shadow-md"
                         >
                             Next
                         </button>
