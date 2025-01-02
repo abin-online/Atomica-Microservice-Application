@@ -42,7 +42,7 @@ export default class ProblemRepository implements IProblemRepository {
   }
 
   async getAllTags(): Promise<any[]> {
-    const tags = await tagModel.find()
+    const tags = await tagModel.find({blocked:false})
     return tags
   }
 }
