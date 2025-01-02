@@ -117,16 +117,7 @@ const CreateProblem = () => {
             'Content-Type': 'application/json',
         },
     });
-      // const response = await axios.post(
-      //   "",
-      //   formData,
-      //   {
-      //     withCredentials: true,  // Ensure credentials are included
-      //     headers: {
-      //       "Content-Type": "application/json",  // Ensure the Content-Type is set
-      //     },
-      //   }
-      // );
+
       toast.success("Problem added successfully:", response.data);
     } catch (error) {
       console.error("Error adding problem:", error);

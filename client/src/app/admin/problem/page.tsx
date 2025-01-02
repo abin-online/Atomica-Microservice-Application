@@ -47,7 +47,12 @@ const Problem = () => {
       const updatedStatus = !currentStatus;
       await axios.patch(`http://localhost:5002/problem/updateStatus/${id}`, {
         blocked: updatedStatus,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+      
       setProblems((prev) =>
         prev.map((p) => (p._id === id ? { ...p, blocked: updatedStatus } : p))
       );
@@ -60,10 +65,6 @@ const Problem = () => {
     router.push(`/editProblem/${id}`);
   };
 
-  const handleCreateProblem = () => {
-    router.push('/admin/createProblem'); // Redirect to the create problem page
-  };
-
   return (
     <div className="flex bg-gray-100">
       <Header />
@@ -71,12 +72,6 @@ const Problem = () => {
       <div className="flex-1 my-24 bg-gray-100 p-6">
         <div className="flex items-center justify-between my-8">
           <h1 className="text-2xl font-bold text-gray-800">Manage Problems</h1>
-          <button
-            onClick={handleCreateProblem}
-            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 shadow-md transition-all"
-          >
-            Create New Problem
-          </button>
         </div>
         <div className="bg-gray-700 rounded-md shadow-md overflow-hidden">
           <table className="w-full table-auto">
