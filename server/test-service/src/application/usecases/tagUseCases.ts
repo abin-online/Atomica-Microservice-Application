@@ -2,6 +2,7 @@
 import { ITagUseCase } from "../interfaces/useCaseInterfaces/tagUseCaseInterface";
 import { ITagRepository } from "../interfaces/repositoryInterfaces/tagRepositoryInterface";
 import { ITag } from "../../domain/entities/tag";
+import produce from "../../infrastructure/messaging/kafka/producer";
 
 export default class TagUseCase implements ITagUseCase {
   private tagRepository: ITagRepository;
@@ -14,6 +15,9 @@ export default class TagUseCase implements ITagUseCase {
     if (!tag.name) {
       throw new Error("Tag name is required");
     }
+    //---------------------------------------------
+    await produce('add-tag', tag) //kafka produce |
+    //---------------------------------------------
     return await this.tagRepository.create(tag);
   }
 
