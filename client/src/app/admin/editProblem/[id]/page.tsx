@@ -21,8 +21,8 @@ interface FormData {
 
 const EditProblem = () => {
      const router = useRouter()
-    const pathname = usePathname();  // Get the full pathname from the URL
-    const id = pathname.split('/').pop() || '';  /// Problem ID from URL query parameters
+    const pathname = usePathname();  
+    const id = pathname.split('/').pop() || '';  
     console.log('iddddddddd', id)
   const [formData, setFormData] = useState<FormData>({
     title: "",
@@ -122,7 +122,7 @@ const EditProblem = () => {
         }
       );
       toast.success("Problem updated successfully!");
-      router.push("/admin/problems"); // Redirect after successful update
+      router.push("/admin/problem"); // Redirect after successful update
     } catch (error) {
       console.error("Error updating problem:", error);
       toast.error("Failed to update problem");

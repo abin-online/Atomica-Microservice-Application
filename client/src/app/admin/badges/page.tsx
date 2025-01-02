@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
 import { useRouter } from "next/navigation";
+import { FaEdit, FaSyncAlt } from "react-icons/fa";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
 interface Badge {
   _id: string;
@@ -18,8 +20,11 @@ interface Badge {
 const BadgeList = () => {
   const [badges, setBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(false);
-  const [updatingId, setUpdatingId] = useState<string | null>(null); // track the updating badge
-  const router = useRouter()
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [badgesPerPage] = useState(5); // Number of badges per page
+  const router = useRouter();
+
   useEffect(() => {
     const fetchBadges = async () => {
       try {
@@ -39,104 +44,148 @@ const BadgeList = () => {
 
   const toggleBadgeStatus = async (id: string, currentStatus: boolean) => {
     try {
-      setLoading(true);
       setUpdatingId(id);
       const newStatus = !currentStatus;
-      const data = { id, isActive: newStatus };
-
-      console.log("Toggling badge status:", data); // Debug log
-
-      const response = await axios.patch("http://localhost:5003/badge/badge", data, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-      });       
-
+      const response = await axios.patch(
+        "http://localhost:5003/badge/badge",
+        { id, isActive: newStatus },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
       if (response.status === 200) {
-        console.log('Badge status updated successfully:', response.data); // Debug log
         toast.success("Badge status updated successfully");
-
-        // Update the badges list locally without refetching
         setBadges((prevBadges) =>
           prevBadges.map((badge) =>
             badge._id === id ? { ...badge, isActive: newStatus } : badge
           )
         );
       } else {
-        console.error("Failed to update badge status:", response);
         toast.error("Failed to update badge status");
       }
     } catch (error) {
-      console.error("Error updating badge status:", error);
       toast.error("Failed to update badge status");
     } finally {
-      setLoading(false);
-      setUpdatingId(null); // Reset updating ID
+      setUpdatingId(null);
     }
   };
 
-  // Handle Create Badge button click
   const handleCreateBadge = () => {
-    // Redirect to the page to create a new badge
-   
-    router.push('/admin/createBadge')
-    // You can navigate to the "Create Badge" form or open a modal here
+    router.push("/admin/createBadge");
   };
+
+  // Pagination logic
+  const indexOfLastBadge = currentPage * badgesPerPage;
+  const indexOfFirstBadge = indexOfLastBadge - badgesPerPage;
+  const currentBadges = badges.slice(indexOfFirstBadge, indexOfLastBadge);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="flex bg-gray-100">
       <Header />
       <Sidebar />
-      <div className="my-20 flex bg-gray-800 text-white min-h-screen w-full p-6">
-        <div className="flex flex-col w-full p-6 bg-gray-700 rounded-md shadow-md">
+      <div className="my-20 flex bg-gray-900 text-white min-h-screen w-full p-6">
+        <div className="flex flex-col w-full p-6 bg-gray-800 rounded-md shadow-lg">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">Badge List</h1>
+            <h1 className="text-3xl font-semibold">Badge List</h1>
             <button
               onClick={handleCreateBadge}
-              className="py-2 px-4 bg-blue-500 hover:bg-blue-600 rounded-md text-white"
+              className="py-2 px-6 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
             >
               Create Badge
             </button>
           </div>
 
-          {badges.length === 0 ? (
-            <p>No badges found.</p>
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <FaSyncAlt className="text-4xl animate-spin" />
+            </div>
+          ) : badges.length === 0 ? (
+            <p className="text-center text-xl text-gray-400">No badges found.</p>
           ) : (
-            <table className="w-full bg-gray-800 text-left border-collapse border border-gray-600">
-              <thead>
-                <tr>
-                  <th className="p-3 border border-gray-600">Name</th>
-                  <th className="p-3 border border-gray-600">Description</th>
-                  <th className="p-3 border border-gray-600">Status</th>
-                  <th className="p-3 border border-gray-600">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {badges.map((badge) => (
-                  <tr key={badge._id}>
-                    <td className="p-3 border border-gray-600">{badge.name}</td>
-                    <td className="p-3 border border-gray-600">{badge.description}</td>
-                    <td className="p-3 border border-gray-600">
-                      {badge.isActive ? "Active" : "Inactive"}
-                    </td>
-                    <td className="p-3 border border-gray-600">
-                      <button
-                        onClick={() => toggleBadgeStatus(badge._id, badge.isActive)}
-                        disabled={loading || updatingId === badge._id}
-                        className={`py-2 px-4 rounded-md font-semibold text-white ${
-                          badge.isActive
-                            ? "bg-red-500 hover:bg-red-600"
-                            : "bg-green-500 hover:bg-green-600"
-                        } ${loading || updatingId === badge._id ? "bg-gray-400 cursor-not-allowed" : ""}`}
-                      >
-                        {loading || updatingId === badge._id ? "Updating..." : badge.isActive ? "Block" : "Unblock"}
-                      </button>
-                    </td>
+            <>
+              <table className="w-full table-auto bg-gray-800 text-left border-collapse border border-gray-700 rounded-md">
+                <thead>
+                  <tr className="bg-gray-700 text-gray-300">
+                    <th className="p-4 border-b border-gray-600">Name</th>
+                    <th className="p-4 border-b border-gray-600">Description</th>
+                    <th className="p-4 border-b border-gray-600">Status</th>
+                    <th className="p-4 border-b border-gray-600">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {currentBadges.map((badge) => (
+                    <tr key={badge._id} className="hover:bg-gray-700">
+                      <td className="p-4 border-b border-gray-600">{badge.name}</td>
+                      <td className="p-4 border-b border-gray-600">{badge.description}</td>
+                      <td className="p-4 border-b border-gray-600">
+                        {badge.isActive ? (
+                          <span className="text-green-400 font-semibold">Active</span>
+                        ) : (
+                          <span className="text-red-400 font-semibold">Inactive</span>
+                        )}
+                      </td>
+                      <td className="p-4 border-b border-gray-600">
+                        <div className="flex items-center space-x-3 justify-center">
+                          <button
+                            onClick={() => router.push(`/admin/editBadge/${badge._id}`)}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center space-x-2"
+                          >
+                            <FaEdit />
+                            <span>Edit</span>
+                          </button>
+
+                          <button
+                            onClick={() => toggleBadgeStatus(badge._id, badge.isActive)}
+                            disabled={updatingId === badge._id}
+                            className={`w-32 py-2 px-4 rounded-lg font-semibold text-white transition duration-200 flex items-center justify-center space-x-2 ${
+                              badge.isActive
+                                ? "bg-red-500 hover:bg-red-600"
+                                : "bg-green-500 hover:bg-green-600"
+                            } ${updatingId === badge._id ? "bg-gray-400 cursor-not-allowed" : ""}`}
+                          >
+                            {badge.isActive ? (
+                              <>
+                                <AiFillCloseCircle />
+                                <span>Block</span>
+                              </>
+                            ) : (
+                              <>
+                                <AiFillCheckCircle />
+                                <span>Unblock</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Pagination */}
+              <div className="flex justify-center mt-4">
+                <ul className="flex space-x-2">
+                  {Array.from(
+                    { length: Math.ceil(badges.length / badgesPerPage) },
+                    (_, index) => index + 1
+                  ).map((pageNumber) => (
+                    <li key={pageNumber}>
+                      <button
+                        onClick={() => paginate(pageNumber)}
+                        className={`px-4 py-2 rounded-lg ${
+                          currentPage === pageNumber
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-600 text-gray-300 hover:bg-gray-700"
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
           )}
         </div>
       </div>
