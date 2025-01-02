@@ -1,15 +1,39 @@
 'use client'
 
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const LeaderBoard = () => {
-  const users = [
-    { id: 1, name: "John Doe", score: 1500, avatar: "https://i.pravatar.cc/50?img=1" },
-    { id: 2, name: "Jane Smith", score: 1450, avatar: "https://i.pravatar.cc/50?img=2" },
-    { id: 3, name: "Alice Johnson", score: 1400, avatar: "https://i.pravatar.cc/50?img=3" },
-    { id: 4, name: "Bob Brown", score: 1350, avatar: "https://i.pravatar.cc/50?img=4" },
-    { id: 5, name: "Charlie Davis", score: 1300, avatar: "https://i.pravatar.cc/50?img=5" },
-  ];
+  // const users = [
+  //   { id: 1, name: "John Doe", score: 1500, avatar: "https://i.pravatar.cc/50?img=1" },
+  //   { id: 2, name: "Jane Smith", score: 1450, avatar: "https://i.pravatar.cc/50?img=2" },
+  //   { id: 3, name: "Alice Johnson", score: 1400, avatar: "https://i.pravatar.cc/50?img=3" },
+  //   { id: 4, name: "Bob Brown", score: 1350, avatar: "https://i.pravatar.cc/50?img=4" },
+  //   { id: 5, name: "Charlie Davis", score: 1300, avatar: "https://i.pravatar.cc/50?img=5" },
+  // ];
+  type User = {
+    _id: number;
+    name: string;
+    points: number;
+    avatar: string;
+  };
+  
+  const [users, setUsers] = useState<User[]>([])
+
+  useEffect(() => {
+    const fetchLeaderBoard = async () => {
+      try {
+        const response = await axios.get('http://localhost:5003/badge/leaderBoard');
+        setUsers(response.data);
+        console.log("userssssss", users)
+      } catch (error) {
+        console.error("Error:::::::::", error);
+      }
+    };
+  
+    fetchLeaderBoard();
+  }, []);
+  
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg shadow-lg">
@@ -19,7 +43,7 @@ const LeaderBoard = () => {
       <div className="space-y-6">
         {users.map((user, index) => (
           <div
-            key={user.id}
+            key={user._id}
             className={`flex items-center justify-between px-6 py-4 rounded-lg transform transition-all duration-300 hover:scale-105 ${
               index === 0
                 ? "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg"
@@ -47,7 +71,7 @@ const LeaderBoard = () => {
               </div>
               {/* Avatar */}
               <img
-                src={user.avatar}
+                src={`https://i.pravatar.cc/50?img=${index + 1}`}
                 alt={user.name}
                 className="w-12 h-12 rounded-full ml-4 border-2 border-gray-300"
               />
@@ -56,7 +80,7 @@ const LeaderBoard = () => {
             </div>
             {/* Score */}
             <div className="flex items-center space-x-2">
-              <span className="text-white font-bold text-xl">{user.score} pts</span>
+              <span className="text-white font-bold text-xl">{user.points} pts</span>
               {/* Badge for top 3 */}
               {index < 3 && (
                 <span

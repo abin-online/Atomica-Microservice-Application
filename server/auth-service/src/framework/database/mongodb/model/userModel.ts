@@ -21,7 +21,10 @@ const userSchema: Schema<Iuser> = new Schema({
     is_verified: {
         type: Boolean,
         default: false
-    }
+    },
+
+}, {
+    timestamps: true
 })
 
 const userModel: Model<Iuser> = model('user', userSchema)

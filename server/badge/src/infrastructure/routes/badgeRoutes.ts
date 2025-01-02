@@ -14,6 +14,7 @@ const router = (router: Router) => {
     router.get("/badge", badgeController.getAllBadges); 
     router.patch("/badge", badgeController.blockBadge); 
     router.post('/test' , userController.updateTestPoint);
+    router.get('/leaderBoard' , userController.leaderBoard);
 }
 
 
