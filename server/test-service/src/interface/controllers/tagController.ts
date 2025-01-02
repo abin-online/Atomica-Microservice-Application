@@ -51,4 +51,25 @@ export default class TagController {
         return next(new ErrorHandler(error.status, error.message))
     }
   }
+
+  async getTagById(req: Req, res: Res, next: Next) : Promise<void> {
+    try {
+      const id = req.params.id;
+      const tag = await this.tagUseCase.getTagById(id);
+      res.json(tag)
+    } catch (error : any) {
+      return next(new ErrorHandler(error.status, error.message))
+    }
+  }
+
+  async updateTag(req: Req, res: Res, next: Next) : Promise<void> {
+    try {
+      const {id} = req.params
+      const data = req.body;
+      const updatedTag = await this.tagUseCase.updateTag(id, data)
+      res.status(200).json(updatedTag);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.status, error.message))
+    }
+  }
 }

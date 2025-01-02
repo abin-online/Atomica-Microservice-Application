@@ -23,10 +23,29 @@ export default class TagUseCase implements ITagUseCase {
 
   async blockTag(id: string, blocked: boolean): Promise<ITag | null> {
     console.log("from usecase     ",id, blocked)
-    return await this.tagRepository.blockTag(id, blocked);
+
+    
+    const tag = await this.tagRepository.blockTag(id, blocked);
+    const blockData = {
+      tag: tag?.name,
+      blocked
+    }
+    await produce('block-tag', blockData);
+    
+    return tag
   }
 
   async getAllTags(): Promise<ITag[]> {
     return await this.tagRepository.getAll();
+  }
+  
+  
+
+  async getTagById(id: string) : Promise<ITag> {
+    return await this.tagRepository.getTag(id);
+  }
+
+  async updateTag(id: string, data: any): Promise<ITag> {
+    return await this.tagRepository.updateTag(id, data);
   }
 }

@@ -23,4 +23,21 @@ export class TagRepository implements ITagRepository {
     console.log(updatedTag)
     return updatedTag
   }
+
+  async getTag(id: string): Promise<ITag> {
+    const tag = await tagModel.findById(id);
+    if (!tag) {
+      throw new Error(`Tag not found.`);
+    }
+    return tag;
+  }
+
+  async updateTag(id: string, data: any): Promise<ITag> {
+    const updatedTag = await tagModel.findByIdAndUpdate(id, data, { new: true });
+    if (!updatedTag) {
+      throw new Error(`Failed to update tag.`);
+    }
+    return updatedTag;
+  }
+
 }

@@ -8,7 +8,7 @@ async function consume() {
         console.log('daaaaaaaaa')
         await consumer.connect();
         await consumer.subscribe({
-            topics: ["add-tag"],
+            topics: ["add-tag", 'block-tag'],
             fromBeginning: true,
         });
         
@@ -23,6 +23,10 @@ async function consume() {
                     console.log('tagukk ulle vandhitte')
 
                     await tagService.addTag(tag)
+                }else if(topic === 'block-tag') {
+                    console.log('blog tagukk ulle vandhitte' , tag)
+        
+                    await tagService.blockTag(tag)
                 }
             }
         })
