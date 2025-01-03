@@ -15,7 +15,6 @@ export class BadgeController {
       this.blockBadge = this.blockBadge.bind(this);
     }
   
-    // Method to create a new badge
     async createBadge(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
         const { name, description, minQuestionsSolved } = req.body;
@@ -45,13 +44,23 @@ export class BadgeController {
     async updateBadge(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
         const { id } = req.params;
-        const badgeData = req.body;
+        const { name, description, minQuestionsSolved } = req.body;
+        const image = req.file as Express.Multer.File;
+    
+        let badgeData: { [key: string]: any } = { name, description, minQuestionsSolved };
+    
+        if (image) {
+          const s3Response = await s3Service.uploadFile(image);
+          badgeData.imageURL = s3Response.Location; // Add the new image URL if an image is uploaded
+        }
+        console.log(badgeData)
         const updatedBadge = await this.badgeUseCase.updateBadge(id, badgeData);
-        res.status(200).json(updatedBadge);
+        res.status(200).json({ message: "Badge updated", badge: updatedBadge });
       } catch (error: any) {
         return next(new ErrorHandler(error.status, error.message));
       }
     }
+    
   
     // Method to retrieve a badge by ID
     async getBadge(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -9,10 +9,13 @@ const upload = multer({storage: storage});
 
 const router = (router: Router) => {
     router.post("/badge", upload.single('image'), badgeController.createBadge); 
-    router.put("/badge/:id", badgeController.updateBadge); 
+    router.put("/badge/:id", upload.single('image'), badgeController.updateBadge); 
     router.get("/badge/:id", badgeController.getBadge); 
     router.get("/badge", badgeController.getAllBadges); 
-    router.patch("/badge", badgeController.blockBadge); 
+
+
+    //PATCH IS NOT WORKING, 
+    router.put("/blockBadge", badgeController.blockBadge); 
     router.post('/test' , userController.updateTestPoint);
     router.get('/leaderBoard' , userController.leaderBoard);
 }

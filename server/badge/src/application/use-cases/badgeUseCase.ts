@@ -23,12 +23,10 @@ export default class BadgeUseCase {
     return await this.badgeRepository.getAllBadges();
   }
 
-  // Get a badge by its ID
   async getBadgeById(id: string): Promise<IBadge | null> {
     return await this.badgeRepository.getBadgeById(id);
   }
 
-  // Block or unblock a badge (e.g., setting the `isActive` status)
   async blockBadge(badgeId: string, isActive: boolean): Promise<IBadge | null> {
     return await this.badgeRepository.blockBadge(badgeId, isActive);
   }
