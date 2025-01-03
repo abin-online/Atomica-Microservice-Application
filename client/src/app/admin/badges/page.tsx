@@ -29,7 +29,7 @@ const BadgeList = () => {
     const fetchBadges = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5003/badge/badge");
+        const response = await axios.get("http://localhost:5003/badge/badges");
         setBadges(response.data);
       } catch (error) {
         console.error("Error fetching badges:", error);
