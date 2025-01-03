@@ -46,22 +46,19 @@ const BadgeList = () => {
     try {
       setUpdatingId(id);
       const newStatus = !currentStatus;
-      const response = await axios.patch(
-        "http://localhost:5003/badge/badge",
-        { id, isActive: newStatus },
-        { headers: { "Content-Type": "application/json" } }
+      await axios.put(
+        "http://localhost:5003/badge/blockBadge",
+        { id, isActive: newStatus }
       );
 
-      if (response.status === 200) {
+      
         toast.success("Badge status updated successfully");
         setBadges((prevBadges) =>
           prevBadges.map((badge) =>
             badge._id === id ? { ...badge, isActive: newStatus } : badge
           )
-        );
-      } else {
-        toast.error("Failed to update badge status");
-      }
+        )
+  
     } catch (error) {
       toast.error("Failed to update badge status");
     } finally {

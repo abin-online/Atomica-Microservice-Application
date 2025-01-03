@@ -48,16 +48,12 @@ const Problem = () => {
   const handleBlock = async (id: string, currentStatus: boolean) => {
     try {
       const updatedStatus = !currentStatus;
-      await axios.patch(
-        `http://localhost:5002/problem/updateStatus/${id}`,
-        {
+      await axios.put(
+        `http://localhost:5002/problem/blockProblem`,
+        { 
+          problemId: id,
           blocked: updatedStatus,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
       );
 
       setProblems((prev) =>

@@ -3,12 +3,12 @@
 import { blockUser, getUsersData } from "@/api/admin";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
-import { removeUser } from "@/lib/features/users/userSlice";
 import { useAppDispatch } from "@/lib/hook";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillCloseCircle, AiFillCheckCircle } from "react-icons/ai";
-import { FaEdit, FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt } from "react-icons/fa";
+import { useConfirmationDialog } from "@/app/customHooks/useConfirmationDialog";
 
 const UsersPage = () => {
   interface User {
@@ -20,38 +20,19 @@ const UsersPage = () => {
   }
 
   const dispatch = useAppDispatch();
-
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [userPerPage] = useState(5);
-
-  const handleBlock = async (userId: string) => {
-    setUpdatingId(userId);
-    const response = await blockUser(userId);
-    if (response.statusText === "OK") {
-      const updatedUser = users.find((user) => user._id === userId);
-      toast.success(
-        `${updatedUser?.name} is ${updatedUser?.is_blocked ? "unblocked" : "blocked"} successfully`
-      );
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === userId ? { ...user, is_blocked: !user.is_blocked } : user
-        )
-      );
-    } else {
-      toast.error("An error occurred in the backend");
-    }
-    setUpdatingId(null);
-  };
+  const userPerPage = 5;
+  const { dialog, openDialog } = useConfirmationDialog();
 
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const users = await getUsersData();
-        setUsers(users.data || []);
+        const { data } = await getUsersData();
+        setUsers(data || []);
       } catch (error) {
         toast.error("Error fetching users");
       } finally {
@@ -61,13 +42,43 @@ const UsersPage = () => {
     fetchUsers();
   }, []);
 
+  const handleBlock = async (userId: string) => {
+    setUpdatingId(userId);
+    try {
+      const response = await blockUser(userId);
+      if (response.statusText === "OK") {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === userId ? { ...user, is_blocked: !user.is_blocked } : user
+          )
+        );
+        const updatedUser = users.find((user) => user._id === userId);
+        toast.success(
+          `${updatedUser?.name} is ${updatedUser?.is_blocked ? "unblocked" : "blocked"} successfully`
+        );
+      } else {
+        throw new Error("Backend error");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating user status");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const confirmBlock = (user: User) => {
+    openDialog({
+      title: user.is_blocked ? "Unblock User" : "Block User",
+      message: `Are you sure you want to ${user.is_blocked ? "unblock" : "block"} this user?`,
+      onConfirm: () => handleBlock(user._id),
+    });
+  };
 
   const indexOfLastUser = currentPage * userPerPage;
   const indexOfFirstUser = indexOfLastUser - userPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
 
   return (
     <div className="flex bg-gray-100">
@@ -98,41 +109,47 @@ const UsersPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user) => (
+                  {currentUsers.map((user) => (
                     <tr key={user._id} className="hover:bg-gray-700">
                       <td className="p-4 border-b border-gray-600">{user.name}</td>
                       <td className="p-4 border-b border-gray-600">{user.email}</td>
                       <td className="p-4 border-b border-gray-600">
-                        {user.is_blocked ? (
-                          <span className="text-red-400 font-semibold">Blocked</span>
-                        ) : (
-                          <span className="text-green-400 font-semibold">Active</span>
-                        )}
+                        <span
+                          className={
+                            user.is_blocked
+                              ? "text-red-400 font-semibold"
+                              : "text-green-400 font-semibold"
+                          }
+                        >
+                          {user.is_blocked ? "Blocked" : "Active"}
+                        </span>
                       </td>
                       <td className="p-4 border-b border-gray-600">
-                        <div className="flex items-center space-x-3 justify-center">
-                          <button
-                            onClick={() => handleBlock(user._id)}
-                            disabled={updatingId === user._id}
-                            className={`w-32 py-2 px-4 rounded-lg font-semibold text-white transition duration-200 flex items-center justify-center space-x-2 ${user.is_blocked
-                                ? "bg-red-500 hover:bg-red-600"
-                                : "bg-green-500 hover:bg-green-600"
-                              } ${updatingId === user._id ? "bg-gray-400 cursor-not-allowed" : ""
-                              }`}
-                          >
-                            {user.is_blocked ? (
-                              <>
-                                <AiFillCloseCircle />
-                                <span>Unblock</span>
-                              </>
-                            ) : (
-                              <>
-                                <AiFillCheckCircle />
-                                <span>Block</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => confirmBlock(user)}
+                          disabled={updatingId === user._id}
+                          className={`w-32 py-2 px-4 rounded-lg font-semibold text-white transition duration-200 flex items-center justify-center space-x-2 ${
+                            user.is_blocked
+                              ? "bg-red-500 hover:bg-red-600"
+                              : "bg-green-500 hover:bg-green-600"
+                          } ${
+                            updatingId === user._id
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : ""
+                          }`}
+                        >
+                          {user.is_blocked ? (
+                            <>
+                              <AiFillCloseCircle />
+                              <span>Unblock</span>
+                            </>
+                          ) : (
+                            <>
+                              <AiFillCheckCircle />
+                              <span>Block</span>
+                            </>
+                          )}
+                        </button>
                       </td>
                       <td className="p-4 border-b border-gray-600">
                         {user.createdAt || "13/12/2024"}
@@ -141,7 +158,7 @@ const UsersPage = () => {
                   ))}
                 </tbody>
               </table>
-
+                  {dialog}
               <div className="flex justify-center mt-4">
                 <ul className="flex space-x-2">
                   {Array.from(
@@ -151,10 +168,11 @@ const UsersPage = () => {
                     <li key={pageNumber}>
                       <button
                         onClick={() => paginate(pageNumber)}
-                        className={`px-4 py-2 rounded-lg ${currentPage === pageNumber
+                        className={`px-4 py-2 rounded-lg ${
+                          currentPage === pageNumber
                             ? "bg-blue-600 text-white"
                             : "bg-gray-600 text-gray-300 hover:bg-gray-700"
-                          }`}
+                        }`}
                       >
                         {pageNumber}
                       </button>
