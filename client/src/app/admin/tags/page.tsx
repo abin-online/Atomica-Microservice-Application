@@ -141,8 +141,8 @@ const Tags = () => {
                                                     <button
                                                         onClick={() => confirmBlock(tag._id, tag.blocked)}
                                                         className={`w-32 py-2 px-4 rounded-lg font-semibold text-white transition duration-200 flex items-center justify-center space-x-2 ${tag.blocked
-                                                                ? 'bg-red-500 hover:bg-red-600'
-                                                                : 'bg-green-500 hover:bg-green-600'
+                                                                ? 'bg-green-500 hover:bg-green-600'
+                                                                : 'bg-red-500 hover:bg-red-700'
                                                             }`}
                                                     >
                                                         {tag.blocked ? 'Unblock' : 'Block'}
@@ -217,3 +217,4 @@ const Tags = () => {
 };
 
 export default Tags;
+
