@@ -5,7 +5,9 @@ const app = express()
 
 const services = {
     auth: 'http://localhost:5000',
-    test: 'http://localhost:5001'
+    test: 'http://localhost:5001',
+    problem: 'http://localhost:5002',
+    badge: 'http://localhost:5003'
 }
 
 app.use('/auth', createProxyMiddleware({
@@ -15,6 +17,15 @@ app.use('/auth', createProxyMiddleware({
 
 app.use('/mcq', createProxyMiddleware({
     target: services.test,
+    changeOrigin: true
+}))
+app.use('/badge', createProxyMiddleware({
+    target: services.badge,
+    changeOrigin: true
+}))
+
+app.use('/problem', createProxyMiddleware({
+    target: services.problem,
     changeOrigin: true
 }))
 
