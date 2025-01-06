@@ -30,4 +30,8 @@ export default class ProblemUseCase {
   async getAllTags(): Promise<any[]> {
     return await this.problemRepository.getAllTags();
   }
+
+  async getProblems(): Promise<any[]> {
+    return await this.problemRepository.getProblems() //only unblocked problems, for client and testcases
+  }
 }

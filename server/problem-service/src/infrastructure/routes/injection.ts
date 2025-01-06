@@ -7,6 +7,11 @@ import TagUseCase from "../../application/useCases/tagUseCase";
 import TagRepository from "../repositories/tagRepository";
 import { ITagUseCase } from "../../application/interfaces/useCaseInterface/tagUseCaseInterface";
 import { ITagRepository } from "../../application/interfaces/repositoryInterfaces/tagRepositoryInterfaces";
+import { ITestCaseRepository } from "../../application/interfaces/repositoryInterfaces/testCaseInterface";
+import TestCaseRepository from "../repositories/testCaseRepository";
+import { ITestCaseUseCase } from "../../application/interfaces/useCaseInterface/testCaseUseCaseInterface";
+import TestCaseUseCase from "../../application/useCases/testcase-usecase";
+import TestCaseController from "../../interface/controllers/testCaseController";
 
 
 // Instantiate the repository (data layer)
@@ -22,7 +27,14 @@ const tagUseCase: ITagUseCase = new TagUseCase(tagRepository)
 const problemController = new ProblemController(problemUseCase);
 const tagService = tagUseCase
 
+const testCaseRepository : ITestCaseRepository = new TestCaseRepository();
+
+const testCaseUseCase: ITestCaseUseCase = new TestCaseUseCase(testCaseRepository);
+
+const testCaseController = new TestCaseController(testCaseUseCase);
+
 export {
     problemController,
-    tagService
+    tagService,
+    testCaseController
 };

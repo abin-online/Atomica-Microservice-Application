@@ -5,5 +5,6 @@ export interface IProblemUseCase {
     getProblemById(id: string): Promise<any>;
     getAllProblems(): Promise<any[]>;
     getAllTags(): Promise<any[]>;
+    getProblems(): Promise<any[]>
   }
   

@@ -75,4 +75,13 @@ export default class ProblemController {
       return next(new ErrorHandler(error.status, error.message));
     }
   }
+
+  async getUnblockedProblems(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const problems = await this.problemUseCase.getProblems(); //only unblocked problems, especially for client side
+      res.status(200).json(problems);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.status, error.message));
+    }
+  }
 }

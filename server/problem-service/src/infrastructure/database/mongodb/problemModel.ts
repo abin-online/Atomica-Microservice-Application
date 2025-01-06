@@ -14,7 +14,7 @@ const problemSchema: Schema<IProblem> = new Schema({
     },
     blocked: {
         type: Boolean,
-        required: true
+        default: false
     },
     difficulty: {
         type: String,

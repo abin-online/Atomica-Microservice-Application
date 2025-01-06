@@ -1,9 +1,8 @@
 export interface ITestCase  {
-    problemId: string;
-    id: string;
+    problem: string;
+    _id?: string;
     input: object;
     expectedOutput: any;
-    orderMatters: boolean;
     visibility: 'public' | 'hidden';
   }
   

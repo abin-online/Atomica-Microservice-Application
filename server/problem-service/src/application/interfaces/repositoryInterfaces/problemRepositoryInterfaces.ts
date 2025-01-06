@@ -5,5 +5,6 @@ export interface IProblemRepository {
     findById(id: string): Promise<any | null>;
     findAll(): Promise<any[]>;
     getAllTags(): Promise<any[]>
+    getProblems(): Promise<any[]>
   }
   

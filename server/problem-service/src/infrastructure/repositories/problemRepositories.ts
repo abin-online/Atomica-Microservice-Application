@@ -15,6 +15,7 @@ export default class ProblemRepository implements IProblemRepository {
     return await Problem.find({});
   }
 
+
   // Find a problem by ID
   async findById(id: string): Promise<any | null> {
     return await Problem.findById(id);
@@ -43,6 +44,13 @@ export default class ProblemRepository implements IProblemRepository {
 
   async getAllTags(): Promise<any[]> {
     const tags = await tagModel.find({blocked:false})
+    
     return tags
   }
+
+  async getProblems(): Promise<any[]> {
+    const problems = await Problem.find({blocked:false}) 
+    return problems //only unblocked problems, for client and testcases
+  }
+
 }

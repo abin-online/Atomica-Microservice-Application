@@ -22,5 +22,9 @@ export const ProblemRoute = (router: Router) => {
     problemController.getAllProblems(req, res, next)
   );
 
+  router.get('/getProblems' , (req: Req, res: Res, next: Next) => {
+    problemController.getUnblockedProblems(req, res, next)
+  })
+
   return router;
 };

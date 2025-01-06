@@ -2,22 +2,18 @@ import mongoose, { Schema } from "mongoose";
 import { ITestCase } from "../../../domain/entities/testCase";
 
 const testCaseSchema: Schema<ITestCase> = new Schema({
-    problemId: {
+    problem: {
         type: String,
         required: true,
         index: true
     },
     input: {
-        type: Object,
+        type: String,
         required: true
     },
     expectedOutput: {
-        type: Schema.Types.Mixed,
+        type: String,
         required: true,
-    },
-    orderMatters: {
-        type: Boolean,
-        default: false
     },
     visibility: {
         type: String,
@@ -28,4 +24,4 @@ const testCaseSchema: Schema<ITestCase> = new Schema({
     timestamps: true
 });
 
-export const TestCase = mongoose.model<ITestCase>('TestCase', testCaseSchema)
+export const TestCaseModel = mongoose.model<ITestCase>('TestCase', testCaseSchema)
