@@ -7,6 +7,7 @@ import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaSyncAlt } from "react-icons/fa";
+import { blockQuestion, getAllQuestions } from "@/api/quickTest";
 
 interface Question {
   _id: string;
@@ -26,8 +27,9 @@ const QuickTest = () => {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5001/mcq/getAllQuestions");
-        setQuestions(response.data);
+        const response = await getAllQuestions();
+        console.log(response, "response ")
+        setQuestions(response || []);
       } catch (error) {
         console.error("Error fetching questions:", error);
         toast.error("Failed to load questions");
@@ -43,11 +45,7 @@ const QuickTest = () => {
     try {
       setUpdatingId(id);
       const newStatus = !isBlocked;
-      const response = await axios.put("http://localhost:5001/mcq/blockQuestion", {
-        questionId: id,
-        blocked: newStatus,
-      });
-
+      const response = await blockQuestion(id, newStatus)
       if (response.status === 200) {
         toast.success("Question status updated successfully");
         setQuestions((prevQuestions) =>

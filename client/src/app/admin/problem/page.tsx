@@ -8,6 +8,7 @@ import { useAppDispatch } from "@/lib/hook";
 import { setAdmin } from "@/lib/features/users/adminSlice";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaSyncAlt } from "react-icons/fa";
+import { blockProblem, getAllProblems } from "@/api/problem";
 
 interface IProblem {
   _id: string;
@@ -31,10 +32,10 @@ const Problem = () => {
       router.push(`/admin`);
     }
 
-    const fetchProblems = async () => {
+    const fetchProblems = async () => { 
       try {
-        const response = await axios.get("http://localhost:5002/problem/getAllProblems");
-        setProblems(response.data);
+        const response : any = await getAllProblems()
+        setProblems(response?.data);
       } catch (error) {
         console.error("Error fetching problems:", error);
       } finally {
@@ -48,13 +49,15 @@ const Problem = () => {
   const handleBlock = async (id: string, currentStatus: boolean) => {
     try {
       const updatedStatus = !currentStatus;
-      await axios.put(
-        `http://localhost:5002/problem/blockProblem`,
-        { 
-          problemId: id,
-          blocked: updatedStatus,
-        },
-      );
+      // await axios.put(
+      //   `http://localhost:5002/problem/blockProblem`,
+      //   { 
+      //     problemId: id,
+      //     blocked: updatedStatus,
+      //   },
+      // );
+
+      await blockProblem(id, updatedStatus)
 
       setProblems((prev) =>
         prev.map((p) => (p._id === id ? { ...p, blocked: updatedStatus } : p))

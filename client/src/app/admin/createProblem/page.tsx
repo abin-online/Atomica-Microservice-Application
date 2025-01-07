@@ -5,6 +5,9 @@ import axios from "axios";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
 import toast from "react-hot-toast";
+import { createProblem } from "@/api/problem";
+import { useRouter } from "next/navigation";
+import { getTagsFromProblems } from "@/api/tag";
 
 interface FormData {
   title: string;
@@ -18,6 +21,7 @@ interface FormData {
 }
 
 const CreateProblem = () => {
+  const router = useRouter()
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
@@ -35,9 +39,10 @@ const CreateProblem = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/problem/getTags");
-        console.log("Tags fetched:", response.data);
-        setTags(response.data);
+
+        const response : any = await getTagsFromProblems()
+        console.log("Tags fetched:", response?.data);
+        setTags(response?.data);
       } catch (error) {
         console.error("Error fetching tags:", error);
       }
@@ -86,39 +91,67 @@ const CreateProblem = () => {
     }));
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log("Form data to be submitted:", formData);
 
-  //   try {
-  //     const response = await axios.post('http://localhost:5002/problem/addProblem', formData, {
-  //       withCredentials: true,  // Include credentials (cookies, etc.)
-  //       headers: {
-  //           'Content-Type': 'application/json',  // Ensure the correct Content-Type header is set
-  //       },
-  //   });
-    
-  //     console.log("Problem added successfully:", response.data);
-  //   } catch (error) {
-  //     console.error("Error adding problem:", error);
-  //     if (axios.isAxiosError(error)) {
-  //       console.error("Axios error:", error.response ? error.response.data : error.message);
-  //     }
-  //   }
-  // };
+  const validateFormData = () => {
+    if (!formData.title.trim()) {
+      toast.error("Title is required!");
+      return false;
+    }
 
+    if (!formData.description.trim()) {
+      toast.error("Description is required!");
+      return false;
+    }
+
+    if (!formData.difficulty.trim()) {
+      toast.error("Difficulty level is required!");
+      return false;
+    }
+
+    if (formData.tags.length === 0) {
+      toast.error("At least one tag is required!");
+      return false;
+    }
+
+    if (formData.inputFormat.some(input => !input.name.trim() || !input.type.trim() || !input.description.trim())) {
+      toast.error("Each input format must have a name, type, and description!");
+      return false;
+    }
+
+    if (!formData.outputFormat.type.trim() || !formData.outputFormat.description.trim()) {
+      toast.error("Output format type and description are required!");
+      return false;
+    }
+
+    if (formData.constraints.some(constraint => !constraint.trim())) {
+      toast.error("Constraints must not be empty!");
+      return false;
+    }
+
+    if (formData.hints.some(hint => !hint.trim())) {
+      toast.error("Hints must not be empty!");
+      return false;
+    }
+
+    return true; // All fields are valid
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data to be submitted:", formData);  // Ensure it's in the correct format
-    try {
-      const response = await axios.post('http://localhost:5002/problem/addProblem', formData, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
 
-      toast.success("Problem added successfully:", response.data);
+    console.log("Form data to be submitted:", formData);
+    try {
+
+      if (validateFormData()) {
+        const response: any = await createProblem(formData)
+        toast.success("Problem added successfully:", response?.data);
+        router.push('/admin/problem')
+      } else {
+        return
+      }
+
+
+
     } catch (error) {
       console.error("Error adding problem:", error);
       if (axios.isAxiosError(error)) {
@@ -126,7 +159,7 @@ const CreateProblem = () => {
       }
     }
   };
-  
+
   const handleTagSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = Array.from(e.target.selectedOptions).map(
       (option) => option.value

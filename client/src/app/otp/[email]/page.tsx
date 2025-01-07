@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { resendOtp, verifyOTP } from '@/api/user';
+import { resendOtp, verifyOTP } from '@/api/userAuthentication';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
+import { createBadge } from "@/api/badge";
 
 const CreateBadge = () => {
     const [formData, setFormData] = useState({
@@ -81,11 +82,19 @@ const CreateBadge = () => {
                 console.log(key, value);
             });
             
-            const response = await axios.post("http://localhost:5003/badge/badge", uploadData, {
+            // const response = await axios.post("http://localhost:5003/badge/badge", uploadData, 
+            // // 
+            // {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            // });
+            const headers =  {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-            });
+            }
+            const response : any = await createBadge(uploadData, headers)
 
             if (response.status === 201) {
                 toast.success("Badge created successfully!");

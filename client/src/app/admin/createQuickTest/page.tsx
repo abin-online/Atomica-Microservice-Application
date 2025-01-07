@@ -6,6 +6,8 @@ import Header from '@/components/admin/Header';
 import Sidebar from '@/components/admin/SideBar';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { createQuickTest } from '@/api/quickTest';
+import { getAllTags } from '@/api/tag';
 
 const CreateQuickTest = () => {
     const router = useRouter();
@@ -34,9 +36,10 @@ const CreateQuickTest = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(`http://localhost:5001/tag/getAllTags`)
-            console.log(response.data)
-            setTags(response.data);
+            const response : any = await getAllTags()
+
+            console.log(response?.data)
+            setTags(response?.data);
         }
         fetchData()
 
@@ -71,12 +74,9 @@ const CreateQuickTest = () => {
     const handleSubmit = async () => {
         try {
             console.log('Form Data Submitted:', formData); // Log the form data
-            const response = await axios.post('http://localhost:5001/mcq/addQuestion', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.status === 201) {
+            const response = await createQuickTest(formData)
+
+            if (response?.status === 201) {
                 toast.success('Question created successfully');
                 router.push('/admin/quickTest');
             } else {

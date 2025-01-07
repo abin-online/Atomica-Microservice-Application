@@ -8,6 +8,7 @@ import Sidebar from "@/components/admin/SideBar";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaSyncAlt } from "react-icons/fa";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
+import { blockBadge, fetchBadge } from "@/api/badge";
 
 interface Badge {
   _id: string;
@@ -29,7 +30,7 @@ const BadgeList = () => {
     const fetchBadges = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5003/badge/badges");
+        const response  : any = await fetchBadge()
         setBadges(response.data);
       } catch (error) {
         console.error("Error fetching badges:", error);
@@ -46,10 +47,12 @@ const BadgeList = () => {
     try {
       setUpdatingId(id);
       const newStatus = !currentStatus;
-      await axios.put(
-        "http://localhost:5003/badge/blockBadge",
-        { id, isActive: newStatus }
-      );
+      // await axios.put(
+      //   "http://localhost:5003/badge/blockBadge",
+      //   { id, isActive: newStatus }
+      // );
+
+      await blockBadge(id, newStatus)
 
       
         toast.success("Badge status updated successfully");

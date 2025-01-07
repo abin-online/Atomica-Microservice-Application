@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirmationDialog } from '../customHooks/useConfirmationDialog';
+import { updateTest } from '@/api/badge';
 
 interface Question {
     _id: string;
@@ -116,7 +117,8 @@ export default function QuizPage() {
 
                 try {
                     console.log("|-----------------> user Quiz Data____________|", userQuizData)
-                    const response = await axios.post('http://localhost:5003/badge/test', userQuizData);
+                    // const response = await axios.post('http://localhost:5003/badge/test', userQuizData);
+                    const response : any = await updateTest(userQuizData)
                     if (response.data.newBadge) {
                         setNewBadgeData(response.data.badgeData);  // Store badge data
                         setTimeout(() => {

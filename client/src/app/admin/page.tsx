@@ -1,9 +1,8 @@
 'use client';
 
-import { adminLogin } from '@/api/admin';
+import { adminLogin } from '@/api/adminAuthentication';
 import { adminAuth } from '@/api/middleware/middleware';
 import { setAdmin } from '@/lib/features/users/adminSlice';
-import { setUser } from '@/lib/features/users/userSlice';
 import { useAppDispatch } from '@/lib/hook';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
@@ -67,13 +66,6 @@ export default function AdminLogin() {
         toast.success("Welcome to Admin Dashboard");
         console.log('admin data ___________>', admin)
 
-        // dispatch((setUser({
-        //   id: user._id,
-        //   name: user.name,
-        //   email: user.email,
-        //   blocked: user.is_blocked
-        // })))
-        
   
 
         // Redirect to home page after a brief delay
@@ -106,7 +98,7 @@ export default function AdminLogin() {
       <div className="flex flex-col lg:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Left --> Image */}
         <div className="hidden lg:block lg:w-1/2 bg-blue-500">
-          <img
+          <img   
             src="https://cdn.wallpapersafari.com/13/89/wb4WOU.jpg"
             alt="Admin Login Visual"
             className="object-cover w-full h-full"

@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
+import { getBadge, updateBadge } from "@/api/badge";
 
 const EditBadge = () => {
     const router = useRouter();
@@ -29,7 +30,8 @@ const EditBadge = () => {
 
         const fetchBadgeData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5003/badge/badge/${id}`);
+                
+                const response : any = await getBadge(id)
                 const badge = response.data;
 
                 // Set form data with fetched badge details (excluding image)
@@ -105,14 +107,15 @@ const EditBadge = () => {
                 uploadData.append('image', formData.image);
             }
 
-            // Make the API call to update the badge data
-            const response = await axios.put(`http://localhost:5003/badge/badge/${id}`, uploadData, {
+            const headers =  {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-            });
+            }
 
-            if (response.status === 200) {
+            const response : any = await updateBadge(id, uploadData, headers)
+
+            if (response?.status === 200) {
                 toast.success("Badge updated successfully!");
                 router.push("/admin/badges"); // Redirect after successful update
             }

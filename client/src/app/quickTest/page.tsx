@@ -1,4 +1,5 @@
 'use client'
+import { getAllTags } from '@/api/tag';
 import NavBar from '@/components/user/Navbar';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -21,7 +22,8 @@ const [difficulty, setDifficulty] = useState("");
 
 useEffect(() => {
     const fetchData = async () => {
-        const response = await axios.get(`http://localhost:5001/tag/getAllTags`)
+        // const response = await axios.get(`http://localhost:5001/tag/getAllTags`)
+        const response : any = await getAllTags()
         console.log(response.data)
         setTags(response.data);
     }

@@ -2,8 +2,8 @@
 
 // components/Sidebar.js
 import { useState } from 'react';
-import { FiHome, FiUsers, FiArrowRightCircle, FiArrowLeftCircle, FiLogOut, FiAlertTriangle, FiOctagon, FiTag, FiBriefcase } from 'react-icons/fi';
-import { adminLogout } from '@/api/admin';
+import { FiHome, FiUsers, FiArrowRightCircle, FiArrowLeftCircle, FiLogOut, FiAlertTriangle, FiOctagon, FiTag, FiBriefcase, FiType } from 'react-icons/fi';
+import { adminLogout } from '@/api/adminAuthentication';
 import { useAppDispatch } from '@/lib/hook';
 import { removeUser } from '@/lib/features/users/userSlice';
 import { removeAdmin } from '@/lib/features/users/adminSlice';
@@ -24,6 +24,7 @@ const Sidebar = () => {
     { name: 'Users', icon: <FiUsers />, path: '/admin/users' },
     { name: 'QuickTest', icon: <FiOctagon />, path: '/admin/quickTest' },
     { name: 'Problem', icon: <FiAlertTriangle />, path: '/admin/problem' },
+    {name: 'Testcases', icon : <FiType/>, path: '/admin/testcases'},
     { name: 'Tags', icon: <FiTag />, path: '/admin/tags' },
     {name : 'Badge', icon: <FiBriefcase/>, path: '/admin/badges'}
   ];

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { signup } from "@/api/user";
+import { signup } from "@/api/userAuthentication";
 import {userAuth} from "@/api/middleware/middleware";
 
 const SignUpPage: React.FC = () => {

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import NavBar from '@/components/user/Navbar';
 import Link from 'next/link';
+import { getUnblockedProblems } from '@/api/problem';
+import toast from 'react-hot-toast';
 
 // Define the Problem type
 interface Problem {
@@ -16,18 +18,22 @@ const Page = () => {
     const [problems, setProblems] = useState<Problem[]>([]); // State to store problems data
     const [loading, setLoading] = useState(true); // State for loading status
 
-    // Fetch problems from the backend API
     useEffect(() => {
-        axios.get('http://localhost:5002/problem/getAllProblems')
-            .then(response => {
-                setProblems(response.data); // Assuming response.data contains the list of problems
-                setLoading(false);
-            })
-            .catch(error => {
+        const fetchUnblockedProblems = async () => {
+            try {
+                const response : any = await getUnblockedProblems();
+                setProblems(response.data); 
+            } catch (error) {
+                toast.error('Error fetching problems')
                 console.error('Error fetching problems:', error);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+    
+        fetchUnblockedProblems();
     }, []);
+    
 
     // Render loading state or the problems
     if (loading) {

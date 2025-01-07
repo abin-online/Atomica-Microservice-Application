@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useConfirmationDialog } from '@/app/customHooks/useConfirmationDialog';
 import toast from 'react-hot-toast';
 import { FaEdit, FaSyncAlt } from 'react-icons/fa';
+import { blockTag, createTag, getAllTags } from '@/api/tag';
 
 interface Tag {
     _id: string;
@@ -21,15 +22,15 @@ const Tags = () => {
     const [loading, setLoading] = useState(false); // Add loading state
     const { dialog, openDialog } = useConfirmationDialog();
 
-      const [currentPage, setCurrentPage] = useState(1);
-      const [tagsPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [tagsPerPage] = useState(5);
 
     useEffect(() => {
         const fetchTags = async () => {
             setLoading(true); // Set loading to true before fetching
             try {
-                const response = await axios.get('http://localhost:5001/tag/getAllTags');
-                setTags(response.data);
+                const response: any = await getAllTags()
+                setTags(response?.data);
             } catch (err) {
                 console.error('Error fetching tags:', err);
             } finally {
@@ -42,10 +43,11 @@ const Tags = () => {
     const handleAddTag = async () => {
         if (newTag.trim()) {
             try {
-                const response = await axios.post('http://localhost:5001/tag/addTag', {
-                    tag: newTag.trim(),
-                });
-                setTags((prevTags) => [...prevTags, response.data]);
+                // const response = await axios.post('http://localhost:5001/tag/addTag', {
+                //     tag: newTag.trim(),
+                // });
+                const response: any = await createTag(newTag.trim())
+                setTags((prevTags) => [...prevTags, response?.data]);
                 setNewTag('');
                 setShowPopup(false);
             } catch (err) {
@@ -56,10 +58,12 @@ const Tags = () => {
 
     const toggleBlockedStatus = async (_id: string, currentStatus: boolean) => {
         try {
-            await axios.put('http://localhost:5001/tag/blockTag', {
-                tag: _id,
-                blocked: !currentStatus,
-            });
+            // await axios.put('http://localhost:5001/tag/blockTag', {
+            //     tag: _id,
+            //     blocked: !currentStatus,
+            // });
+
+            await blockTag(_id, !currentStatus)
 
             toast.success(`Successfully ${currentStatus ? 'unblocked' : 'blocked'}`);
             setTags((prevTags) =>
@@ -84,7 +88,7 @@ const Tags = () => {
     const indexOfLastTag = currentPage * tagsPerPage;
     const indexOfFirstTag = indexOfLastTag - tagsPerPage;
     const currentTags = tags.slice(indexOfFirstTag, indexOfLastTag);
-  
+
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
@@ -120,7 +124,7 @@ const Tags = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tags.map((tag) => (
+                                    {currentTags.map((tag) => (
                                         <tr key={tag._id} className="hover:bg-gray-700">
                                             <td className="p-4 border-b border-gray-600">{tag.name}</td>
                                             <td className="p-4 border-b border-gray-600">
@@ -141,8 +145,8 @@ const Tags = () => {
                                                     <button
                                                         onClick={() => confirmBlock(tag._id, tag.blocked)}
                                                         className={`w-32 py-2 px-4 rounded-lg font-semibold text-white transition duration-200 flex items-center justify-center space-x-2 ${tag.blocked
-                                                                ? 'bg-green-500 hover:bg-green-600'
-                                                                : 'bg-red-500 hover:bg-red-700'
+                                                            ? 'bg-green-500 hover:bg-green-600'
+                                                            : 'bg-red-500 hover:bg-red-700'
                                                             }`}
                                                     >
                                                         {tag.blocked ? 'Unblock' : 'Block'}
@@ -154,28 +158,27 @@ const Tags = () => {
                                 </tbody>
                             </table>
 
-                                        {/* Pagination */}
-              <div className="flex justify-center mt-4">
-                <ul className="flex space-x-2">
-                  {Array.from(
-                    { length: Math.ceil(tags.length / tagsPerPage) },
-                    (_, index) => index + 1
-                  ).map((pageNumber) => (
-                    <li key={pageNumber}>
-                      <button
-                        onClick={() => paginate(pageNumber)}
-                        className={`px-4 py-2 rounded-lg ${
-                          currentPage === pageNumber
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-600 text-gray-300 hover:bg-gray-700"
-                        }`}
-                      >
-                        {pageNumber}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                            {/* Pagination */}
+                            <div className="flex justify-center mt-4">
+                                <ul className="flex space-x-2">
+                                    {Array.from(
+                                        { length: Math.ceil(tags.length / tagsPerPage) },
+                                        (_, index) => index + 1
+                                    ).map((pageNumber) => (
+                                        <li key={pageNumber}>
+                                            <button
+                                                onClick={() => paginate(pageNumber)}
+                                                className={`px-4 py-2 rounded-lg ${currentPage === pageNumber
+                                                        ? "bg-blue-600 text-white"
+                                                        : "bg-gray-600 text-gray-300 hover:bg-gray-700"
+                                                    }`}
+                                            >
+                                                {pageNumber}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </>
                     )}
 

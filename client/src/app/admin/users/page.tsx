@@ -1,6 +1,6 @@
 'use client';
 
-import { blockUser, getUsersData } from "@/api/admin";
+import { blockUser, getUsersData } from "@/api/adminAuthentication";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
 import { useAppDispatch } from "@/lib/hook";

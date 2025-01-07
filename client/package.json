@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@codemirror/highlight": "^0.19.8",
+    "@codemirror/lang-javascript": "^6.2.2",
     "@monaco-editor/react": "^4.6.0",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.5.0",
     "@types/react-slick": "^0.23.13",
+    "@uiw/codemirror-themes": "^4.23.7",
+    "@uiw/react-codemirror": "^4.23.7",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",

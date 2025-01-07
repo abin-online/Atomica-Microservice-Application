@@ -6,6 +6,8 @@ import Header from '@/components/admin/Header';
 import Sidebar from '@/components/admin/SideBar';
 import toast from 'react-hot-toast';
 import { usePathname, useRouter } from 'next/navigation';
+import { getQuickTest, updateQuestion } from '@/api/quickTest';
+import { getAllTags } from '@/api/tag';
 
 const EditQuickTest = () => {
     const router = useRouter();
@@ -35,16 +37,16 @@ const EditQuickTest = () => {
     useEffect(() => {
         // Fetch tags
         const fetchTags = async () => {
-            const response = await axios.get('http://localhost:5001/tag/getAllTags');
-            setTags(response.data);
+            const response : any = await getAllTags()
+            setTags(response?.data);
         };
 
         const questionId = pathname.split('/').pop() || '';
         if (questionId) {
             const getQuestion = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:5001/mcq/getQuestion/${questionId}`);
-                    const data = response.data;
+                    const data = await getQuickTest(questionId)
+                                        
                     setFormData({
                         question: data.question,
                         options: {
@@ -57,6 +59,7 @@ const EditQuickTest = () => {
                         difficulty: data.difficulty,
                         tags: data.tags,
                     });
+
                 } catch (error) {
                     console.error('Error fetching question:', error);
                     toast.error('Error fetching question');
@@ -108,13 +111,9 @@ const EditQuickTest = () => {
         }
 
         try {
-            const response = await axios.put(`http://localhost:5001/mcq/updateQuestion/${questionId}`, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response: any = await updateQuestion(questionId, formData)
 
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 toast.success('Question updated successfully');
                 router.push('/admin/quickTest');
             } else {

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { forgotPassword } from '@/api/user';
+import { forgotPassword } from '@/api/userAuthentication';
 import { useRouter } from 'next/navigation';
 
 const ForgotPassword = () => {
