@@ -1,91 +1,94 @@
 'use client'
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import NavBar from '@/components/user/Navbar';
-import Link from 'next/link';
-import { getUnblockedProblems } from '@/api/problem';
+import ProblemList from '@/components/user/ProblemList';
+import { getAllTags } from '@/api/tag';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-// Define the Problem type
-interface Problem {
-    _id: string;
-    no: string;
-    title: string;
-    difficulty: string;
-}
-
 const Page = () => {
-    const [problems, setProblems] = useState<Problem[]>([]); // State to store problems data
-    const [loading, setLoading] = useState(true); // State for loading status
+
+    const [tags, setTags] = useState([])
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     useEffect(() => {
-        const fetchUnblockedProblems = async () => {
+        const fetchTag = async () => {
             try {
-                const response : any = await getUnblockedProblems();
-                setProblems(response.data); 
+                const response: any = await getAllTags();
+                if (response?.data) {
+                    setTags(response.data);
+                }
+                console.log(response.data)
             } catch (error) {
-                toast.error('Error fetching problems')
-                console.error('Error fetching problems:', error);
-            } finally {
-                setLoading(false);
+                console.error('Error fetching tags:', error);
+                toast.error('Failed to load tags');
             }
-        };
-    
-        fetchUnblockedProblems();
-    }, []);
-    
+        }
+        fetchTag()
+    }, [])
 
-    // Render loading state or the problems
-    if (loading) {
-        return <div>Loading problems...</div>;
-    }
+    const handleTagClick = (tagName: string) => {
+        setSelectedTags((prevSelectedTags) => {
+            const isSelected = prevSelectedTags.includes(tagName);
+            if (isSelected) {
+                return prevSelectedTags.filter((tag) => tag !== tagName);
+            } else {
+                return [...prevSelectedTags, tagName];
+            }
+        });
+    
+        setTimeout(() => {
+            const isSelected = selectedTags.includes(tagName);
+            if (isSelected) {
+                toast.success(`Deselected tag: ${tagName}`);
+            } else {
+                toast.success(`Selected tag: ${tagName}`);
+            }
+        }, 0);
+    };
+    
+    
 
     return (
         <div className="quick-test-home bg-gray-100 text-gray-800 min-h-screen">
-            {/* Navigation Bar */}
+
             <NavBar />
 
-            {/* Problems List Section */}
-            <section className="problems-list py-8 px-6 bg-white shadow-md rounded-lg max-w-4xl mx-auto mt-8">
-                <h2 className="text-2xl font-semibold mb-4">List of Problems</h2>
+            <div className="flex flex-col items-center justify-center py-6 ">
+                {/* Search Bar */}
+                <div className="mb-6 w-full  max-w-4xl">
+                    <input
+                        type="text"
+                        placeholder="Search problems..."
+                        className="w-full px-4 py-2 border rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                </div>
 
-                {/* Table for Problems */}
-                <table className="min-w-full table-auto">
-                    <thead>
-                        <tr className="bg-gray-100 border-b">
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">No</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Title</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Difficulty</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {problems.map((problem, index) => (
-                            <tr key={problem._id} className="border-b hover:bg-gray-50">
-                                <td className="px-6 py-4 text-sm text-gray-700">
-                                    <Link href={`/problemView/${problem._id}`}>
-                                        {index + 1}
-                                    </Link>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-700">
-                                    <Link href={`/problemView/${problem._id}`}>
-                                        {problem.title}
-                                    </Link>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-700">
-                                    <Link href={`/problemView/${problem._id}`}>
-                                        {problem.difficulty}
-                                    </Link>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </section>
+                {/* Tags Section */}
 
-            {/* Footer */}
-            <footer className="py-6 mt-8 bg-primary-500 text-white text-center">
-                <p>&copy; 2024 Quick Test. All rights reserved.</p>
-            </footer>
+                <div className="flex flex-wrap gap-2 justify-center items-center max-w-4xl">
+                    {tags.map((tag: any, index: number) => (
+                        <span
+                            key={index}
+                            onClick={() => handleTagClick(tag.name)}
+                            className={`relative bg-blue-500 text-white px-4 py-2 rounded-full text-sm shadow cursor-pointer ${selectedTags.includes(tag.name) ? 'bg-blue-600' : 'hover:bg-blue-600'
+                                }`}
+                        >
+                            {tag.name}
+
+                            {/* Tick or Cross Indicator */}
+                            {selectedTags.includes(tag.name) && (
+                                <span className="absolute top-1 right-1 text-white">
+                                    ✓
+                                </span>
+                            )}
+                        </span>
+                    ))}
+                </div>
+            </div>
+
+
+            <ProblemList selectedTags={selectedTags} />
+
         </div>
     );
 };
