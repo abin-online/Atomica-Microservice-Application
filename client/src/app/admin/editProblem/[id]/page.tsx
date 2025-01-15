@@ -7,6 +7,7 @@ import Sidebar from "@/components/admin/SideBar";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { updateProblem } from "@/api/problem";
 
 interface FormData {
   title: string;
@@ -112,15 +113,16 @@ const EditProblem = () => {
     e.preventDefault();
     console.log("Form data to be submitted:", formData);
     try {
-      const response = await axios.put(
-        `http://localhost:5002/problem/updateProblem/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // const response = await axios.put(
+      //   `http://localhost:5002/problem/updateProblem/${id}`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      await updateProblem(id, formData)
       toast.success("Problem updated successfully!");
       router.push("/admin/problem"); // Redirect after successful update
     } catch (error) {

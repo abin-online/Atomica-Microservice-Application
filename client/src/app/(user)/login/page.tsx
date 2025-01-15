@@ -2,14 +2,11 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { AUTH_SERVICE_URL } from "@/utils/constants";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { login } from "@/api/userAuthentication";
 import { useAppDispatch } from "@/lib/hook";
 import { setUser } from "@/lib/features/users/userSlice";
-import { RootState } from "@/lib/store";
 import { userGoogleLogin } from "@/api/userAuthentication";
 import { jwtDecode } from 'jwt-decode';
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
@@ -42,14 +39,20 @@ function Page() {
 
       if (user) {
         // Store user data in localStorage and show success toast
-        localStorage.setItem("user", JSON.stringify(user));
+        //localStorage.setItem("user", JSON.stringify(user));
         toast.success("Welcome to atomica");
         console.log('user data ___________>', user)
+          console.log("user token___________",response.token)
+        console.log(response.token.role,'response of login my form submit')
+        localStorage.setItem('accesToken',response.token.accessToken)
+        localStorage.setItem('refreshToken',response.token.refreshToken)
+        localStorage.setItem('role',response.token.role)
 
         dispatch((setUser({
           id: user._id,
           name: user.name,
           email: user.email,
+          role: 'user',
           blocked: user.is_blocked
         })))
 

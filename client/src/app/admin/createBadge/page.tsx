@@ -6,12 +6,15 @@ import toast from "react-hot-toast";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
 import { createBadge } from "@/api/badge";
+import { useRouter } from "next/navigation";
 
 const CreateBadge = () => {
+    const router = useRouter()
     const [formData, setFormData] = useState({
         name: "",
         description: "",
         minQuestionsSolved: 0,
+        category: "problem", 
         image: null as File | null, // Specify the type for image
     });
 
@@ -49,6 +52,8 @@ const CreateBadge = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        console.log("formData in handle submit ", formData)
+
         // Check if the form is filled correctly
         if (formData.name.trim() === '') {
             toast.error('Fill out the tag name field');
@@ -58,8 +63,8 @@ const CreateBadge = () => {
             toast.error('Fill out the description field');
             return;
         }
-        if (formData.minQuestionsSolved < 10) {
-            toast.error('Minimum questions should be greater than 10');
+        if (formData.minQuestionsSolved < 1) {
+            toast.error('Minimum questions should be greater than 0');
             return;
         }
         if (!formData.image) {
@@ -75,6 +80,7 @@ const CreateBadge = () => {
             uploadData.append('name', formData.name);
             uploadData.append('description', formData.description);
             uploadData.append('minQuestionsSolved', formData.minQuestionsSolved.toString());
+            uploadData.append('category', formData.category)
             if (formData.image) {
                 uploadData.append('image', formData.image); // Append the image file to FormData
             }
@@ -94,15 +100,18 @@ const CreateBadge = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             }
+            console.log("upload dataa", uploadData)
             const response : any = await createBadge(uploadData, headers)
 
             if (response.status === 201) {
                 toast.success("Badge created successfully!");
+                router.push('/admin/badges')
                 setFormData({
                     name: "",
                     description: "",
                     minQuestionsSolved: 0,
-                    image: null, // Reset image field
+                    image: null, 
+                    category: "problem",
                 });
                 setImagePreview(null); // Reset image preview
             }
@@ -159,6 +168,21 @@ const CreateBadge = () => {
                                 onChange={handleChange}
                                 className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
                             />
+                        </div>
+                        <div>
+                            <label htmlFor="category" className="block text-sm font-medium mb-1">
+                                Badge Type
+                            </label>
+                            <select
+                                id="category"
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
+                            >
+                                <option value="problem">Problem</option>
+                                <option value="test">Test</option>
+                            </select>
                         </div>
                         <div>
                             <label htmlFor="image" className="block text-sm font-medium mb-1">

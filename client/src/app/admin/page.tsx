@@ -12,20 +12,20 @@ import toast from 'react-hot-toast';
 export default function AdminLogin() {
   const dispatch = useAppDispatch()
   const [email, setEmail] = useState('')
-  const [password,setPassword]=useState('')
+  const [password, setPassword] = useState('')
   const router = useRouter()
   // adminAuth()
-  
-  useEffect(() => {
-      const storedAdmin = localStorage.getItem('admin');
-      if (storedAdmin) {
-        dispatch(setAdmin(JSON.parse(storedAdmin)));
-        router.push(`/admin/dashboard`)
-      }else{ 
-    }
-    }, [dispatch]);
 
-   
+  useEffect(() => {
+    const storedAdmin = localStorage.getItem('admin');
+    if (storedAdmin) {
+      dispatch(setAdmin(JSON.parse(storedAdmin)));
+      router.push(`/admin/dashboard`)
+    } else {
+    }
+  }, [dispatch]);
+
+
 
   const {
     register,
@@ -34,14 +34,14 @@ export default function AdminLogin() {
   } = useForm();
 
   type Login = {
-    email : string;
-    password : string
+    email: string;
+    password: string
   }
 
   const onSubmit = async (data: Login) => {
     try {
       // Perform the login request
-      
+
       const response = await adminLogin(data); // Assuming `login` is an API function
       console.log("Response received:", response);
 
@@ -59,14 +59,19 @@ export default function AdminLogin() {
           email: admin.email,
           role: admin.role,
         };
-        
+
         dispatch(setAdmin(adminData));
-        localStorage.setItem('admin', JSON.stringify(adminData));
+        //localStorage.setItem('admin', JSON.stringify(adminData));
+        console.log("Admin Token ",response.token)
+        localStorage.setItem('adminAccessToken', response.token.accessToken);
+        localStorage.setItem('adminRefreshToken', response.token.refreshToken);
+        localStorage.setItem('adminRole', response.token.role);
+
 
         toast.success("Welcome to Admin Dashboard");
         console.log('admin data ___________>', admin)
 
-  
+
 
         // Redirect to home page after a brief delay
         setTimeout(() => {
@@ -74,31 +79,31 @@ export default function AdminLogin() {
         }, 1500);
       } else {
         // Log error and handle different error messages
-        console.log("res msg admin =>>>>",response?.response.data.message)
-        if(response?.response.data.message == "access denied"){
+        console.log("res msg admin =>>>>", response?.response.data.message)
+        if (response?.response.data.message == "access denied") {
           toast.error("Access denied");
-        }else if(response?.response.data.message == 'incorrect password'){
+        } else if (response?.response.data.message == 'incorrect password') {
           toast.error("Incorrect password");
-        }else if(response?.response.data.message == 'invalid email id') {
+        } else if (response?.response.data.message == 'invalid email id') {
           toast.error("Invalid email");
-        }else{
+        } else {
           toast.error('An unexpected error occured')
         }
 
       }
     } catch (error) {
-     console.log(error)
+      console.log(error)
     }
   };
 
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      
+
       <div className="flex flex-col lg:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Left --> Image */}
         <div className="hidden lg:block lg:w-1/2 bg-blue-500">
-          <img   
+          <img
             src="https://cdn.wallpapersafari.com/13/89/wb4WOU.jpg"
             alt="Admin Login Visual"
             className="object-cover w-full h-full"
@@ -175,7 +180,7 @@ export default function AdminLogin() {
 
             {/* Forgot Password */}
             <div className="flex justify-end text-sm mt-4">
-              
+
             </div>
           </div>
         </div>

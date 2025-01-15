@@ -1,14 +1,14 @@
 'use client';
 
-import NavBar from '@/components/user/Navbar';
 import { setUser } from '@/lib/features/users/userSlice';
 import { useAppDispatch } from '@/lib/hook';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useConfirmationDialog } from '../customHooks/useConfirmationDialog';
+import { useConfirmationDialog } from '../../customHooks/useConfirmationDialog';
 import { updateTest } from '@/api/badge';
+import LoadingSpinner from '@/components/user/LoadingSpinner';
 
 interface Question {
     _id: string;
@@ -196,17 +196,9 @@ export default function QuizPage() {
     const closeModal = () => setIsModalOpen(false);
 
     if (quiz.length === 0) {
-        return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
-                <div className="flex items-center justify-center space-x-2">
-                    <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500 border-opacity-75"></div>
-                    <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-purple-500 border-opacity-75"></div>
-                    <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-teal-500 border-opacity-75"></div>
-                </div>
-                <p className="mt-6 text-lg font-semibold text-gray-600">Fetching the quiz... Please wait!</p>
-            </div>
-        );
+        return <LoadingSpinner message="Fetching the quiz... Please wait!" />;
     }
+      
     const handleRetry = ()=> {
         window.location.reload()
     }
@@ -226,7 +218,7 @@ export default function QuizPage() {
         const totalCorrect = results.reduce((sum, r) => sum + r, 0);
         return (
             <div className="quiz-page bg-gray-100 min-h-screen text-gray-800">
-                <NavBar />
+               
                 <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
                     <h1 className="text-2xl font-bold text-gray-700 mb-6">Quiz Results</h1>
                     <p className="text-lg mb-4">You scored {totalCorrect} out of {quiz.length}</p>
@@ -302,7 +294,7 @@ export default function QuizPage() {
 
     return (
         <div className="quiz-page bg-gray-100 min-h-screen text-gray-800">
-            <NavBar />
+        
             <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
                 <h1 className="text-2xl font-bold text-gray-700 mb-6">Quiz</h1>
                 <div className="question-box p-4 bg-gray-50 rounded-lg shadow-inner">

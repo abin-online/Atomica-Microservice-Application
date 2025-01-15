@@ -1,15 +1,16 @@
 import axios from "axios";
 import config from "@/config";
-
-const API = axios.create({
-    baseURL: config.BASEURL ,
+import { removeUser } from "@/lib/features/users/userSlice";
+import { store } from "@/lib/store";
+const USERAPI = axios.create({
+    baseURL: config.BASEURL,
     headers: {
         "Content-Type": 'application/json',
         "withCredentials": true
     }
 })
 
-API.interceptors.request.use((config) => {
+USERAPI.interceptors.request.use((config) => {
     const accessToken = localStorage.getItem('accesToken');
     const refreshToken = localStorage.getItem('refreshToken');
     const role = localStorage.getItem('role');
@@ -32,19 +33,35 @@ API.interceptors.request.use((config) => {
     return Promise.reject(error)
 })
 
-API.interceptors.response.use(
+USERAPI.interceptors.response.use(
     response => {
 
         return response;
     },
     (error) => {
         if (error.response) {
-            const { data } = error.response;
-            console.log(data.message);
+            const { data, status } = error.response;
+
+            console.log("Error message:", data.message);
+            console.log("Error details:", data);
+
+            if (status === 401 && data.message == 'ACCESS FORBIDDEN' ) {
+
+                localStorage.removeItem("accesToken");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("role");
+                localStorage.removeItem("verifyToken");
+                localStorage.removeItem('user')
+
+                store.dispatch(removeUser()); 
+                window.location.href = "/login"; 
+            }
+            return error.response
         } else {
-            console.log(error);
+            console.error("Unknown error:", error);
         }
         return Promise.reject(error);
-    },
+    }
 );
-export default API;
+export default USERAPI;
+

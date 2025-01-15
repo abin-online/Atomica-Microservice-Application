@@ -1,5 +1,4 @@
 'use client'
-import NavBar from '@/components/user/Navbar';
 import ProblemList from '@/components/user/ProblemList';
 import { getAllTags } from '@/api/tag';
 import { useEffect, useState } from 'react';
@@ -51,7 +50,6 @@ const Page = () => {
     return (
         <div className="quick-test-home bg-gray-100 text-gray-800 min-h-screen">
 
-            <NavBar />
 
             <div className="flex flex-col items-center justify-center py-6 ">
                 {/* Search Bar */}

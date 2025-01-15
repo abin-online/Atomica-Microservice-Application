@@ -18,32 +18,34 @@ const EditBadge = () => {
         name: "",
         description: "",
         minQuestionsSolved: 0,
+        category: '',
         image: null as File | null, // Image file to be uploaded
     });
 
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    // Fetch badge data from the server using the ID
-    useEffect(() => {
-        if (!id) return; // Wait until the ID is available
 
+    useEffect(() => {
+        if (!id) return;
+        
         const fetchBadgeData = async () => {
             try {
                 
                 const response : any = await getBadge(id)
                 const badge = response.data;
 
-                // Set form data with fetched badge details (excluding image)
+
                 setFormData({
                     name: badge.name,
                     description: badge.description,
                     minQuestionsSolved: badge.minQuestionsSolved,
-                    image: null, // Don't set the image here, we handle it separately
+                    category: badge.category,
+                    image: null, 
                 });
 
-                // Set image preview for the existing image URL
-                setImagePreview(badge.imageURL); // Assuming imageURL is the URL to the image
+
+                setImagePreview(badge.imageURL);
             } catch (error) {
                 console.error("Error fetching badge data:", error);
                 toast.error("Failed to fetch badge data.");
@@ -53,23 +55,23 @@ const EditBadge = () => {
         fetchBadgeData();
     }, [id]);
 
-    // Handle input changes (similar to the CreateBadge page)
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, files } = e.target as HTMLInputElement;
 
         if (e.target instanceof HTMLInputElement && e.target.type === "file") {
             const file = files ? files[0] : null;
             if (file) {
-                // Update formData with the selected file
+
                 setFormData((prevData) => ({
                     ...prevData,
                     [name]: file,
                 }));
-                // Preview the selected image
+
                 setImagePreview(URL.createObjectURL(file));
             }
         } else {
-            // Update the formData for text input fields
+
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: name === "minQuestionsSolved" ? Number(value) : value,
@@ -89,8 +91,8 @@ const EditBadge = () => {
             toast.error('Fill out the description field');
             return;
         }
-        if (formData.minQuestionsSolved < 10) {
-            toast.error('Minimum questions should be greater than 10');
+        if (formData.minQuestionsSolved < 1) {
+            toast.error('Minimum questions should be greater than 1');
             return;
         }
 
@@ -101,7 +103,7 @@ const EditBadge = () => {
             uploadData.append('name', formData.name);
             uploadData.append('description', formData.description);
             uploadData.append('minQuestionsSolved', formData.minQuestionsSolved.toString());
-
+            uploadData.append('category', formData.category);
             // Append the new image if it exists
             if (formData.image) {
                 uploadData.append('image', formData.image);
@@ -172,6 +174,21 @@ const EditBadge = () => {
                                 onChange={handleChange}
                                 className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
                             />
+                        </div>
+                        <div>
+                            <label htmlFor="category" className="block text-sm font-medium mb-1">
+                                Badge Type
+                            </label>
+                            <select
+                                id="category"
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
+                            >
+                                <option value="problem">Problem</option>
+                                <option value="test">Test</option>
+                            </select>
                         </div>
                         <div>
                             <label htmlFor="image" className="block text-sm font-medium mb-1">

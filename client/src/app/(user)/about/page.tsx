@@ -1,6 +1,5 @@
 'use client';
 
-import NavBar from '@/components/user/Navbar';
 import React, { useState } from 'react';
 
 const AboutPage = () => {
@@ -40,7 +39,7 @@ const AboutPage = () => {
 
   return (
     <>
-      <NavBar />
+
       <div className="bg-gray-900 text-white min-h-screen">
         {/* Header Section */}
         <header className="bg-gradient-to-r from-indigo-500 to-gray-800 py-12 text-center animate-fadeIn">
@@ -139,7 +138,7 @@ const AboutPage = () => {
                 {activeIndex === index ? '-' : '+'}
               </span>
             </button>
-            {/* Smooth transition on expanding the content */}
+
             <div
               className={`${
                 activeIndex === index ? 'max-h-screen' : 'max-h-0'
@@ -160,7 +159,7 @@ const AboutPage = () => {
             Join a growing community of learners and problem-solvers today!
           </p>
           <button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-purple-600 hover:to-indigo-500 text-white font-semibold py-3 px-8 rounded-lg transition-transform duration-300 transform hover:scale-105">
-            Sign Up Now
+            Start Learn
           </button>
         </section>
       </div>

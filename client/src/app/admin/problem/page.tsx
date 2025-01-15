@@ -35,7 +35,7 @@ const Problem = () => {
     const fetchProblems = async () => { 
       try {
         const response : any = await getAllProblems()
-        setProblems(response?.data);
+        setProblems(response?.data || []);
       } catch (error) {
         console.error("Error fetching problems:", error);
       } finally {
@@ -49,13 +49,6 @@ const Problem = () => {
   const handleBlock = async (id: string, currentStatus: boolean) => {
     try {
       const updatedStatus = !currentStatus;
-      // await axios.put(
-      //   `http://localhost:5002/problem/blockProblem`,
-      //   { 
-      //     problemId: id,
-      //     blocked: updatedStatus,
-      //   },
-      // );
 
       await blockProblem(id, updatedStatus)
 

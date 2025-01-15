@@ -6,7 +6,7 @@ const initialState: admin = {
     name: '',
     email: '',
     role: ''
-} 
+}
 
 const adminSlice = createSlice({
     name: 'admin',
@@ -18,6 +18,9 @@ const adminSlice = createSlice({
             state.name = name
             state.role = role
             state.email = email
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('admin', JSON.stringify(state));
+            }
         },
 
         removeAdmin: (state) => {
@@ -25,6 +28,9 @@ const adminSlice = createSlice({
             state.name = ''
             state.role = ''
             state.email = ''
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('mentor');
+            }
         },
 
 

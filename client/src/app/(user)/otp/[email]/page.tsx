@@ -79,7 +79,7 @@ const OTPPage: React.FC = () => {
       const response: any = await verifyOTP(otpValue, email);
       if (response._id) {
         toast.success('User Registered Successfully');
-        router.replace('/');
+        router.replace('/login');
       } else {
         toast.error(response.response?.data?.message || 'Verification failed');
       }

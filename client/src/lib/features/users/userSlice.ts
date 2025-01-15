@@ -21,6 +21,9 @@ const userSlice = createSlice({
             state.role = role
             state.email = email
             state.blocked = blocked
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('user', JSON.stringify(state));
+            }
         },
 
         removeUser: (state) => {
@@ -28,6 +31,9 @@ const userSlice = createSlice({
             state.name = ''
             state.role = ''
             state.email = ''
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('user');
+            }
         },
 
 
