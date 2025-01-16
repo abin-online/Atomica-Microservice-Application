@@ -4,8 +4,8 @@ import path from "path";
 
 const outputPath = path.join(__dirname, '../../src/outputs');
 
-if(!fs.existsSync(outputPath)) {
-    fs.mkdirSync(outputPath, {recursive : true});
+if (!fs.existsSync(outputPath)) {
+    fs.mkdirSync(outputPath, { recursive: true });
 }
 
 // const executeJavascript = (filePath: any)=> {
@@ -28,12 +28,27 @@ if(!fs.existsSync(outputPath)) {
 const executeJavascript = (filePath: string) => {
     return new Promise((resolve, reject) => {
         exec(`node ${filePath}`, (error, stdout, stderr) => {
-            if (error) return reject({ error, stderr });
-            if (stderr) return reject(stderr);
-            resolve(stdout);
+            if (error) {
+                // Structure the error better to handle it cleanly later
+                return reject({
+                    message: error.message,
+                    stack: error.stack,
+                    stderr: stderr
+                });
+            }
+            if (stderr) {
+                // If there is stderr, reject with that too
+                return reject({
+                    message: stderr,
+                    stderr: stderr
+                });
+            }
+            resolve(stdout);  // Resolve with stdout if no errors
         });
     });
 };
+
+
 
 export {
     executeJavascript

@@ -7,5 +7,9 @@ export const compilerRouter = (router: Router) => {
         console.log(req.body)
         compilerController.runCode(req, res, next)
     })
+    router.post('/submit', (req: Request, res: Response, next: NextFunction) => {
+        console.log(req.body)
+        compilerController.submitCode(req, res, next)
+    })
 }
 
