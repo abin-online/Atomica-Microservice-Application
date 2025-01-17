@@ -14,6 +14,7 @@ interface FormData {
   description: string;
   difficulty: "Beginner" | "Intermediate" | "Advanced";
   tags: string[];
+  functionName: string;
   inputFormat: { name: string; type: string; description: string }[];
   outputFormat: { type: string; description: string };
   constraints: string[];
@@ -27,6 +28,7 @@ const CreateProblem = () => {
     description: "",
     difficulty: "Beginner",
     tags: [],
+    functionName: '',
     inputFormat: [{ name: "", type: "", description: "" }],
     outputFormat: { type: "", description: "" },
     constraints: [""],
@@ -247,6 +249,21 @@ const CreateProblem = () => {
             <p className="text-sm text-gray-400 mt-2">
               Hold <span className="font-semibold text-blue-400">Ctrl</span> (Windows) or <span className="font-semibold text-blue-400">Cmd</span> (Mac) to select multiple tags.
             </p>
+          </div>
+
+
+          <div className="mb-5">
+            <label htmlFor="title" className="block text-lg mb-2 font-semibold">
+              Function name:
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={formData.functionName}
+              onChange={handleInputChange}
+              className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 text-white"
+              placeholder="Enter function name..."
+            />
           </div>
 
           {/* Input Format */}

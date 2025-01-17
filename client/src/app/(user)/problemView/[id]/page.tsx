@@ -260,7 +260,8 @@ const ProblemPage = () => {
   const [problem, setProblem] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const pathname = usePathname()
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState(`function findSum(arr) {
+}`)
   const [language, setlanguage] = useState('js')
   const [testCases, setTestCases] = useState<any[]>([])
   const [testResults, setTestResults] = useState<any[]>([])
@@ -280,6 +281,7 @@ const ProblemPage = () => {
 
   const problemId = pathname.split('/').pop() || ''
   const user: any = localStorage.getItem('user')
+  const USER = JSON.parse(user)
 
   useEffect(() => {
     socket.connect()
@@ -344,7 +346,6 @@ const ProblemPage = () => {
       }
     }
     createCollab()
-
     setTimerActive(true)
   }
 
@@ -417,7 +418,7 @@ const ProblemPage = () => {
 
   const handleJoinSession = () => {
 
-    const joinCollab = async () => {
+    const KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKjoinCollab = async () => {
       try {
         if (joinSessionId) {
           const response: any = await joinCollaboration(joinSessionId);
@@ -471,10 +472,12 @@ const ProblemPage = () => {
     if (sessionId) {
       socket.emit('code-change', { roomId: sessionId, content: value })
     }
-    console.log("useremaillll" , JSON.parse(user?.email))
-    localStorage.setItem(`${user?.email}-code-${problemId}`, value)
-  }
+    console.log("useremaillll" , USER?.email)
+    localStorage.setItem(`${USER?.email}-code-${problemId}`, value)
 
+  
+  }
+  
   useEffect(() => {
     if (!problemId) return
 
@@ -490,16 +493,36 @@ const ProblemPage = () => {
     }
     fetchProblem()
 
-    axios
-      .get(`http://localhost:4001/problem/testCase/testCases`)
-      .then((response) => setTestCases(response.data || []))
-      .catch((error) => console.error('Error fetching test cases:', error))
-
-    const savedCode = localStorage.getItem(`${user?.email}-code-${problemId}`)
+    const savedCode = localStorage.getItem(`${USER?.email}-code-${problemId}`)
     if (savedCode) {
       setCode(savedCode)
     }
   }, [problemId])
+
+
+  useEffect(()=> {
+
+
+
+    const fetchTestCases = async()=> {
+      try {
+        console.log("problem  =====",problem)
+        const encodedTitle = encodeURIComponent(problem?.title);
+        console.log(encodedTitle)
+        const response = await axios.get(`http://localhost:4001/problem/testCase/testCases/${encodedTitle}`)
+        if(response.data) {
+          setTestCases(response.data)
+        }
+      } catch (error) {
+        console.error('Error fetching test cases:', error)
+
+      }
+    }
+    fetchTestCases()
+
+  }, [problem])
+
+
 
   if (loading) {
     return <div className="text-center text-xl text-gray-400">Loading problem...</div>
