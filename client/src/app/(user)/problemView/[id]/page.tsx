@@ -1,244 +1,3 @@
-// 'use client'
-// import { useEffect, useState } from 'react'
-// import { usePathname } from 'next/navigation'
-// import axios from 'axios'
-// import CodeMirror from '@uiw/react-codemirror'
-// import { javascript } from '@codemirror/lang-javascript'
-// import material from '@uiw/codemirror-themes'
-// import { tags } from "@codemirror/highlight"
-// import { submitCode, runCode } from '@/api/compilation'
-// import socket from '@/lib/socket'
-// import { viewProblem } from '@/api/problem'
-// import { v4 as uuidv4 } from 'uuid';
-
-// const ProblemPage = () => {
-//   const [problem, setProblem] = useState<any>(null)
-//   const [loading, setLoading] = useState(true)
-//   const pathname = usePathname()
-//   const [code, setCode] = useState('') // Initialize code state
-//   const [language, setlanguage] = useState('js')
-//   const [testCases, setTestCases] = useState<any[]>([])
-//   const [testResults, setTestResults] = useState<any[]>([])
-//   const [sessionId, setSessionId] = useState<string | null>(null);
-
-//   const problemId = pathname.split('/').pop() || ''
-//   const user : any = localStorage.getItem('user')
-
-//   useEffect(() => {
-
-//       socket.connect();
-
-//       socket.emit('join-room', 'test-123');
-//       socket.on('update-code', (newCode) => setCode(newCode))
-
-
-//       return () => {
-//         socket.disconnect()
-//       }
-
-
-//   }, [])
-
-//   const handleCreateSession = () => {
-
-//     const newSessionId = uuidv4()
-//     console.log(newSessionId)
-//     setSessionId(newSessionId);
-
-//     console.log("Session created with ID:", newSessionId);
-//   };
-
-//   const handleRun = async () => {
-//     try {
-//       const response: any = await runCode(code, problem?.title, language)
-
-//       if (response.status === 200) {
-//         console.log("Success:", response.data)
-//         console.log('test case', testCases)
-//         console.log('test results', testResults)
-//         setTestResults(response.data.results || [])
-//       } else {
-//         console.error("Unexpected response:", response)
-//       }
-//     } catch (error: any) {
-//       console.error("Error submitting code:", error.message)
-//     }
-//   }
-
-//   const handleSubmit = async () => {
-//     try {
-//       const response: any = await submitCode(code, problem?.title, language)
-
-//       if (response.status === 200) {
-//         console.log("Success:", response.data)
-//         console.log('test case', testCases)
-//         console.log('test results', testResults)
-//         setTestResults(response.data.results || [])
-//       } else {
-//         console.error("Unexpected response:", response)
-//       }
-//     } catch (error: any) {
-//       console.error("Error submitting code:", error.message)
-//     }
-//   }
-
-//   useEffect(() => {
-//     if (!problemId) return
-
-//     // Fetch problem details
-//     const fectchProblem = async () => {
-//       try {
-//         await viewProblem(problemId)
-//           .then((response: any) => {
-//             setProblem(response.data)
-//             setLoading(false)
-//             console.log(problem)
-//           })
-//           .catch((error) => {
-//             console.error('Error fetching problem:', error)
-//             setLoading(false)
-//           })
-//       } catch (error) {
-
-//       }
-//     }
-//     fectchProblem()
-
-//     // Fetch test cases
-//     axios
-//       .get(`http://localhost:4001/problem/testCase/testCases`)
-//       .then((response) => {
-//         setTestCases(response.data || [])
-//       })
-//       .catch((error) => {
-//         console.error('Error fetching test cases:', error)
-//       })
-
-//     const savedCode = localStorage.getItem(`${user?.email}-code-${problemId}`)
-//     if (savedCode) {
-//       setCode(savedCode)
-//     }
-//   }, [problemId])
-
-
-//   const handleCodeChange = (value: string) => {
-//     setCode(value)
-//     socket.emit('code-change', { roomId:  'test-123', content: value })
-
-//     console.log(user?.email)
-//     localStorage.setItem(`${user?.email}-code-${problemId}`, value)
-//   }
-
-//   if (loading) {
-//     return <div className="text-center text-xl text-gray-400">Loading problem...</div>
-//   }
-
-//   return (
-//     <div className="bg-gray-900 text-gray-200 h-screen flex flex-col overflow-hidden">
-
-
-//       <div className="flex flex-1">
-//         {/* Problem Details */}
-//         <div className="w-1/3 p-6 bg-gray-800 overflow-y-auto">
-//           <h2 className="text-3xl font-semibold mb-4">{problem.title}</h2>
-//           <p className="text-lg mb-6">{problem.description}</p>
-//           <div>
-//             <h3 className="text-xl font-medium mb-2">Input Format</h3>
-//             <div className="p-4 bg-gray-700 rounded-md shadow-sm mb-4">
-//               <pre className="text-sm">{JSON.stringify(problem.inputFormat, null, 2)}</pre>
-//             </div>
-//           </div>
-//           <div>
-//             <h3 className="text-xl font-medium mb-2">Output Format</h3>
-//             <div className="p-4 bg-gray-700 rounded-md shadow-sm">
-//               <pre className="text-sm">{problem.outputFormat.description}</pre>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Code Editor */}
-//         <div className="flex-1 p-6 bg-gray-900 flex flex-col">
-//           <div className="flex justify-between items-center mb-4">
-//             <h3 className="text-2xl font-medium">Your Solution</h3>
-//             <button
-//               onClick={handleSubmit}
-//               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
-//             >
-//               SUBMIT
-//             </button>
-//             <button
-//               onClick={handleRun}
-//               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
-//             >
-//               RUN
-//             </button>
-//           </div>
-//           <CodeMirror
-//             value={code}
-//             width="600px"
-//             height="600px"
-//             theme={material({
-//               theme: "dark",
-//               settings: {
-//                 background: "#1e1e1e",
-//                 foreground: "#d4d4d4",
-//                 caret: "#00e676",
-//                 selection: "#264f78",
-//                 selectionMatch: "#528bff",
-//               },
-//               styles: [
-//                 { tag: tags.keyword as any, color: "#c792ea" },
-//                 { tag: tags.string, color: "#ecc48d" },
-//                 { tag: tags.variableName, color: "#82aaff" },
-//               ],
-//             })}
-//             extensions={[javascript()]}
-//             onChange={handleCodeChange} // Use the new handler
-//           />
-//         </div>
-
-//         {/* Test Cases */}
-// <div className="w-1/3 p-6 bg-gray-800 overflow-y-auto">
-//   <h3 className="text-2xl font-medium mb-4">Test Cases</h3>
-//   {testCases.map((testCase, index) => {
-//     const result = testResults.find(
-//       (result) => result.input === testCase.input
-//     )
-//     const passed = result?.passed
-//     return (
-//       <div
-//         key={index}
-//         className={`p-4 mb-4 rounded-md shadow-sm ${passed === true
-//             ? "bg-green-700"
-//             : passed === false
-//               ? "bg-red-700"
-//               : "bg-gray-700"
-//           }`}
-//       >
-//         <pre className="text-sm mb-2">
-//           Input: {testCase.input}
-//         </pre>
-//         <pre className="text-sm mb-2">
-//           Expected Output: {testCase.expectedOutput}
-//         </pre>
-//         <pre className="text-sm">
-//           Output: {result?.output || ""}
-//         </pre>
-//       </div>
-//     )
-//   })}
-// </div>
-//       </div>
-
-//       <footer className="bg-gray-800 text-gray-400 py-4 text-center">
-//         <p>&copy; 2024 Quick Test. All rights reserved.</p>
-//       </footer>
-//     </div>
-//   )
-// }
-
-// export default ProblemPage
-
 'use client'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
@@ -260,8 +19,8 @@ const ProblemPage = () => {
   const [problem, setProblem] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const pathname = usePathname()
-  const [code, setCode] = useState(`function findSum(arr) {
-}`)
+  const [code, setCode] = useState('')
+  const [params, setParams] = useState<any[]>([])
   const [language, setlanguage] = useState('js')
   const [testCases, setTestCases] = useState<any[]>([])
   const [testResults, setTestResults] = useState<any[]>([])
@@ -278,6 +37,9 @@ const ProblemPage = () => {
   const [accepted, setAccepted] = useState(false);
   const [submissionTime, setSubmissionTime] = useState<string>("");
   const [allPassed, setAllPassed] = useState(false)
+  const [activeTestCaseId, setActiveTestCaseId] = useState(0);
+  const [showAll, setShowAll] = useState(false);
+
 
   const problemId = pathname.split('/').pop() || ''
   const user: any = localStorage.getItem('user')
@@ -355,8 +117,8 @@ const ProblemPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const response: any = await submitCode(code, problem?.title, language)
-
+      const response: any = await submitCode(code, problem?.title, problem?.outputFormat?.type, language)
+      console.log("submit response" , response)
       if (response.status === 200) {
         console.log("Success:", response.data)
         console.log('test case', testCases)
@@ -400,7 +162,7 @@ const ProblemPage = () => {
   const handleRun = async () => {
     try {
    
-      const response: any = await runCode(code, problem?.title, language)
+      const response: any = await runCode(code, problem?.title, problem?.outputFormat?.type, language)
 
       if (response.status === 200) {
         console.log("Success:", response.data)
@@ -418,7 +180,7 @@ const ProblemPage = () => {
 
   const handleJoinSession = () => {
 
-    const KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKjoinCollab = async () => {
+    const joinCollab = async () => {
       try {
         if (joinSessionId) {
           const response: any = await joinCollaboration(joinSessionId);
@@ -432,7 +194,7 @@ const ProblemPage = () => {
             toast.success('Successfully joined the session');
             return
           }
-          console.log("eeeeeeeeeeeeeeeeeeeeeeee", response)
+          console.log(response)
 
           const errorMessage: any = response?.data?.message || 'Cannot join session'
           switch (errorMessage) {
@@ -478,31 +240,44 @@ const ProblemPage = () => {
   
   }
   
-  useEffect(() => {
-    if (!problemId) return
 
+
+  useEffect(() => {
+    if (!problemId) return;
+  
     const fetchProblem = async () => {
       try {
-        const response: any = await viewProblem(problemId)
-        setProblem(response.data)
-        setLoading(false)
-      } catch (error) {
-        console.error('Error fetching problem:', error)
-        setLoading(false)
-      }
-    }
-    fetchProblem()
+        const response: any = await viewProblem(problemId);
+        
+        if (response && response.data) {
+          setProblem(response.data);
 
-    const savedCode = localStorage.getItem(`${USER?.email}-code-${problemId}`)
-    if (savedCode) {
-      setCode(savedCode)
-    }
-  }, [problemId])
+          const parameters : any = []
+          response.data.inputFormat.forEach((value: any)=> {
+            parameters.push(value.name)
+          })
+  
+          const savedCode = localStorage.getItem(`${USER?.email}-code-${problemId}`) || '';
+          setCode(`function ${response.data.functionName}(${parameters.join(',')}){
+
+}`);
+if(savedCode) {
+          setCode(`${savedCode}`);
+}
+        }
+      } catch (error) {
+        console.error('Error fetching problem:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchProblem();
+  }, [problemId]);
+  
 
 
   useEffect(()=> {
-
-
 
     const fetchTestCases = async()=> {
       try {
@@ -539,7 +314,6 @@ const ProblemPage = () => {
   return (
     <div className="bg-gray-900 text-gray-200 h-screen flex flex-col overflow-hidden">
       <div className='py-2 px-5'>
-
 
         {modalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -680,83 +454,142 @@ const ProblemPage = () => {
         </div>
 
         <div className="w-1/3 p-6 bg-gray-800 overflow-y-auto">
-          <h3 className="text-2xl font-medium mb-4">Test Cases</h3>
-          {/* {testCases.map((testCase, index) => (
-            <div key={index} className="p-4 mb-4 bg-gray-700 rounded-md">
-              <pre>Input: {testCase.input}</pre>
-              <pre>Expected Output: {testCase.expectedOutput}</pre>
-            </div>
-          ))} */}
+  <h3 className="text-2xl font-medium mb-4">Test Cases</h3>
 
-          {/* {testCases.map((testCase, index) => {
-            const result = testResults.find(
-              (result) => result.input === testCase.input
-            )
-            const passed = result?.passed
-            return (
+  <div>
+    {/* Test Case Tabs */}
+    <div className="flex space-x-2 mb-4">
+      {testCases.map((testCase, index) => {
+        const result = testResults.find(
+          (result) => result.input === testCase.input
+        );
+        const passed = result?.passed;
+
+        return (
+          <div
+            key={testCase._id} // Unique key based on testCase._id
+            onClick={() => setActiveTestCaseId(index)}
+            className={`cursor-pointer py-2 px-4 rounded-lg transition-all ${
+              index === activeTestCaseId
+                ? "bg-gray-700 text-gray-300 hover:bg-dark-layer-2"
+                : "bg-dark-fill-3 text-white"
+            }`}
+          >
+            <div className="flex items-center">
               <div
-                key={index}
-                className={`p-4 mb-4 rounded-md shadow-sm ${passed === true
-                  ? "bg-green-700"
-                  : passed === false
-                    ? "bg-red-700"
-                    : "bg-gray-700"
-                  }`}
+                className={`h-1.5 w-1.5 rounded-full ${
+                  passed === true
+                    ? "bg-green-500"
+                    : passed === false
+                    ? "bg-red-500"
+                    : ""
+                }`}
+              ></div>
+              <span className="ml-2">Case {index + 1}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    {/* Active Test Case Result */}
+    {testCases.map((testCase, index) => {
+      if (index !== activeTestCaseId) return null; // Only show the active test case
+
+      const result = testResults.find(
+        (result) => result.input === testCase.input
+      );
+
+      return (
+        <div key={testCase._id} className="py-4 space-y-4">
+          {/* Input */}
+          <div className="p-4 rounded-md shadow-lg bg-gray-700 text-gray-300 hover:bg-dark-layer-2 transition-colors duration-300">
+            <pre className="font-mono text-sm">
+              <strong className="text-gray-100">Input:</strong> 
+              {testCase.input.map((param: any, idx: number) => (
+                <div key={idx}>
+                  <strong className="text-gray-100">{problem.inputFormat[idx].name} :</strong> 
+                  <span> {param.params}</span>
+                </div>
+              ))}
+            </pre>
+          </div>
+
+          {/* Expected Output */}
+          <div className="p-4 rounded-md shadow-lg bg-gray-700 text-gray-300 hover:bg-dark-layer-2 transition-colors duration-300">
+            <pre className="font-mono text-sm">
+              <strong className="text-gray-100">Target:</strong> {testCase.expectedOutput}
+            </pre>
+          </div>
+
+          {/* Show Error if Present */}
+          {result?.error ? (
+            <div
+              style={{
+                wordWrap: "break-word",
+                whiteSpace: "pre-wrap",
+                scrollbarWidth: "thin", // Firefox support
+                scrollbarColor: "#9e9e9e #2d2d2d", // Thumb and track colors
+                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <strong className="text-gray-100">Error:</strong>
+              <div
+                className="mt-2 space-y-2 max-h-64 overflow-y-auto bg-gray-800 p-3 rounded"
+                style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
               >
-                <pre >
-                  Input: {testCase.input}
-                </pre>
-                <pre >
-                  Expected Output: {testCase.expectedOutput}
-                </pre>
-                <pre >
-                  Output: {result?.output || ""}
+                {result.error
+                  .split("\n")
+                  .slice(2, 17) // Adjust slice indices as needed
+                  .map((line: any, index: number) => (
+                    line.trim() === 0 ? null : (
+                      <div key={index} className="font-mono text-sm text-red-400">
+                        {line}
+                      </div>
+                    )
+                  ))}
+              </div>
+            </div>
+          ) : (
+            // Output Section (only shown if there's no error)
+            result?.output && (
+              <div className="p-4 rounded-md shadow-lg bg-gray-700 text-gray-300 hover:bg-dark-layer-2 transition-colors duration-300">
+                <pre className="font-mono text-sm">
+                  <strong className="text-gray-100">Output:</strong> {result.output}
                 </pre>
               </div>
             )
-          })} */}
+          )}
 
-<div>
-  {accepted && (
-    <div className="p-4 mb-4 bg-yellow-700 text-white rounded-md">
-      <p className="text-lg font-medium">
-        {passedTests}/{totalTests} test cases passed. Keep trying!
-      </p>
-    </div>
-  )}
-  
-  {/* Display individual test case results */}
-  {testCases.map((testCase, index) => {
-    const result = testResults.find(
-      (result) => result.input === testCase.input
-    );
-    const passed = result?.passed;
-    return (
-      <div
-        key={index}
-        className={`p-4 mb-4 rounded-md shadow-sm ${passed === true
-          ? "bg-green-700"
-          : passed === false
-          ? "bg-red-700"
-          : "bg-gray-700"
-          }`}
-      >
-        <pre>
-          Input: {testCase.input}
-        </pre>
-        <pre>
-          Expected Output: {testCase.expectedOutput}
-        </pre>
-        <pre>
-          Output: {result?.output || ""}
-        </pre>
-      </div>
-    );
-  })}
+          {/* Logs */}
+          {result?.logs.length && (
+            <div className="p-4 rounded-md shadow-lg bg-gray-700 text-gray-300 hover:bg-dark-layer-2 transition-colors duration-300">
+              <strong className="text-gray-100">stdout:</strong>
+              <div className="mt-2 space-y-2 bg-gray-800">
+                {result.logs.slice(0, showAll ? result.logs.length : 3).map((log: any, index: number) => (
+                  log.trim() === 0 ? null : (
+                    <pre key={index} className="font-mono text-sm p-2 rounded bg-gray-800 text-gray-100">
+                      {log}
+                    </pre>
+                  )
+                ))}
+                {result.logs.length > 3 && (
+                  <button
+                    onClick={() => setShowAll((prev) => !prev)}
+                    className="mt-2 text-blue-400 hover:underline"
+                  >
+                    {showAll ? "See Less" : "See More"}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
 </div>
 
-
-        </div>
       </div>
     </div>
   )
