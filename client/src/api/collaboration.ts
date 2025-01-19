@@ -28,3 +28,13 @@ export const joinCollaboration = async (roomId : string)=> {
         return error
     }
 }
+
+export const collabLists = async()=> {
+    try {
+        const response = await USERAPI.get(collaboration.collabLists);
+        console.log("collab lists", response)
+        return response
+    } catch (error) {
+        
+    }
+}
