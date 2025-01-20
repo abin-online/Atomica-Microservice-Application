@@ -14,6 +14,7 @@ import { createCollaboration, endCollaboration, joinCollaboration } from '@/api/
 import toast from 'react-hot-toast'
 import CongratulatoryModal from '@/components/user/CongratulatoryModal'
 import { updateProblemScore } from '@/api/badge'
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState<any>(null)
@@ -285,8 +286,11 @@ if(savedCode) {
         const encodedTitle = encodeURIComponent(problem?.title);
         console.log(encodedTitle)
         const response = await axios.get(`http://localhost:4001/problem/testCase/testCases/${encodedTitle}`)
+        console.log("set test cases",response.data)
+
         if(response.data) {
           setTestCases(response.data)
+          console.log("set test cases",response.data)
         }
       } catch (error) {
         console.error('Error fetching test cases:', error)
@@ -446,8 +450,18 @@ if(savedCode) {
           <CodeMirror
             value={code}
             width="600px"
-            height="600px"
-            theme={material({ theme: 'dark' })}
+            height="1000px"
+            theme={vscodeDark}
+            //onPasteCapture={() => toast.error("Don't try to copy paste ! Try solving it yourself !")}
+            onPasteCapture={() => 
+              toast.error(
+                <div style={{ textAlign: 'center' }}>
+                  Try solving it yourself ! <br />
+                  Looks like you're trying to paste! 
+                </div>
+              )
+            }
+            
             extensions={[javascript()]}
             onChange={handleCodeChange}
           />
@@ -460,10 +474,12 @@ if(savedCode) {
     {/* Test Case Tabs */}
     <div className="flex space-x-2 mb-4">
       {testCases.map((testCase, index) => {
-        const result = testResults.find(
-          (result) => result.input === testCase.input
-        );
+           const result = testResults.find(
+            (result) => result.input[0].params === testCase.input[0].params
+          );
+        
         const passed = result?.passed;
+        console.log("passed ot not" , result, passed)
 
         return (
           <div
@@ -497,8 +513,9 @@ if(savedCode) {
       if (index !== activeTestCaseId) return null; // Only show the active test case
 
       const result = testResults.find(
-        (result) => result.input === testCase.input
+        (result) => result.input[0].params === testCase.input[0].params
       );
+      console.log("resulttttttttt", testResults,  result)
 
       return (
         <div key={testCase._id} className="py-4 space-y-4">
