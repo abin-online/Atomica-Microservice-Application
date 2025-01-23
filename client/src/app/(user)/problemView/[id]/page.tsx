@@ -15,6 +15,8 @@ import TestCaseTabs from '@/components/PlayGround/TestCaseTabs'
 import SessionModal from '@/components/PlayGround/SessionModal'
 import ActionButtons from '@/components/PlayGround/ActionButton'
 
+import SubmissionResult from '@/components/PlayGround/Submission'
+
 const ProblemPage = () => {
   const [problem, setProblem] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -31,6 +33,7 @@ const ProblemPage = () => {
   const [timer, setTimer] = useState<number>(0)
   const [timerActive, setTimerActive] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
+  const [submitResult, setSubmitResult] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalTests, setTotalTests] = useState(0);
   const [passedTests, setPassedTests] = useState(0);
@@ -39,11 +42,17 @@ const ProblemPage = () => {
   const [allPassed, setAllPassed] = useState(false)
   const [activeTestCaseId, setActiveTestCaseId] = useState(0);
   const [showAll, setShowAll] = useState(false);
+  const [activeTab, setActiveTab] = useState<'description' | 'solution'>('description');
+
 
 
   const problemId = pathname.split('/').pop() || ''
   const user: any = localStorage.getItem('user')
   const USER = JSON.parse(user)
+  const userName = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user")!).name
+    : "User";
+
 
   useEffect(() => {
     socket.connect()
@@ -133,6 +142,7 @@ const ProblemPage = () => {
 
         if (passed == total) {
           setModalVisible(true); // Show modal
+          setSubmitResult(true)
           setAllPassed(true)
           setSubmissionTime(currentTime);
         } else {
@@ -144,7 +154,7 @@ const ProblemPage = () => {
 
 
         const responseScore: any = await updateProblemScore(email, problem?.title, allPassed);
-        console.log(responseScore)
+        console.log("problem update=======_______|", responseScore)
         if (responseScore?.data.message == 'Problem data updated and new badge awarded!') {
           toast.success('You got a badge')
         }
@@ -340,49 +350,97 @@ const ProblemPage = () => {
 
 
       <div className="flex flex-1">
+
+
         <div className="w-1/3 p-6 bg-gray-800 overflow-y-auto">
-          <h2 className="text-3xl font-semibold mb-4">{problem.title}</h2>
-          <p className="text-lg mb-6">{problem.description}</p>
+          {/* Title */}
+
+          {/* Tabs */}
+          <div className="flex space-x-4 border-b border-gray-600 mb-4">
+            <button
+              onClick={() => setActiveTab('description')}
+              className={`pb-2 text-lg ${activeTab === 'description' ? 'border-b-2 border-white text-white' : 'text-gray-400'
+                }`}
+            >
+              Description
+            </button>
+            <button
+              onClick={() => setActiveTab('solution')}
+              className={`pb-2 text-lg ${activeTab === 'solution' ? 'border-b-2 border-white text-white' : 'text-gray-400'
+                }`}
+            >
+              Solution
+            </button>
+          </div>
+
+          {/* Content */}
+          {activeTab === 'description' ? (
+            <>
+              <h2 className="text-3xl font-semibold mb-4 text-white">{problem.title}</h2>
+              <p className="text-lg text-gray-300">{problem.description}</p>
+            </>
+          ) : (
+            <>
+              <p className="text-lg text-gray-300">{problem.solution}</p>
+            </>
+          )}
         </div>
 
 
         <CodeEditor code={code} onCodeChange={handleCodeChange} />
 
-        <div className="w-1/3 p-6 bg-gray-800 overflow-y-auto">
-          <h3 className="text-2xl font-medium mb-4">Test Cases</h3>
+        {!submitResult ?
+          (<div className="w-1/3 p-6 bg-gray-800 overflow-y-auto">
+            <h3 className="text-2xl font-medium mb-4">Test Cases</h3>
 
 
-          <div>
-            
-            <TestCaseTabs
-              testCases={testCases}
-              testResults={testResults}
-              activeTestCaseId={activeTestCaseId}
-              setActiveTestCaseId={setActiveTestCaseId}
-            />
+            <div>
+
+              <TestCaseTabs
+                testCases={testCases}
+                testResults={testResults}
+                activeTestCaseId={activeTestCaseId}
+                setActiveTestCaseId={setActiveTestCaseId}
+              />
 
 
-            {testCases.map((testCase, index) => {
-              if (index !== activeTestCaseId) return null; 
-              
-              const result = testResults.find(
-                (result) => result.input[0].params === testCase.input[0].params
-              );
+              {testCases.map((testCase, index) => {
+                if (index !== activeTestCaseId) return null;
 
-              return (
-                <TestCase
-                  key={testCase._id}
-                  testCase={testCase}
-                  result={result || { logs: [] }}
-                  showAll={showAll}
-                  setShowAll={setShowAll}
-                  problem={problem}
-                />
-              );
-            })}
-          </div>
+                const result = testResults.find(
+                  (result) => result.input[0].params === testCase.input[0].params
+                );
 
-        </div>
+                return (
+                  <TestCase
+                    key={testCase._id}
+                    testCase={testCase}
+                    result={result || { logs: [] }}
+                    showAll={showAll}
+                    setShowAll={setShowAll}
+                    problem={problem}
+                  />
+                );
+              })}
+            </div>
+
+          </div>) :
+          (
+            <>
+              <SubmissionResult
+          passedTests={passedTests}
+          totalTests={totalTests}
+          userName={userName}
+          submissionTime={submissionTime}
+          code={code}
+          setSubmitResult={setSubmitResult}
+        />
+        
+
+
+            </>)
+        }
+
 
       </div>
     </div>

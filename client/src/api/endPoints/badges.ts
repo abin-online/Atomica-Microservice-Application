@@ -6,7 +6,10 @@ const badgeRoutes = {
     createBadge: '/badge/badge/badge/',
     testResult : '/badge/badge/test',
     problemResult: '/badge/badge/problem',
-    profile: '/badge/profile/profile'
+    profile: '/badge/profile/profile',
+    updateProfile: '/badge/profile/profile',
+    profilePicture: '/badge/profile/profile/userpic',
+    problemStreak: '/badge/profile/profile/streak'
 }
 
 export default badgeRoutes

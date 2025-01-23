@@ -72,10 +72,47 @@ export const updateProblemScore = async (email: string, problem: string, submitt
 
 export const getProfile = async () => {
     try {
-        const response = USERAPI.get(badgeRoutes.profile);
+        const response = await USERAPI.get(badgeRoutes.profile);
         console.log(response)
         return response
     } catch (error) {
         return error
     }
 }
+
+export const updateProfile = async (formData: any, headers: any) => {
+    try {
+        const response = await USERAPI.put(badgeRoutes.updateProfile, formData, headers);
+        console.log(response)
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const getProfilePicture = async ()=> {
+    try {
+        const response = await USERAPI.get(badgeRoutes.profilePicture);
+        return response;
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const getStreak = async ({ year, month }: { year?: number; month?: number }) => {
+    try {
+        // Construct the query parameters based on the provided year and month
+        const params = new URLSearchParams();
+        if (year !== undefined) params.append('year', year.toString());
+        if (month !== undefined) params.append('month', month.toString());
+
+        // Make the API call with the constructed query parameters
+        const response = await USERAPI.get(`${badgeRoutes.problemStreak}?${params.toString()}`);
+        return response;
+    } catch (error) {
+        console.error('Error in getStreak API:', error);
+        return error;
+    }
+};
+
