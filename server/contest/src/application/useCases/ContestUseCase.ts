@@ -30,5 +30,22 @@ export class ContestUseCase implements IContestUseCase {
         const contest = await this.contestRepository.getContest(id);
         return contest
     }
+
+    async updateResult(contestId: string, formData: any): Promise<any> {
+        const result = await this.contestRepository.updateResult(contestId, formData )
+        return result
+    }
+
+    async getContestData(user: string): Promise<any> {
+        console.log("user  =>", user)
+        const userData = await this.contestRepository.contestData(user)
+        
+        return userData
+    }
+
+    async userList(): Promise<any> {
+        const data = await this.contestRepository.userList()
+        return data
+    }
 }
 

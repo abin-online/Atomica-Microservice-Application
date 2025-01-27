@@ -16,6 +16,7 @@ export class ContestController {
 
     async createContest(req: Req, res: Res, next: Next): Promise<void> {
         try {
+            console.log("_________")
             const solution: IContest = req.body;
             const contest = await this.ContestUseCase.createContest(solution)
             res.status(201).json(contest);
@@ -28,6 +29,7 @@ export class ContestController {
     async editContest(req: Req, res: Res, next: Next): Promise<void> {
         try {
             const { contestId } = req.params;
+            console.log("abin")
             const contest: any = req.body
             const updated = await this.ContestUseCase.editContest(contestId, contest);
             res.status(201).json({ updated, message: 'contest updated successfully' });
@@ -45,6 +47,20 @@ export class ContestController {
         }
     }
 
+    async updateResult(req: Req, res: Res, next: Next): Promise<void> {
+        try {
+            console.log("nnnnnnn")
+            const { contestId } = req.params;
+            const data = req.body;
+            const contest = await this.ContestUseCase.updateResult(contestId, data);
+            console.log("contest   ", contest)
+            res.status(201).json(contest);
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
     async getContest(req: Req, res: Res, next: Next): Promise<void> {
         try {
             const { contestId } = req.params;
@@ -55,5 +71,27 @@ export class ContestController {
             next(error)
         }
     }
+
+    async getUserContestData(req: Req, res: Res, next: Next): Promise<void> {
+        try {
+            const {  username } = req.body;
+            console.log("get user contest ",username.username)
+            const userData = await this.ContestUseCase.getContestData(username)
+            res.status(201).json(userData);
+
+         } catch (error) {
+            
+        }
+    }
+
+    async userList(req: Req, res: Res, next: Next): Promise<void> {
+        try {
+            const data = await this.ContestUseCase.userList();
+            res.status(201).json(data)
+        } catch (error) {
+            
+        }
+    }
+
 }
 

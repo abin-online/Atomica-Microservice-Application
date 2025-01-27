@@ -33,8 +33,8 @@ const ContestSchema = new Schema<IContest & Document>({
                 type: Number,
                 required: true
             },
-            passed: {
-                type: Boolean,
+            points: {
+                type: Number,
                 required: true
             }
         }],
@@ -44,7 +44,7 @@ const ContestSchema = new Schema<IContest & Document>({
         type: String,
         required: true
     }
-});
+}, {timestamps: true});
 
 
 const Contest = mongoose.model<IContest & Document>('Contest', ContestSchema);

@@ -5,4 +5,8 @@ export interface IContestRepository {
     editContest(id: string, contest: any): Promise<IContest>
     listContests(): Promise<IContest[]>
     getContest(id: string): Promise<IContest | null>
-}
+    updateResult(contestId: string, formData: any) : Promise<any>
+    contestData(user : string) : Promise<any[]>
+    userList(): Promise<any>
+    
+}   

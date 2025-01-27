@@ -20,9 +20,21 @@ export const ContestRoute = (router: Router) => {
         contestController.getContest(req, res, next)
     );
 
-    router.get('/contests/user', isUser, (req: Req, res: Res, next: Next) =>
+    router.get('/contests/user', (req: Req, res: Res, next: Next) =>
         contestController.listContests(req, res, next)
     );
 
+    router.post('/contest/:contestId', isUser, (req: Req, res: Res, next: Next) =>
+        contestController.updateResult(req, res, next)
+    );
+
+    router.post('/user', (req: Req, res: Res, next: Next) => 
+        //console.log(req.body)
+        contestController.getUserContestData(req, res, next)
+           );
+
+    router.get('/users', (req: Req, res: Res, next: Next) => 
+        contestController.userList(req, res, next)
+    );
     return router
 }
