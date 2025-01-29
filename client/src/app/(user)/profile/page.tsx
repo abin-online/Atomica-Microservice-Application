@@ -7,9 +7,13 @@ import Pagination from "@/app/components/Pagination";
 import ProfileCard from "@/components/Profile/ProfileCard";
 import ProfileSkeleton from "@/components/Skeleton/ProfileSkeleton";
 import Streak from "@/components/Profile/Streak";
+import { getUserContestData } from "@/api/contest";
 
 const Profile = () => {
 
+
+  const user: any = localStorage.getItem('user')
+  const USER = JSON.parse(user)
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -24,7 +28,7 @@ const Profile = () => {
   const [selectedBadgeImage, setSelectedBadgeImage] = useState(null);
 
 
-  const openBadgeImageModal = (image : any) => {
+  const openBadgeImageModal = (image: any) => {
     setSelectedBadgeImage(image);
     setIsBadgeImageModalOpen(true);
   };
@@ -62,7 +66,7 @@ const Profile = () => {
     _id: "",
     name: "",
     email: "",
-    bio:"",
+    bio: "",
     profilePicture: "",
     instagram: "",
     linkedIn: "",
@@ -76,6 +80,14 @@ const Profile = () => {
     rightAnswers: 0,
     points: 0,
   });
+
+  const [contestData, setContestData] = useState({
+    contestName : "",
+    name: "",
+    duration : 0,
+    points : 0,
+    createdAt: ""
+  })
 
 
   const [testBadges, setTestBadges] = useState({
@@ -105,8 +117,11 @@ const Profile = () => {
     const fetchUserProfile = async () => {
       try {
         setIsLoading(true);
-        const [response, collabResponse]: any = await Promise.all([getProfile(),
-        collabLists()])
+        const [response, collabResponse, ]: any = await Promise.all([getProfile(),
+        collabLists(), ])
+        const userContestResponse = await getUserContestData(USER?.name)
+        console.log("user contest response ", userContestResponse)
+        setContestData(userContestResponse?.data)
         console.log("collab", collabResponse)
         setCreatedSession(collabResponse.data.createdSessions);
         setJoinedSessions(collabResponse.data.joinedSessions);
@@ -120,9 +135,9 @@ const Profile = () => {
         console.log(collabResponse.data)
       } catch (error) {
         console.log(error)
-      }finally {
+      } finally {
         setIsLoading(false); // Set loading to false after fetching
-    }
+      }
 
 
     }
@@ -152,7 +167,7 @@ const Profile = () => {
     setIsImageModalOpen(false);
     setSelectedImageURL(null);
   };
-  
+
   const [activeTab, setActiveTab] = useState('recentSolved');
   const [activeSubTab, setActiveSubTab] = useState('created');
 
@@ -194,12 +209,12 @@ const Profile = () => {
       <div className="flex justify-center items-start max-w-[1110px] w-full">
         {/* Sidebar */}
         {isLoading ? (
-          <ProfileSkeleton/>
-        ):
-        <ProfileCard user={userMCQ} onUpdate={handleUpdateProfile} isLoading={isLoading} />
+          <ProfileSkeleton />
+        ) :
+          <ProfileCard user={userMCQ} onUpdate={handleUpdateProfile} isLoading={isLoading} />
 
         }
-    
+
         {/* Main Content */}
         <div className="flex flex-col gap-6 w-full">
 
@@ -450,7 +465,7 @@ const Profile = () => {
 
 
           {/* Row 2: Full-Width Div */}
-<Streak/>
+          <Streak />
 
 
           <div className="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto h-[500px]">
@@ -471,6 +486,13 @@ const Profile = () => {
                 onClick={() => setActiveTab("recentSessions")}
               >
                 Recent Sessions
+              </button>
+              <button
+                className={`px-4 py-2 font-medium ${activeTab === "Contest" ? "border-b-2 border-blue-500" : "text-gray-600"
+                  }`}
+                onClick={() => setActiveTab("Contest")}
+              >
+                Contest
               </button>
             </div>
 
@@ -617,17 +639,48 @@ const Profile = () => {
                 )}
               </div>
             )}
+
+            {activeTab === "Contest" && (
+              <div className="h-[calc(100%-80px)] overflow-auto w-[750px]">
+                {contestData?.length > 0 ? (
+                  <div>
+                    <table className="min-w-full border-collapse">
+                      <thead>
+                        <tr className="bg-gray-100">
+                          <th className="px-4 py-2 text-left text-gray-700">Contest Name</th>
+                          <th className="px-4 py-2 text-left text-gray-700">Duration</th>
+                          <th className="px-4 py-2 text-left text-gray-700">Points</th>
+                          <th className="px-4 py-2 text-left text-gray-700">Submission Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginate(contestData).map((data, index) => (
+                          <tr key={index} className="hover:bg-gray-50">
+                            <td className="px-4 py-2">{data.contestName}</td>
+                            <td className="px-4 py-2">{data.duration}</td>
+                            <td className="px-4 py-2">{data.points}</td>
+                            <td className="px-4 py-2">{new Date(data.createdAt).toLocaleDateString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+
+                    <Pagination
+                      totalItems={userProblem.completed.length}
+                      itemsPerPage={itemsPerPage}
+                      currentPage={currentPage}
+                      onPageChange={setCurrentPage}
+                    />
+
+
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-600 mt-4">No completed problems yet</p>
+                )}
+              </div>
+            )}
           </div>
-
-
-
-
-
-
-
-
-
-
         </div>
       </div>
     </div>
