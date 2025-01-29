@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import axios from 'axios'
@@ -16,6 +17,7 @@ import SessionModal from '@/components/PlayGround/SessionModal'
 import ActionButtons from '@/components/PlayGround/ActionButton'
 
 import SubmissionResult from '@/components/PlayGround/Submission'
+import Solutions from '@/components/PlayGround/Solutions'
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState<any>(null)
@@ -381,7 +383,8 @@ const ProblemPage = () => {
             </>
           ) : (
             <>
-              <p className="text-lg text-gray-300">{problem.solution}</p>
+              {/* <h2 className="text-lg text-gray-300">Solutions</h2> */}
+              <Solutions problem={problem.title} />
             </>
           )}
         </div>
@@ -428,14 +431,15 @@ const ProblemPage = () => {
           (
             <>
               <SubmissionResult
-          passedTests={passedTests}
-          totalTests={totalTests}
-          userName={userName}
-          submissionTime={submissionTime}
-          code={code}
-          setSubmitResult={setSubmitResult}
-        />
-        
+                problem={problem.title}
+                passedTests={passedTests}
+                totalTests={totalTests}
+                userName={userName}
+                submissionTime={submissionTime}
+                code={code}
+                setSubmitResult={setSubmitResult}
+              />
+
 
 
             </>)
