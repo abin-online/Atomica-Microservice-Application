@@ -2,6 +2,7 @@ import express from "express"
 import { createProxyMiddleware } from "http-proxy-middleware"
 import dotenv from 'dotenv'
 dotenv.config()
+import morgan from 'morgan'
 
 const app = express()
 
@@ -12,6 +13,9 @@ const {
     PROBLEM_SERVICE,
     BADGE_SERVICE,
     COMPILER_SERVICE,
+    COLLABORATION_SERVICE,
+    COMMUNITY_SERVICE,
+    CONTEST_SERVICE,
     SECURITY_NUMBER,
     COMMAND
 } = process.env
@@ -30,16 +34,29 @@ const services = [{
     route: '/badge'
 }, {
     path: COMPILER_SERVICE,
-    route: '/problem'
+    route: '/compiler'
+}, {
+    path: COLLABORATION_SERVICE,
+    route: '/collaboration'
+},
+{
+    path: COMMUNITY_SERVICE,
+    route: '/community'
+}, {
+    path: CONTEST_SERVICE,
+    route: '/contest'
 }
 ]
 
-const BOOLEAN = 1+2 == Number(SECURITY_NUMBER)
+//LOGGING 
+app.use(morgan('dev'))
 
 app.use((req, res, next) => {
     console.log(`LOGGING 📝 : ${req.method} request to: ${req.originalUrl}`);
-    next(); 
+    next();
 });
+
+const BOOLEAN = 1 + 2 == Number(SECURITY_NUMBER)
 
 services.forEach((service) => {
     app.use(service?.route, createProxyMiddleware({
@@ -48,8 +65,15 @@ services.forEach((service) => {
     }))
 })
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.json(COMMAND)
+})
+
+
+app.get('/services', (req, res) => {
+    res.json(
+        services
+    )
 })
 
 app.listen(PORT, () => {

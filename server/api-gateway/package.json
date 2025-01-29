@@ -11,9 +11,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/morgan": "^1.9.9",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "http-proxy-middleware": "^3.0.3"
+    "http-proxy-middleware": "^3.0.3",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
