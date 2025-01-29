@@ -25,10 +25,11 @@ app.use(express.json());
 
 const router = express.Router();
 collabRouter(router);
+
 app.use("/session", router);
 
 app.get("/", (req, res) => {
-    res.json("COLLAB SERVER");
+    res.json("COLLABORATION SERVICE");
 });
 
 

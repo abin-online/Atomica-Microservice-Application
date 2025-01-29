@@ -5,14 +5,26 @@ const collaborationSchema: Schema = new Schema({
         type: String,
         required: true
     },
-
-    code: {
+    createdBy: {
         type: String,
+        required: true
+    },
+    members: [
+        {
+            type: String
+        }
+    ],
+    duration: {
+        type: Date,
         default: null
     },
+    expired: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 })
 
-const collaborationModel = model('collab',collaborationSchema )
+const collaborationModel = model('collab', collaborationSchema)
 export default collaborationModel
