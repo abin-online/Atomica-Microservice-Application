@@ -1,52 +1,42 @@
 import { exec } from "child_process";
-import fs from 'fs'
-import path from "path";
+// import fs from 'fs'
+// import path from "path";
 
-const outputPath = path.join(__dirname, '../../src/outputs');
+// const outputPath = path.join(__dirname, '../../src/outputs');
 
-if (!fs.existsSync(outputPath)) {
-    fs.mkdirSync(outputPath, { recursive: true });
-}
-
-// const executeJavascript = (filePath: any)=> {
-//     console.log(filePath)
-//     const jobId = path.basename(filePath).split(".")[0];
-//     console.log(jobId)
-//     const outPath = path.join(outputPath, `${jobId}.out`)
-//     console.log('promise')
-//     return new Promise((resolve, reject)=> {
-//         console.log(`node ${filePath} -o ${outPath} && cd ${outputPath} && ./${jobId}.out`)
-//         exec(`node ${filePath} -o ${outPath} && cd ${outputPath} && ./${jobId}.out`, 
-//             (error, stdout, stderr)=> {
-//                 error && reject({error, stderr});
-//                 stderr && reject(stderr);
-//                 resolve(stdout)
-//             })
-//     })
+// if (!fs.existsSync(outputPath)) {
+//     fs.mkdirSync(outputPath, { recursive: true });
 // }
+
 
 const executeJavascript = (filePath: string) => {
     return new Promise((resolve, reject) => {
-        exec(`node ${filePath}`, (error, stdout, stderr) => {
-            if (error) {
-                // Structure the error better to handle it cleanly later
-                return reject({
-                    message: error.message,
-                    stack: error.stack,
-                    stderr: stderr
-                });
-            }
-            if (stderr) {
-                // If there is stderr, reject with that too
-                return reject({
-                    message: stderr,
-                    stderr: stderr
-                });
-            }
-            resolve(stdout);  // Resolve with stdout if no errors
-        });
+      exec(`node ${filePath}`, (error, stdout, stderr) => {
+        if (error) {
+          return reject({
+            message: error.message,
+            stack: error.stack,
+            stderr,
+          });
+        }
+        if (stderr) {
+          return reject({
+            message: stderr,
+            stderr,
+          });
+        }
+  
+
+        const lines = stdout.trim().split("\n");
+  
+        const logs = lines.slice(0, -1);
+        const result = lines[lines.length - 1]; 
+        
+        resolve({ logs, result });
+      });
     });
-};
+  };
+  
 
 
 

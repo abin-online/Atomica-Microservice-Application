@@ -1,42 +1,70 @@
 import fs from "fs";
 import { executeJavascript } from "../services/executeJS";
+import { analyzeComplexityWithAI } from "./complexityAnalysis";
 
 export const executeTestCases = async (
     filePath: string,
     code: string,
-    testCases: Array<{ input: string; expectedOutput: string }>
+    testCases: Array<{ input: Array<{ params: string }>; expectedOutput: string }>,
+    outputType: string
 ) => {
     const results = [];
 
+
+//   const complexityAnalysis = await analyzeComplexityWithAI(code);
+//   console.log("Complexity Analysis: ", complexityAnalysis);
+
     for (const testCase of testCases) {
         const { input, expectedOutput } = testCase;
+        
         try {
+            // Prepare the input data by parsing each parameter
+            const parsedInput = input.map(param => JSON.parse(param.params));
+
+            // Generate the test code dynamically
             const testCode = `
-                const input = ${input};
-                console.log(${code}(input));
+                const input = ${JSON.stringify(parsedInput)};
+                const result = ${code}(...input);
+                console.log(result); // Ensure the result is logged last
             `;
+
             await fs.writeFileSync(filePath, testCode);
 
-            const output: any = await executeJavascript(filePath);
-            console.log("output", output);
+            const { logs, result }: any = await executeJavascript(filePath);
 
-            const passed = output.trim() === expectedOutput.trim();
-            results.push({ input, expectedOutput, output: output.trim(), passed });
-        } catch (error: any) {
+            // Check the output against expected output based on outputType
+            let passed;
+            console.log("output type ", outputType)
+            if (outputType === 'array') {
+            let expected = JSON.parse(result).sort((a:any,b: any)=> a-b).join("");
+            let output = JSON.parse(expectedOutput).sort((a:any,b: any)=> a-b).join("")
+                passed = expected == output;
 
-            // Handle error by logging the error message and stack trace
-            console.error("Error occurred:", error.message);
-            console.error("Error stack:", error.stack);
+            } else if (outputType === 'number') {
+                passed = result.trim() === expectedOutput.trim();
+            }
 
-            // Add error details to the result
             results.push({
-                input, expectedOutput,
-                error: error.stack || error.message, 
-                passed: false
+                input,
+                expectedOutput,
+                output: result.trim(),
+                logs,
+                passed,
+            });
+        } catch (error: any) {
+            results.push({
+                input,
+                expectedOutput,
+                error: error.stack || error.message,
+                logs: [],
+                passed: false,
             });
         }
     }
 
-    console.log("results=======", results);
+    console.log("Test case results with logs =======", results);
     return results;
 };
+
+
+

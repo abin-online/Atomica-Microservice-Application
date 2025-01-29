@@ -1,15 +1,7 @@
 
-                const input = [51, 22, 61, 42, 91, 48, 57, 14, 28, 9, 76, 14];
-                console.log(function findSum(arr) {
-    const arrayHandler = {
-        data: arr.slice(0),
-        calculateSum: function () {
-          //console.log(arr)
-            return this.data.reduce((total, num) => total + num, 0);
-        }
-      
-    };
-
-    return arrayHandler.calculateSum();
-}(input));
+                const input = [[2,7,11,15],9];
+                const result = function twoSum(nums,target){
+        return [0,1]
+}(...input);
+                console.log(result); // Ensure the result is logged last
             

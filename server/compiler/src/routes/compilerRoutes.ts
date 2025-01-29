@@ -11,5 +11,9 @@ export const compilerRouter = (router: Router) => {
         console.log(req.body)
         compilerController.submitCode(req, res, next)
     })
+    router.post('/submit/contest', (req: Request, res: Response, next: NextFunction) => {
+        console.log(req.body)
+        compilerController.submitCode(req, res, next)
+    })
 }
 

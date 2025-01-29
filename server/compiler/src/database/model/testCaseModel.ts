@@ -1,11 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
-interface ITestCase {
+export interface ITestCase {
     problem: string;
-    input: string;
-    expectedOutput: string;
-    visibility: 'public' | 'hidden'
-}
+    _id?: string;
+    input: { params: string }[];  
+    expectedOutput: any;  
+    visibility: 'public' | 'hidden';  
+  }
+  
 
 const testCaseSchema: Schema<ITestCase> = new Schema({
     problem: {
@@ -14,9 +16,13 @@ const testCaseSchema: Schema<ITestCase> = new Schema({
         index: true
     },
     input: {
-        type: String,
-        required: true
-    },
+        type: [
+          {
+            params: { type: String, required: true }, 
+        },
+        ],
+        required: true,
+      },
     expectedOutput: {
         type: String,
         required: true,
