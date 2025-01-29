@@ -30,6 +30,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/user', userRouter)
 app.use('/admin', adminRouter)
 
+app.get('/', (req, res)=>{
+    res.json("AUTHENTICATION SERVICE")
+})
+
 app.use(errorMiddleware)
 
 

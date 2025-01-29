@@ -11,13 +11,13 @@ export const googleLogin = async (userRepository:IuserRepository,hashPassword:Ih
             const user= await userRepository.createUser({name,email,password})
             console.log(user,'google login user ',user.is_blocked)
             if(user.is_blocked) return next(new ErrorHandler(400,'admin blocked the user'))
-            const token:any = await jwt.create_access_and_refresh_token(user._id as string)
+            const token:any = await jwt.create_access_and_refresh_token(user.email as string)
                 token.role='user'
                 console.log(token,"the token is checking in user use case index in")
             return {user,token}
         }
         if(user.is_blocked) return next(new ErrorHandler(400,'admin blocked the user'))
-        const token:any =await jwt.create_access_and_refresh_token(user._id as string)
+        const token:any =await jwt.create_access_and_refresh_token(user.email as string)
     console.log(token,"the google token place")
     token.role='user'
         return {user,token}

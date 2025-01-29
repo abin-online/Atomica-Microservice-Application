@@ -21,7 +21,7 @@ export const login = async (userRepository: IuserRepository, jwt: IJwt, hashPass
         if (!comparePassword) {
             return next(new ErrorHandler(400, 'incorrect password'))
         }
-        const token: any = await jwt.create_access_and_refresh_token(user._id as string)
+        const token: any = await jwt.create_access_and_refresh_token(user.email as string)
         token.role = 'user'
         return {
             user, 

@@ -2,7 +2,7 @@ import { JwtPayload, Secret } from "jsonwebtoken";
 import { Next, Req, Res } from "../../types/serverTypes";
 import jwt from 'jsonwebtoken'
 import { catchError } from "../../../usecases/middlewares/catchError";
-import userModel from '../../database/mongodb/model/userModel'
+import adminModel from "../../database/mongodb/model/admin";
 
 require('dotenv').config();
 interface CustomRequest extends Req{
@@ -13,7 +13,7 @@ interface CustomJwtPayload extends JwtPayload{
     userId:string;
 }
 
-export const isAuthenticate = async (req:CustomRequest,res:Res,next:Next)=>{
+export const isAdminAuthenticate = async (req:CustomRequest,res:Res,next:Next)=>{
     try {
         console.log(req.cookies)
         
@@ -24,22 +24,20 @@ export const isAuthenticate = async (req:CustomRequest,res:Res,next:Next)=>{
         console.log('Ref',refreshToken)
         console.log('rol',role)
         if(!authHeader||!refreshToken||!role){
-            return res.status(401).json({message:'Access Forbidden!!! Please login again',success:false});
+            return res.status(401).json({message:'ACCESS FORBIDDEN',success:false});
         }
         const accessToken = authHeader.split(' ')[1];
         // console.log('Comming here req.headers auth ',authHeader,refreshToken);
         if(!accessToken &&!refreshToken){
-            return res.status(401).json({message:'Access token forbidden!!! please login again',success:false});
-            
+            return res.status(401).json({message:'ACCESS FORBIDDEN',success:false});
         }
-
-        
         try {
             const decoded = jwt.verify(accessToken,process.env.JWT_ACCESS_KEY as Secret) as CustomJwtPayload;
             console.log('the decoded')
             if(decoded){
                 console.log(decoded,'decoded')
-                const user = await userModel.findOne({_id:decoded.id,blocked:false})
+                //const user = await userModel.findOne({_id:decoded.id,blocked:false})
+                const user = await adminModel.findOne({_id: decoded.id});
                 console.log(user,'the user')
                 if(user){
 
@@ -48,14 +46,14 @@ export const isAuthenticate = async (req:CustomRequest,res:Res,next:Next)=>{
                     next()
                 }
             }else{
-                return res.status(401).json({message:'Access forbidden!!! Please login again.',succuss:false})
+                return res.status(401).json({message:'ACCESS FORBIDDEN',succuss:false})
             }
         } catch (error) {
             try {
                 const decodedRefreshToken = jwt.verify(refreshToken,process.env.JWT_REFRESH_KEY as Secret) as CustomJwtPayload;
                 
                 if(!decodedRefreshToken){
-                    return res.status(401).json({message:'Access forbidden!!! Please login again.',succuss:false})
+                    return res.status(401).json({message:'ACCESS FORBIDDEN',succuss:false})
                 }
                 const newAccessToken = jwt.sign({userId:decodedRefreshToken.userId},process.env.JWT_ACCESS_KEY as Secret,{expiresIn:'15m'})
                 res.setHeader('Authorization',`Bearer ${newAccessToken}`);
@@ -64,7 +62,7 @@ export const isAuthenticate = async (req:CustomRequest,res:Res,next:Next)=>{
                 
             } catch (error) {
                 console.log("haiha the not decoded")
-                return res.status(401).json({message:'Access Forbidden!!! Please login again',succus:false})
+                return res.status(401).json({message:'ACCESS FORBIDDEN',succus:false})
             }
             
         }

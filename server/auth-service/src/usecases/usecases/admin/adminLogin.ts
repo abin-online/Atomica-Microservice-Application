@@ -13,7 +13,7 @@ try {
     
     const compare = await hashPassword.compareHashPassword(password,admin.password)
     if(!compare) return next(new ErrorHandler(404,'Password is incorrect!'))
-    const id= admin._id
+    const id= admin.email
     const token:any = await jwt.create_access_and_refresh_token(id as string)
     token.role='admin'
     return {admin,token}

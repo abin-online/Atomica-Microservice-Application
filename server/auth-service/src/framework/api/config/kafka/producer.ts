@@ -5,7 +5,7 @@ async function produce(topic: string, value: any | Buffer): Promise<void> {
     try {
         const producer = kafka.producer({createPartitioner : Partitioners.LegacyPartitioner}) 
         //LegacyPartitioner, which decides how messages are partitioned across Kafka's topics.
-        console.log("Connecting to Kafka producer...");
+        console.log("");
         await producer.connect();
         console.log("Producer connected successfully.");
         const messageValue = typeof value === "object" ? JSON.stringify(value) : value;

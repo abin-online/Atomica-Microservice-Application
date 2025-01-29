@@ -119,7 +119,7 @@ export class UserController {
         try {
             console.log('google login in controller', req.body)
             const user: any = await this.userUserCase.googleLogin(req.body.name, req.body.email, req.body.password, next)
-            console.log(user, 'the user afther creation in controller google')
+            console.log(user, 'the user after creation in controller google')
             if (user) {
                 console.log(user.token, 'user token')
 

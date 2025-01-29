@@ -17,7 +17,7 @@ export function UserRoute(router:  Route) {
     })
 
     router.post('/forgotPassword', async (req: Req, res: Res, next) => {
-        console.log('comming in forgot password', req.body)
+        console.log(' in forgot password', req.body)
         userController.forgotPassword(req, res, next)
     })
 
@@ -36,7 +36,7 @@ export function UserRoute(router:  Route) {
         userController.googleLogin(req, res, next);
     })
 
-    router.post('/logout', async (req: Req, res: Res, next: Next) => {
+    router.post('/logout', isUser, async (req: Req, res: Res, next: Next) => {
         console.log('coming into logout')
         userController.logout(req, res, next);
     })
