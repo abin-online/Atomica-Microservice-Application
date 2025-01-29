@@ -16,6 +16,7 @@ export const signup = async (userData: userData) => {
 export const verifyOTP = async (otp: string, email: string) => {
     try {
         const response = await API.post(userRoutes.verifyOTP, { otp, email })
+        
         console.log(response)
         return response.data
     } catch (error: any) {
@@ -54,6 +55,11 @@ export const logOut = async () => {
     try {
         
         const response = await API.post(userRoutes.logOut)
+        localStorage.removeItem("accesToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("role");
+        localStorage.removeItem("verifyToken");
+        localStorage.removeItem('user')
         return response.data
 
     } catch (error) {

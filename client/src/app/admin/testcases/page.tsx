@@ -14,6 +14,7 @@ const Testcases = () => {
         problem: string;
         input: string;
         expectedOutput: string;
+        visibility: boolean
     };
 
     const [testCases, setTestCases] = useState<TestCase[]>([]);
@@ -47,7 +48,7 @@ const Testcases = () => {
         const fetchTestCase = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:4001/problem/testCase/testCases"
+                    "http://localhost:4001/problem/testCase/admin/testCases"
                 );
                 setTestCases(response?.data);
                 console.log(response?.data)
@@ -106,8 +107,8 @@ const Testcases = () => {
                                 <thead>
                                     <tr className="bg-gray-700 text-gray-300">
                                         <th className="p-4 border-b border-gray-600">Question</th>
-                                        <th className="p-4 border-b border-gray-600">Input</th>
                                         <th className="p-4 border-b border-gray-600">Expected Output</th>
+                                        <th className="p-4 border-b border-gray-600">Visibility</th>
                                         <th className="p-4 border-b border-gray-600">Actions</th>
                                     </tr>
                                 </thead>
@@ -115,8 +116,8 @@ const Testcases = () => {
                                     {currentTestCases.map((testCase, index) => (
                                         <tr key={index} className="hover:bg-gray-700">
                                             <td className="p-4 border-b border-gray-600">{testCase.problem}</td>
-                                            <td className="p-4 border-b border-gray-600">{testCase.input}</td>
                                             <td className="p-4 border-b border-gray-600">{testCase.expectedOutput}</td>
+                                            <td className="p-4 border-b border-gray-600">{testCase.visibility.toString()}</td>
                                             <td className="p-4 border-b border-gray-600">
                                                 <button onClick={()=>handleEditTestCase(testCase._id)}
                                                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center space-x-2"

@@ -13,7 +13,7 @@ interface CodeEditorProps {
     height?: string;
 }
 
-const CodeEditor : React.FC<CodeEditorProps>  = ({ code, onCodeChange, width = "600px", height = "1000px" }) => {
+const CodeEditor : React.FC<CodeEditorProps>  = ({ code, onCodeChange, width = "600px", height = "730px" }) => {
   return (
     <div className="p-6 bg-gray-900 flex flex-col">
       <CodeMirror

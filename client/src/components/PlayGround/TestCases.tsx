@@ -5,19 +5,19 @@ import React from 'react';
 
 interface TestCaseProps {
   testCase: {
-      _id: string;
-      input: Array<{ params: string }>;
-      expectedOutput: string;
+    _id: string;
+    input: Array<{ params: string }>;
+    expectedOutput: string;
   };
   result: {
-      error?: string;
-      output?: string;
-      logs: string[];
+    error?: string;
+    output?: string;
+    logs: string[];
   };
   showAll: boolean;
   setShowAll: React.Dispatch<React.SetStateAction<boolean>>;
   problem: {
-      inputFormat: Array<{ name: string }>;
+    inputFormat: Array<{ name: string }>;
   };
 }
 
@@ -28,13 +28,16 @@ const TestCase: React.FC<TestCaseProps> = ({ testCase, result, showAll, setShowA
       {/* Input */}
       <div className="p-4 rounded-md shadow-lg bg-gray-700 text-gray-300 hover:bg-dark-layer-2 transition-colors duration-300">
         <pre className="font-mono text-sm">
-          <strong className="text-gray-100">Input:</strong> 
+          <strong className="text-gray-100">Input:</strong>
           {testCase.input.map((param, idx) => (
             <div key={idx}>
-              <strong className="text-gray-100">{problem.inputFormat[idx].name} :</strong> 
+              <strong className="text-gray-100">
+                {problem.inputFormat[idx]?.name || `Parameter ${idx + 1}`} :
+              </strong>
               <span> {param.params}</span>
             </div>
           ))}
+
         </pre>
       </div>
 
@@ -64,7 +67,7 @@ const TestCase: React.FC<TestCaseProps> = ({ testCase, result, showAll, setShowA
             {result.error
               .split("\n")
               .slice(2, 17) // Adjust slice indices as needed
-              .map((line : any, index) => (
+              .map((line: any, index) => (
                 line.trim() === 0 ? null : (
                   <div key={index} className="font-mono text-sm text-red-400">
                     {line}
@@ -85,7 +88,7 @@ const TestCase: React.FC<TestCaseProps> = ({ testCase, result, showAll, setShowA
       )}
 
       {/* Logs */}
-      {result?.logs.length && (
+      {result?.logs.length > 0 && (
         <div className="p-4 rounded-md shadow-lg bg-gray-700 text-gray-300 hover:bg-dark-layer-2 transition-colors duration-300">
           <strong className="text-gray-100">stdout:</strong>
           <div className="mt-2 space-y-2 bg-gray-800">

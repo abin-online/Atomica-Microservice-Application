@@ -253,12 +253,13 @@ const CreateProblem = () => {
 
 
           <div className="mb-5">
-            <label htmlFor="title" className="block text-lg mb-2 font-semibold">
+            <label htmlFor="functionName" className="block text-lg mb-2 font-semibold">
               Function name:
             </label>
             <input
-              id="title"
+              id="functionName"
               type="text"
+              name="functionName"
               value={formData.functionName}
               onChange={handleInputChange}
               className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 text-white"
@@ -266,9 +267,11 @@ const CreateProblem = () => {
             />
           </div>
 
+
+
           {/* Input Format */}
           <div className="mb-5">
-            <label className="block text-lg mb-2 font-semibold">Input Format:</label>
+            <label className="block text-lg mb-2 font-semibold">Input Format ( Parameters ):</label>
             {formData.inputFormat.map((field, index) => (
               <div key={index} className="flex gap-3 mb-3">
                 <input
@@ -280,15 +283,21 @@ const CreateProblem = () => {
                   }
                   className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
                 />
-                <input
-                  type="text"
-                  placeholder="Type"
-                  value={field.type}
-                  onChange={(e) =>
-                    handleInputFormatChange(index, "type", e.target.value)
-                  }
-                  className="flex-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                />
+                <select
+  value={field.type}
+  onChange={(e) => handleInputFormatChange(index, "type", e.target.value)}
+  className="flex-1 p-3 w-72 bg-gray-700 border border-gray-600 rounded-lg text-white"
+>
+  <option value="">Select Type</option>
+  <option value="string">String</option>
+  <option value="number">Number</option>
+  <option value="boolean">Boolean</option>
+  <option value="array">Array</option>
+  <option value="object">Object</option>
+  <option value="null">Null</option>
+  <option value="undefined">Undefined</option>
+</select>
+
                 <input
                   type="text"
                   placeholder="Description"
@@ -311,36 +320,51 @@ const CreateProblem = () => {
 
           {/* Output Format */}
           <div className="mb-5">
-            <label htmlFor="outputFormat" className="block text-lg mb-2 font-semibold">
-              Output Format:
-            </label>
-            <input
-              id="outputFormat.type"
-              type="text"
-              placeholder="Output Type"
-              value={formData.outputFormat.type}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  outputFormat: { ...prev.outputFormat, type: e.target.value },
-                }))
-              }
-              className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 text-white"
-            />
-            <textarea
-              id="outputFormat.description"
-              rows={3}
-              placeholder="Output Description"
-              value={formData.outputFormat.description}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  outputFormat: { ...prev.outputFormat, description: e.target.value },
-                }))
-              }
-              className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 text-white"
-            ></textarea>
-          </div>
+  <label htmlFor="outputFormat" className="block text-lg mb-2 font-semibold">
+    Output Format:
+  </label>
+
+  {/* Dropdown for Output Type */}
+  <select
+    id="outputFormat.type"
+    value={formData.outputFormat.type}
+    onChange={(e) =>
+      setFormData((prev) => ({
+        ...prev,
+        outputFormat: { ...prev.outputFormat, type: e.target.value },
+      }))
+    }
+    className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 text-white"
+  >
+    <option value="" disabled>Select Data Type</option>
+    <option value="string">String</option>
+    <option value="number">Number</option>
+    <option value="boolean">Boolean</option>
+    <option value="object">Object</option>
+    <option value="array">Array</option>
+    <option value="undefined">Undefined</option>
+    <option value="null">Null</option>
+    <option value="function">Function</option>
+    <option value="symbol">Symbol</option>
+    <option value="bigint">BigInt</option>
+  </select>
+
+  {/* Textarea for Output Description */}
+  <textarea
+    id="outputFormat.description"
+    rows={3}
+    placeholder="Output Description"
+    value={formData.outputFormat.description}
+    onChange={(e) =>
+      setFormData((prev) => ({
+        ...prev,
+        outputFormat: { ...prev.outputFormat, description: e.target.value },
+      }))
+    }
+    className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-blue-400 text-white mt-3"
+  ></textarea>
+</div>
+
 
           {/* Constraints */}
           <div className="mb-5">
