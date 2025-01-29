@@ -36,4 +36,10 @@ export default class McqUseCase implements IMcqUseCase {
   async getMCQ(tag: string, difficulty: string): Promise<any[]> {
     return await this.mcqRepository.fetchToUser(tag, difficulty);
   }
+
+  async getMCQForContest(question: any): Promise<any[]> {
+    console.log("contest array from repo", question)
+
+    return await this.mcqRepository.getMCQForContest(question)
+  }
 }

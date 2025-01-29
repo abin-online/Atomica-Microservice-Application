@@ -7,5 +7,7 @@ export interface IMcqUseCase {
     getQuestionById(id: string): Promise<any>;
     updateQuestion(id: string, data: any): Promise<any>;
     getMCQ(tag: string, difficulty: string) : Promise<any[]>
+    getMCQForContest(question: any) : Promise<any[]>
+
   }
    

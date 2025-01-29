@@ -91,4 +91,17 @@ export default class McqController {
       return next(new ErrorHandler(error.status, error.message))
     }
   }
+
+  async getMCQForContest(req: Request, res: Response, next: NextFunction) : Promise<void> {
+    try {
+        const {question} = req.body;
+        console.log("contest arrayfrom controller ", req.body)
+
+        const mCQForContest = await this.mcqUseCase.getMCQForContest(question);
+        console.log(mCQForContest)
+        res.status(200).json(mCQForContest)
+    } catch (error : any) {
+      return next(new ErrorHandler(error.status, error.message))
+    }
+  }
 }

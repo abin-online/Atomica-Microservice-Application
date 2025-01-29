@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { mcqController } from "./injection";
 import { Req, Res, Next } from "../../interface/framework/types/serverTypes";
+import { isUser } from "../../interface/framework/middleware/roleAuth";
 
 export const QuestionRoute = (router: Router) => {
   router.post("/addQuestion", (req: Req, res: Res, next: Next) =>
@@ -19,9 +20,13 @@ export const QuestionRoute = (router: Router) => {
     mcqController.updateQuestion(req, res, next)
   );
 
-  router.get('/getAllMcq', (req: Req, res: Res, next : Next) => 
+  router.get('/getAllMcq', (req: Req, res: Res, next: Next) =>
     mcqController.getMCQ(req, res, next)
-);
+  );
+
+  router.post('/mcq/contest', (req: Req, res: Res, next: Next) =>
+    mcqController.getMCQForContest(req, res, next)
+  )
 
   return router;
 };

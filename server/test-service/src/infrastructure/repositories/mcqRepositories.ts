@@ -38,5 +38,11 @@ export default class McqRepository implements IMcqRepository {
     console.log("[]{}", response)
     return response
   }
+
+  async getMCQForContest(question: any): Promise<any> {
+    console.log("contest array ", question)
+      const mCQForContest = await mcqModel.find({question: {$in: question}})
+      return mCQForContest
+  }
 }
 

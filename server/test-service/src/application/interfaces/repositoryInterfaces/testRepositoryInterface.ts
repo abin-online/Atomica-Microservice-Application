@@ -7,4 +7,5 @@ export interface IMcqRepository {
   updateById(id: string, data: any): Promise<any | null>;
   updateBlockedStatus(id: string, blocked: boolean): Promise<any | null>;
   fetchToUser(tag: string, difficulty: string): Promise<any | null>;
+  getMCQForContest(question: any): Promise<any>;
 }

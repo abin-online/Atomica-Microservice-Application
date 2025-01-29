@@ -31,6 +31,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/mcq', questionRouter)
 app.use('/tag', tagRouter)
 
+app.get('/', (req, res)=>{
+    res.json("TEST SERVICE")
+})
 
 const PORT = process.env.PORT || 5001
 
