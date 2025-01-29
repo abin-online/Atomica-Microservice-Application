@@ -38,7 +38,7 @@ export default function QuizPage() {
     const router = useRouter()
     const dispatch = useAppDispatch()
     const { dialog, openDialog } = useConfirmationDialog()
-    
+
 
     type BadgeData = {
         name: string;
@@ -54,7 +54,7 @@ export default function QuizPage() {
             if (storedUser) {
                 try {
                     const user = JSON.parse(storedUser);
-                    console.log('prased User:', user);
+                    console.log('parsed User:', user);
                     dispatch(setUser(user));
                 } catch (error) {
                     console.error("Error in parsingg", error);
@@ -118,13 +118,13 @@ export default function QuizPage() {
                 try {
                     console.log("|-----------------> user Quiz Data____________|", userQuizData)
                     // const response = await axios.post('http://localhost:5003/badge/test', userQuizData);
-                    const response : any = await updateTest(userQuizData)
+                    const response: any = await updateTest(userQuizData)
                     if (response.data.newBadge) {
                         setNewBadgeData(response.data.badgeData);  // Store badge data
                         setTimeout(() => {
                             setIsModalOpen(true);
                         }, 500);
-                    } 
+                    }
                 } catch (err) {
                     console.error('Error submitting quiz data:', err);
                     toast.error('Failed to submit quiz results.');
@@ -198,8 +198,8 @@ export default function QuizPage() {
     if (quiz.length === 0) {
         return <LoadingSpinner message="Fetching the quiz... Please wait!" />;
     }
-      
-    const handleRetry = ()=> {
+
+    const handleRetry = () => {
         window.location.reload()
     }
     const confirmBack = () => {
@@ -210,7 +210,7 @@ export default function QuizPage() {
         });
     };
 
-    const backToHome = ()=> {
+    const backToHome = () => {
         router.push('/quickTest')
     }
 
@@ -218,7 +218,7 @@ export default function QuizPage() {
         const totalCorrect = results.reduce((sum, r) => sum + r, 0);
         return (
             <div className="quiz-page bg-gray-100 min-h-screen text-gray-800">
-               
+
                 <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
                     <h1 className="text-2xl font-bold text-gray-700 mb-6">Quiz Results</h1>
                     <p className="text-lg mb-4">You scored {totalCorrect} out of {quiz.length}</p>
@@ -247,19 +247,19 @@ export default function QuizPage() {
                         ))}
                     </ul>
                     <div className="flex justify-center gap-4 mt-6">
-                    <button
-                        onClick={handleRetry}
-                        className="px-6 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600"
-                    >
-                        Retry
-                    </button>
-                    <button
-                        onClick={confirmBack}
-                        className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
-                    >
-                        Back
-                    </button>
-                </div>
+                        <button
+                            onClick={handleRetry}
+                            className="px-6 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600"
+                        >
+                            Retry
+                        </button>
+                        <button
+                            onClick={confirmBack}
+                            className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
+                        >
+                            Back
+                        </button>
+                    </div>
                 </div>
                 {dialog}
                 {newBadgeData && isModalOpen && (
@@ -283,18 +283,12 @@ export default function QuizPage() {
                         </div>
                     </div>
                 )}
-
             </div>
         );
     }
 
-
-
-
-
     return (
         <div className="quiz-page bg-gray-100 min-h-screen text-gray-800">
-        
             <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
                 <h1 className="text-2xl font-bold text-gray-700 mb-6">Quiz</h1>
                 <div className="question-box p-4 bg-gray-50 rounded-lg shadow-inner">
