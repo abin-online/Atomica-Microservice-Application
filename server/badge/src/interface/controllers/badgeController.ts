@@ -17,11 +17,11 @@ export class BadgeController {
   
     async createBadge(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-        const { name, description, minQuestionsSolved } = req.body;
+        const { name, description, minQuestionsSolved, category } = req.body;
         console.log("deii", req.body)
         const image = req.file as Express.Multer.File;
 
-
+        console.log(image)
         if (!image) {
           res.status(400).json({ message: 'No image file' });
         }
@@ -31,6 +31,7 @@ export class BadgeController {
           name,
           description,
           minQuestionsSolved,
+          category,
           imageURL: s3Response.Location
         }
         const newBadge = await this.badgeUseCase.createBadge(badgeData);
@@ -44,10 +45,10 @@ export class BadgeController {
     async updateBadge(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
         const { id } = req.params;
-        const { name, description, minQuestionsSolved } = req.body;
+        const { name, description, category, minQuestionsSolved } = req.body;
         const image = req.file as Express.Multer.File;
     
-        let badgeData: { [key: string]: any } = { name, description, minQuestionsSolved };
+        let badgeData: { [key: string]: any } = { name, description, category, minQuestionsSolved };
     
         if (image) {
           const s3Response = await s3Service.uploadFile(image);

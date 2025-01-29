@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { badgeController, userController } from "./injection";
+import { badgeController, userController, userProblemController } from "./injection";
 import multer from "multer";
+import { isUser } from "../middlewares/authMiddleware/roleAuth";
 
 const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
@@ -17,8 +18,14 @@ const router = (router: Router) => {
 
     //PATCH IS NOT WORKING, 
     router.put("/blockBadge", badgeController.blockBadge); 
-    router.post('/test' , userController.updateTestPoint);
+    router.post('/test' , isUser, userController.updateTestPoint);
     router.get('/leaderBoard' , userController.leaderBoard);
+
+
+    router.post('/problem', isUser, userProblemController.updateProblemScore)
+    router.get('/filter/submission' , userProblemController.getSubmissions)
+    router.get('/analytic/leaderBoard' , userProblemController.leaderBoard)
+    
 }
 
 

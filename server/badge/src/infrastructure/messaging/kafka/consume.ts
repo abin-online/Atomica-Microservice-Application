@@ -1,5 +1,5 @@
 import kafka from "./kafkaConfig";
-import { mcqUserService } from "../../routes/injection";
+import { mcqUserService, userProblemService } from "../../routes/injection";
 
 async function consume() {
 
@@ -24,7 +24,12 @@ async function consume() {
 
                     // await tagService.addTag(tag)
                     console.log(data)
-                    await mcqUserService.createUser(data)
+                    
+                    await Promise.all([
+                        mcqUserService.createUser(data),
+                        userProblemService.createUser(data)
+                    ])
+                 
                 }
             }
         })

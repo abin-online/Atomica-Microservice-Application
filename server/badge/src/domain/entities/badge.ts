@@ -3,6 +3,7 @@ export interface IBadge {
     name: string;
     description: string;
     minQuestionsSolved: number;
+    category: "problem" | "test";
     imageURL: string;
     isActive?: boolean;
 }  

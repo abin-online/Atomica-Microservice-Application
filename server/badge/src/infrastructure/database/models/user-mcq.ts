@@ -10,6 +10,34 @@ const userSchema: Schema<IUserMcq> = new Schema({
         type: String,
         required: true,
     },
+    bio: {
+        type: String,
+        default: ""
+    },
+    profilePicture: {
+        type: String,
+        default: ""
+    },
+    instagram: {
+        type: String,
+        default: ""    
+    },
+    linkedIn : {
+        type: String,
+        default: ""    
+    },
+    X: {
+        type: String,
+        default: ""    
+    },
+    facebook: {
+        type: String,
+        default: ""   
+    },
+    website: {
+        type: String,        
+        default: "" 
+    },
     badges: {
         type: [String],
         default: [],
@@ -36,6 +64,6 @@ const userSchema: Schema<IUserMcq> = new Schema({
     }
 }, { timestamps: true });
 
-const userModel: Model<IUserMcq> = model<IUserMcq>('user', userSchema);
+const userMcqModel: Model<IUserMcq> = model<IUserMcq>('user-mcq', userSchema);
 
-export default userModel;
+export default userMcqModel;

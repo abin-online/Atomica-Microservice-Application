@@ -5,6 +5,7 @@ import { IBadge } from "../../domain/entities/badge";
 export class BadgeRepository implements IBadgeRepository {
     // Add a new badge
     async addBadge(badge: IBadge): Promise<IBadge> {
+        console.log("BADGE REPO ||",badge)
         return await BadgeModel.create(badge);
     }
 

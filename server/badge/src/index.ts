@@ -6,7 +6,8 @@ import connectDb from './infrastructure/database/db'
 import router from './infrastructure/routes/badgeRoutes'
 import consume from './infrastructure/messaging/kafka/consume'
 import expressJson from 'express';
-
+import profileRouter from './infrastructure/routes/profile';
+import morgan from 'morgan'
 dotenv.config()
 
 connectDb()
@@ -17,6 +18,7 @@ const badgeRouter = express.Router()
 
 router(badgeRouter)
 
+app.use(morgan('dev'))
 const corsOptions = {
     origin: 'http://localhost:3000', 
     credentials: true,
@@ -33,9 +35,15 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/badge', badgeRouter)
 
+app.use('/profile', profileRouter)
+
 app.use((req, res, next) => {
     console.log('CORS Headers:', res.getHeaders())
     next()
+})
+
+app.get('/', (req, res)=>{
+    res.json("BADGE SERVICE")
 })
 
 const PORT = process.env.PORT || 5003

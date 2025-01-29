@@ -10,11 +10,13 @@ export default class BadgeUseCase {
 
   // Create a new badge
   async createBadge(data: IBadge): Promise<IBadge> {
+    // await produce('add-badge', data);
     return await this.badgeRepository.addBadge(data);
   }
 
   // Update badge details
   async updateBadge(id: string, data: Partial<IBadge>): Promise<IBadge | null> {
+    // await produce('update-badge', data);
     return await this.badgeRepository.updateBadge(id, data);
   }
 

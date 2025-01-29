@@ -34,8 +34,15 @@ export class UserController {
                 wrongAnswers,
                 rightAnswers
             } = req.body;
-            console.log(req.body)  
-            const user = await userModel.findOne({ email: email });
+            console.log(req.body)
+            let userEmail
+            if ((req as any).user) {
+                console.log("userEmail =>",(req as any).user.userId);
+                userEmail = (req as any).user.userId
+            }
+
+
+            const user = await userModel.findOne({ email: userEmail || email });
             if (!user) {
                 res.json({ message: "user not found" })
                 return
@@ -50,23 +57,23 @@ export class UserController {
             const points = Math.ceil((user.rightAnswers / user.testAttended) * 100);
             user.points += points;
 
-            const badges = await BadgeModel.find({isActive: true});
+            const badges = await BadgeModel.find({ isActive: true });
             let newBadge: string | null = null;
             let badgeData: object | null = null;
 
             for (const badge of badges) {
-                console.log(user.rightAnswers , "_____", badge.minQuestionsSolved , "____", !user.badges.includes(badge.name))
+                console.log(user.rightAnswers, "_____", badge.minQuestionsSolved, "____", !user.badges.includes(badge.name))
                 if (user.rightAnswers >= badge.minQuestionsSolved && !user.badges.includes(badge.name)) {
                     user.badges.push(badge.name);
                     newBadge = badge.name;
-                    badgeData = badge; 
-                    break;  
+                    badgeData = badge;
+                    break;
                 }
             }
-            
-            
+
+
             await user.save();
-         
+
             if (newBadge) {
                 res.json({ message: "Test data updated and new badge awarded!", newBadge, badgeData, user });
             } else {
@@ -80,12 +87,12 @@ export class UserController {
     }
 
     async leaderBoard(req: Request, res: Response, next: NextFunction) {
-       try {
-        const leaderBoard = await userModel.find().sort({points: -1})
-        res.status(200).json(leaderBoard)
-       } catch (error) {
-        
-       }
+        try {
+            const leaderBoard = await userModel.find().sort({ points: -1 })
+            res.status(200).json(leaderBoard)
+        } catch (error) {
+
+        }
     }
 }
 

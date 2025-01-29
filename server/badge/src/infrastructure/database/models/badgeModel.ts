@@ -15,7 +15,12 @@ const badgeSchema: Schema = new Schema({
         type: Number,
         required: true
     },
-    imageURL : {
+    category: {
+        type: String,
+        enum: ["problem", "test"],
+        required: true,
+    },
+    imageURL: {
         type: String,
         required: true
     },
