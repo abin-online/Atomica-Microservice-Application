@@ -9,7 +9,10 @@ const badgeRoutes = {
     profile: '/badge/profile/profile',
     updateProfile: '/badge/profile/profile',
     profilePicture: '/badge/profile/profile/userpic',
-    problemStreak: '/badge/profile/profile/streak'
+    problemStreak: '/badge/profile/profile/streak',
+    LeaderBoard: '/badge/badge/analytic/leaderBoard',
+    leaderBoard : '/badge/badge/leaderBoard'
 }
 
 export default badgeRoutes
+
