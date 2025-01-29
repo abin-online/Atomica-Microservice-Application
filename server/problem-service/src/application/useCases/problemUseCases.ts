@@ -32,6 +32,17 @@ export default class ProblemUseCase {
   }
 
   async getProblems(): Promise<any[]> {
-    return await this.problemRepository.getProblems() //only unblocked problems, for client and testcases
+    const problems =  await this.problemRepository.getProblems() 
+    console.log('problem use case___' , problems)
+    return problems;
+  
+  }
+
+  async viewProblem(id: string) : Promise<any> {
+    return await this.problemRepository.viewProblem(id)
+  }
+
+  async getProblemsForContest(question: any) : Promise<any> {
+    return await this.problemRepository.getProblemsForContest(question)
   }
 }

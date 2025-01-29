@@ -26,6 +26,10 @@ const problemSchema: Schema<IProblem> = new Schema({
             type: String,
         },
     ],
+    functionName : {
+        type: String,
+        required:true
+    },
     inputFormat: [
         {
             name: {
@@ -38,7 +42,7 @@ const problemSchema: Schema<IProblem> = new Schema({
             },
             description: {
                 type: String,
-                required: true,
+                required: false,
             },
         },
     ],
@@ -49,7 +53,7 @@ const problemSchema: Schema<IProblem> = new Schema({
         },
         description: {
             type: String,
-            required: true,
+            required: false,
         },
     },
     constraints: [

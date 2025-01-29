@@ -3,4 +3,5 @@ export interface ITestCaseRepository {
     getTestCase(id: string) : Promise<any>;
     updateTestCase(id: string, data: any) : Promise<any>
     getTestCases(): Promise<any>
+    publicTestCases(problem: string) : Promise<any>
 }

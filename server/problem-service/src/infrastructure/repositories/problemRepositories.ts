@@ -50,7 +50,18 @@ export default class ProblemRepository implements IProblemRepository {
 
   async getProblems(): Promise<any[]> {
     const problems = await Problem.find({blocked:false}) 
+    console.log(problems)
     return problems //only unblocked problems, for client and testcases
   }
 
+  async viewProblem(id: string): Promise<any> {
+    const problem = await Problem.findById(id);
+    return problem
+  }
+ 
+  async getProblemsForContest(question: any): Promise<any> {
+    console.log("contest array ", question)
+    const problems = await Problem.find({title: {$in: question}})
+    return problems
+  }
 }

@@ -8,6 +8,7 @@ export interface IProblem  {
     inputFormat: { name: string; type: string; description: string }[];
     outputFormat: { type: string; description: string };
     constraints: string[];
+    functionName: string;
     hints: string[];
   }
   

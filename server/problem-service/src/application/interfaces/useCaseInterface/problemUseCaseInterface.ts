@@ -6,5 +6,7 @@ export interface IProblemUseCase {
     getAllProblems(): Promise<any[]>;
     getAllTags(): Promise<any[]>;
     getProblems(): Promise<any[]>
+    viewProblem(id: string): Promise<any>;
+    getProblemsForContest(question: any) : Promise<any>
   }
   

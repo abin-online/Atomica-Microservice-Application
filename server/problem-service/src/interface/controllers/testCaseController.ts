@@ -11,6 +11,7 @@ export default class TestCaseController {
         this.getTestCase = this.getTestCase.bind(this);
         this.updateTestCase = this.updateTestCase.bind(this);
         this.getTestCases = this.getTestCases.bind(this);
+        this.publicTestCases = this.publicTestCases.bind(this)
     }
 
     async createTestCase(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -25,8 +26,10 @@ export default class TestCaseController {
 
     async getTestCase(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { id } = req.params;
+        console.log(id)
         try {
-            const testCase = this.testCaseUseCase.getTestCase(id);
+            const testCase = await this.testCaseUseCase.getTestCase(id);
+            console.log("trs", testCase)
             res.status(200).json(testCase);
         } catch (error: any) {
             return next(new ErrorHandler(error.status, error.message));
@@ -47,6 +50,18 @@ export default class TestCaseController {
     async getTestCases(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const testCase = await this.testCaseUseCase.getTestCases();
+            res.status(200).json(testCase);
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status, error.message))
+        }
+    }
+
+    
+    async publicTestCases(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { problem } = req.params;
+            
+            const testCase = await this.testCaseUseCase.publicTestCases(decodeURIComponent(problem));
             res.status(200).json(testCase);
         } catch (error: any) {
             return next(new ErrorHandler(error.status, error.message))

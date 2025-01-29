@@ -52,6 +52,10 @@ app.use((req, res, next) => {
 // Kafka consumer 
 consume()
 
+app.get('/', (req, res)=>{
+    res.json("PROBLEM SERVICE")
+})
+
 const PORT = process.env.PORT || 5002
 app.listen(PORT, () => {
     console.log(`Problem service is running at http://localhost:${PORT}`)

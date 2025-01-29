@@ -12,6 +12,7 @@ export default class ProblemController {
     this.blockProblem = this.blockProblem.bind(this);
     this.getProblem = this.getProblem.bind(this);
     this.getAllProblems = this.getAllProblems.bind(this);
+    this.viewProblem = this.viewProblem.bind(this)
   }
 
   async createProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -79,9 +80,33 @@ export default class ProblemController {
   async getUnblockedProblems(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const problems = await this.problemUseCase.getProblems(); //only unblocked problems, especially for client side
+      console.log("get unblocked problems==========++++-----",problems)
       res.status(200).json(problems);
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
+    }
+  }
+
+  async viewProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const { id } = req.params;
+        const problem = await this.problemUseCase.viewProblem(id);
+        res.status(200).json(problem);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.status, error.message));
+    }
+  }
+
+  async getProblemsForContest(req: Request, res: Response, next: NextFunction) : Promise<void> {
+    try {
+        const {question} = req.body;
+        console.log("contest arrayfrom controller ", req.body)
+
+        const problems = await this.problemUseCase.getProblemsForContest(question);
+        console.log(problems)
+        res.status(200).json(problems)
+    } catch (error : any) {
+      return next(new ErrorHandler(error.status, error.message))
     }
   }
 }

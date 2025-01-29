@@ -9,12 +9,18 @@ export const TestCaseRoute = (router: Router) => {
     router.get('/testCase/:id', (req: Req, res: Res, next: Next) => {
         testCaseController.getTestCase(req, res, next)
     });
-    router.get('/testCase/:id', (req: Req, res: Res, next: Next) => {
+    router.put('/testCase/:id', (req: Req, res: Res, next: Next) => {
         testCaseController.updateTestCase(req, res, next)
     });
 
-    router.get('/testcases', (req: Req, res: Res, next: Next) => {
+    router.get('/admin/testcases', (req: Req, res: Res, next: Next) => {
         testCaseController.getTestCases(req, res, next)
     });
+
+    router.get('/testcases/:problem', (req: Req, res: Res, next: Next) => {
+       
+        testCaseController.publicTestCases(req, res, next)
+    });
+
     return router;
 };

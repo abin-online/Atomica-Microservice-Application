@@ -8,7 +8,9 @@ export default class TestCaseRepository implements ITestCaseRepository {
     }
 
     async getTestCase(id: string): Promise<any> {
+        
         const testCase = await TestCaseModel.findById(id);
+        console.log("testcase" , testCase)
         return await testCase
     }
 
@@ -18,7 +20,13 @@ export default class TestCaseRepository implements ITestCaseRepository {
     }
     
     async getTestCases(): Promise<any> {
-        const testCases = await TestCaseModel.find()
+        const testCases = await TestCaseModel.find({}) 
+        console.log(testCases)
+        return await testCases;
+    }
+
+    async publicTestCases(problem: string): Promise<any> {
+        const testCases = await TestCaseModel.find({visibility: 'public', problem}) 
         console.log(testCases)
         return await testCases;
     }

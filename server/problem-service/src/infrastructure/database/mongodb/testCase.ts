@@ -8,9 +8,13 @@ const testCaseSchema: Schema<ITestCase> = new Schema({
         index: true
     },
     input: {
-        type: String,
-        required: true
-    },
+        type: [
+          {
+            params: { type: String, required: true }, 
+        },
+        ],
+        required: true,
+      },
     expectedOutput: {
         type: String,
         required: true,
