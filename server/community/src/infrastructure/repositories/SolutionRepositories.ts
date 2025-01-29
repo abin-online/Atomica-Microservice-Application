@@ -10,7 +10,7 @@ export class SolutionRepository implements ISolutionRepository {
     }
 
     async getSolutions(problem: string): Promise<ISolution[] | []> {
-        const solution: any =  await Solution.find({problem}).populate('comments');
+        const solution: any = await Solution.find({ problem }).populate('comments');
         log("solution______", solution[0].comments)
         return solution
     }
@@ -22,4 +22,33 @@ export class SolutionRepository implements ISolutionRepository {
             await solution.save();
         }
     }
+
+    async like(solutionId: string, author: string): Promise<any> {
+        const solution = await Solution.findById(solutionId);
+
+        if (!solution) {
+            throw new Error("Solution not found");
+        }
+
+        const isLiked = solution.upvotes.includes(author);
+
+        if (isLiked) {
+
+            const response = await Solution.findByIdAndUpdate(
+                solutionId,
+                { $pull: { upvotes: author } },
+                { new: true }
+            );
+            return response
+        } else {
+
+            const response = await Solution.findByIdAndUpdate(
+                solutionId,
+                { $addToSet: { upvotes: author } },
+                { new: true }
+            );
+            return response
+        }
+    }
+
 }

@@ -31,4 +31,16 @@ export class SolutionController {
             next(error)
         }
     }
+
+    async like(req: Req, res: Res, next: Next): Promise<any> {
+        try {
+            const { solutionId } = req.params;
+            const { author } = req.body
+            const toggle = await this.SolutionUseCase.likeSolution(solutionId, author);
+            res.status(201).json(toggle);
+
+        } catch (error) {
+
+        }
+    }
 }

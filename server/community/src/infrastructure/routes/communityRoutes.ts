@@ -21,6 +21,11 @@ export const CommunityRoute = (router: Router) => {
     (req: Req, res: Res, next: Next) =>
       commentController.postReply(req, res, next));
 
+  
+    router.post('/like/:solutionId', isUser,
+      (req: Req, res: Res, next: Next) =>
+        solutionController.like(req, res, next));
+
   return router;
 
 };
