@@ -64,16 +64,12 @@ const TestCase: React.FC<TestCaseProps> = ({ testCase, result, showAll, setShowA
             className="mt-2 space-y-2 max-h-64 overflow-y-auto bg-gray-800 p-3 rounded"
             style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
           >
-            {result.error
-              .split("\n")
-              .slice(2, 17) // Adjust slice indices as needed
-              .map((line: any, index) => (
-                line.trim() === 0 ? null : (
-                  <div key={index} className="font-mono text-sm text-red-400">
-                    {line}
+            {result.error &&
+        
+                  <div className="font-mono text-sm text-red-400">
+                    {result.error}
                   </div>
-                )
-              ))}
+              }
           </div>
         </div>
       ) : (

@@ -125,7 +125,7 @@ const ProblemPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const response: any = await submitCode(code, problem?.title, problem?.outputFormat?.type, language)
+      const response: any = await submitCode(code, problem?.title, problem?.outputFormat?.type, language, problem?.functionName)
       console.log("submit response", response)
       if (response.status === 200) {
         console.log("Success:", response.data)
@@ -171,7 +171,7 @@ const ProblemPage = () => {
   const handleRun = async () => {
     try {
 
-      const response: any = await runCode(code, problem?.title, problem?.outputFormat?.type, language)
+      const response: any = await runCode(code, problem?.title, problem?.outputFormat?.type, language, problem?.functionName)
 
       if (response.status === 200) {
         console.log("Success:", response.data)
