@@ -1,0 +1,26 @@
+name: dockerhub-collaboration-service
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - server/collaboration/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        run: |
+          cd server/collaboration
+          docker build -t abinbabu2001/atomica-collaboration-service .
+          docker push abinbabu2001/atomica-collaboration-service
