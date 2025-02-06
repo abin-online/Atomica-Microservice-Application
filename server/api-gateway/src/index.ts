@@ -52,7 +52,7 @@ const services = [{
 app.use(morgan('dev'))
 
 app.use((req, res, next) => {
-    console.log(`LOGGING 📝 : ${req.method} request to: ${req.originalUrl}`);
+    console.log(`LOGGING 📝 =>: ${req.method} request to: ${req.originalUrl}`);
     next();
 });
 
