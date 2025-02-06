@@ -1,4 +1,4 @@
-name: dockerhub-client
+name: dockerhub-api-gateway
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: cd server && docker build -t abinbabu2001/atomica-api-gateway .
+      - run: cd server/api-gateway && docker build -t abinbabu2001/atomica-api-gateway .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
