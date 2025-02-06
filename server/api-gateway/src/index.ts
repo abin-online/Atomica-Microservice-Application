@@ -59,9 +59,11 @@ app.use((req, res, next) => {
 const BOOLEAN = 1 + 2 == Number(SECURITY_NUMBER)
 
 services.forEach((service) => {
+    const isCollaboration = service.route === '/collaboration'
     app.use(service?.route, createProxyMiddleware({
         target: service?.path,
-        changeOrigin: BOOLEAN
+        changeOrigin: BOOLEAN,
+        ws: isCollaboration 
     }))
 })
 
