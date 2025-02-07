@@ -77,10 +77,10 @@ export default {
   		keyframes: {
   			'fade-in': {
   				'0%': {
-  					opacity: 0
+  					opacity: '0'
   				},
   				'100%': {
-  					opacity: 1
+  					opacity: '1'
   				}
   			},
   			'scale-up': {
