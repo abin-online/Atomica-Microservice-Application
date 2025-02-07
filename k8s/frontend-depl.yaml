@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: abinbabu2001/client:v2
+          image: abinbabu2001/client
           envFrom:
             - configMapRef:
                 name: frontend-env
