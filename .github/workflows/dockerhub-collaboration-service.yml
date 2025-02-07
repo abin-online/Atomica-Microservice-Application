@@ -2,7 +2,7 @@ name: dockerhub-collaboration-service
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - server/collaboration/**
 

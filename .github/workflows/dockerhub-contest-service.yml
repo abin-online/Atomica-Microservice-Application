@@ -2,7 +2,7 @@ name: dockerhub-contest-service
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - server/contest/**
 

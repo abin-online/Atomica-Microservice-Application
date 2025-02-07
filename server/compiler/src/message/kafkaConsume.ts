@@ -22,7 +22,6 @@ async function consume() {
                 }
             
                 if (topic === "add-testCase") {
-                    console.log('testCase kk ulle vandhitte')
                     await testCaseController.addTestcase(data)
                     // await tagService.addTag(tag)
                     console.log(data)

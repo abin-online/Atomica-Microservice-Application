@@ -2,7 +2,7 @@ name: dockerhub-problem-service
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - server/problem-service/**
 

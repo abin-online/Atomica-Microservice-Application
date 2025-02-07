@@ -2,7 +2,7 @@ name: dockerhub-test-service
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - server/test-service/**
 

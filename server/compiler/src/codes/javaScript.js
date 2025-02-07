@@ -1,5 +1,3 @@
-function twoSum(nums,target){
-  while(true){
-    
-  }
+function findSum(arr){
+  return arr.reduce((acc, curr)=> acc+ 1)
 }
