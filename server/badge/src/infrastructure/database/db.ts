@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 require('dotenv').config();
 
-const dbString: string = process.env.PROBLEM_MONGO_URL || 'mongodb://localhost:27017/Atomica-Badge-Service'
+const dbString: string = process.env.BADGE_MONGO_URL || ''
 
 const connectDb = async () => {
   try {

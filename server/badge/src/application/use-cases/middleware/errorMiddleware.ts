@@ -1,4 +1,4 @@
-import { Req, Res, Next } from "../../../interface/framework/types/serverTypes";
+import { Req, Res, Next } from "../../../interface/serverTypes/serverTypes";
 import ErrorHandler from "./errorHandler";
 
 export const errorMiddleware = (err: any, req: Req, res: Res, next: Next): void => {

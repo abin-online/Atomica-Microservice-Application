@@ -1,4 +1,4 @@
-import { Next } from "../../../interface/framework/types/serverTypes";
+import { Next } from "../../../interface/serverTypes/serverTypes";
 import ErrorHandler from "./errorHandler";
 
 export const catchError = (error: unknown, next: Next): void => {
