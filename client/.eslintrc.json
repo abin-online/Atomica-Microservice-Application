@@ -10,6 +10,6 @@
     "prefer-const": "off", // Use const for reassigned variables
     "react-hooks/rules-of-hooks": "off", // Ensure hooks are used correctly
     "react-hooks/exhaustive-deps": "off", // Warn about missing dependencies in useEffect
-    "react/jsx-no-target-blank": "off" // Warn about using target="_blank" without rel="noopener noreferrer"
+    "react/jsx-no-target-blank": "off" // Warn about using target="_blank" without rel="noopener  noreferrer"
   }
 }
