@@ -75,9 +75,9 @@ app.use(
     })
   );
 
-// app.get('/', (req, res) => {
-//     res.json(COMMAND)
-// })
+app.get('/', (req, res) => {
+    res.json(COMMAND)
+})
 
 
 app.get('/services', (req, res) => {
