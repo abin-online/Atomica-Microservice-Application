@@ -9,7 +9,10 @@ export class ReplyUseCase implements IReplyUseCase{
         this.commentRepository = commentRepository;
     }
 
-    async addReply(commentId: string, reply: IComment): Promise<any> {
-        await this.commentRepository.addReplyToComment(commentId, reply);
+    async addReply(commentId: string, reply: IComment): Promise<IComment> {
+        const newReply: any = await this.commentRepository.createComment(reply);
+        await this.commentRepository.addReplyToComment(commentId, newReply._id?.toString());
+        return newReply;
     }
 }
+

@@ -8,11 +8,20 @@ export class CommentRepository implements ICommentRepository {
         return createdComment;
     }
 
-    async addReplyToComment(commentId: string, reply: IComment): Promise<void> {
+    async addReplyToComment(commentId: string, reply: IComment): Promise<IComment | null> {
         const comment = await Comment.findById(commentId);
+        console.log(comment, commentId, reply);
+    
         if (comment) {
-            comment.replies.push(reply);
-            await comment.save();
+            const updated = await Comment.findByIdAndUpdate(
+                commentId,
+                { $push: { replies: reply } },
+                { new: true } 
+            );
+            console.log(updated)
+            return updated;
         }
+        return null; 
     }
+    
 }

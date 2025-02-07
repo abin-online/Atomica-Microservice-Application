@@ -10,10 +10,18 @@ export class SolutionRepository implements ISolutionRepository {
     }
 
     async getSolutions(problem: string): Promise<ISolution[] | []> {
-        const solution: any = await Solution.find({ problem }).populate('comments');
-        log("solution______", solution[0].comments)
-        return solution
+        const solution: any = await Solution.find({ problem })
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'replies', 
+                }
+            });
+    
+        console.log("solution______", solution[0]?.comments);
+        return solution;
     }
+    
 
     async addCommentToSolution(solutionId: string, commentId: any): Promise<void> {
         const solution = await Solution.findById(solutionId);

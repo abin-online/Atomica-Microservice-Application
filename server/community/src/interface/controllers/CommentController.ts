@@ -32,8 +32,8 @@ export class CommentController {
         try {
             const { commentId } = req.params;
             const reply: IComment = req.body;
-            await this.ReplyUseCase.addReply(commentId, reply);
-            res.status(201).json({ message: "Reply added successfully" });   
+            const replied = await this.ReplyUseCase.addReply(commentId, reply);
+            res.status(201).json({ message: "Reply added successfully", replied });   
         } catch (error : any) {
             return next(new ErrorHandler(error.status, error.message))
         }
