@@ -5,7 +5,8 @@ import Sidebar from "@/components/admin/SideBar";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import { getUnblockedProblems } from "@/api/problem";
+import { getProblem, getUnblockedProblems } from "@/api/problem";
+import {  findtestCase, updateTestCase } from "@/api/testCases";
 
 type InputFormat = {
     name: string;
@@ -26,7 +27,7 @@ type Problem = {
 
 const EditTestCase = () => {
     const pathname = usePathname();
-    const id = pathname.split('/').pop();
+    const testcase_id = pathname.split('/').pop();
     const router = useRouter();
 
     const [testCase, setTestCase] = useState({
@@ -71,11 +72,11 @@ const EditTestCase = () => {
             try {
                 setIsLoading(true);
                 const [testCaseResponse, problemsResponse] = await Promise.all([
-                    axios.get(`http://localhost:4001/problem/testCase/testCase/${id}`),
+                    findtestCase(testcase_id),
                     getUnblockedProblems(),
                 ]);
-
-                const fetchedTestCase = testCaseResponse.data;
+                console.log("Test case response ", testCaseResponse)
+                const fetchedTestCase : any = testCaseResponse?.data;
                 const fetchedInput = Array.isArray(fetchedTestCase.input)
                 ? fetchedTestCase.input.map((item: any) => ({ params: item.params || "" }))
                 : [{ params: "" }];
@@ -100,7 +101,7 @@ const EditTestCase = () => {
         };
 
         fetchData();
-    }, [id]);
+    }, [testcase_id]);
 
     useEffect(() => {
         if (!testCase.problem) return;
@@ -111,9 +112,9 @@ const EditTestCase = () => {
                     (problem) => problem.title === testCase.problem
                 );
                 if (selectedProblem?._id) {
-                    const response = await axios.get(
-                        `http://localhost:5002/problem/getProblem/${selectedProblem._id}`
-                    );
+     
+                    const response : any = await getProblem(selectedProblem._id)
+
                     setFormData(response.data);
 
                     setTestCase((prev) => ({
@@ -133,10 +134,9 @@ const EditTestCase = () => {
         e.preventDefault();
         try {
             setIsLoading(true);
-            const response = await axios.put(
-                `http://localhost:4001/problem/testCase/testCase/${id}`,
-                testCase
-            );
+  
+            const response : any = await updateTestCase(testcase_id)
+
             toast.success("Test case updated successfully");
             router.push("/admin/testcases");
         } catch (error) {

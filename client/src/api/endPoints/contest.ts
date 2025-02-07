@@ -8,5 +8,5 @@ export const contest = {
     getProblemsForContest: '/problem/problem/problems/user',
     updateResult : '/contest/contest/contest/',
     getUserContestData: '/contest/contest/user',
-    dashboardUserListing: '/contest/contest/users'
+    dashboardUserListing: '/contest/contest/users',
 }

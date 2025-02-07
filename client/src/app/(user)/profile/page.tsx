@@ -81,22 +81,28 @@ const Profile = () => {
     points: 0,
   });
 
-  const [contestData, setContestData] = useState({
-    contestName : "",
-    name: "",
-    duration : 0,
-    points : 0,
-    createdAt: ""
-  })
+  const [contestData, setContestData] = useState<
+  {
+    contestName: string;
+    name: string;
+    duration: number;
+    points: number;
+    createdAt: string;
+  }[]
+>([]);
 
 
-  const [testBadges, setTestBadges] = useState({
-    name: '',
-    description: '',
-    minQuestionsSolved: 0,
-    category: 'test',
-    imageURL: null as File | null,
-  });
+
+  const [testBadges, setTestBadges] = useState<
+  {
+    name: string;
+    description: string;
+    minQuestionsSolved: number;
+    category: string;
+    imageURL: File | null;
+  }[]
+>([]);
+
 
   const [problemBadges, setProblemBadges] = useState<
     {

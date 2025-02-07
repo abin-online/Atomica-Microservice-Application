@@ -13,6 +13,7 @@ import TestCase from '@/components/PlayGround/TestCases';
 import { submitCode } from '@/api/compilation';
 import Timer from '@/components/contest/Timer';
 import { useConfirmationDialog } from '@/app/customHooks/useConfirmationDialog';
+import { FetchTestCases } from '@/api/testCases';
 
 
 interface Question {
@@ -104,7 +105,7 @@ const DoContest = () => {
     useEffect(() => {
         const fetchTestCases = async () => {
             try {
-                const response = await axios.get(`http://localhost:4001/problem/testCase/testCases/${problems[currentProblemIndex]?.title}`);
+                const response : any = await FetchTestCases(problems[currentProblemIndex]?.title)
                 if (response.data) {
                     setTestCases(response.data);
                 }
@@ -224,7 +225,7 @@ const DoContest = () => {
         try {
             // Submit the code with the selected language, problem title, and output format type
 
-            const response: any = await submitCode(code, problems[currentProblemIndex]?.title, problems[currentProblemIndex]?.outputFormat?.type, language);
+            const response: any = await submitCode(code, problems[currentProblemIndex]?.title, problems[currentProblemIndex]?.outputFormat?.type, language , problems[currentProblemIndex]?.functionName);
             console.log("Submit response for problem submision:", response);
 
             if (response.status === 200) {

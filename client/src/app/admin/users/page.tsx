@@ -3,7 +3,6 @@
 import { blockUser, getUsersData } from "@/api/adminAuthentication";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
-import { useAppDispatch } from "@/lib/hook";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillCloseCircle, AiFillCheckCircle } from "react-icons/ai";
@@ -19,7 +18,6 @@ const UsersPage = () => {
     createdAt: string | null;
   }
 
-  const dispatch = useAppDispatch();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);

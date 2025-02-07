@@ -8,7 +8,7 @@ export const submitCode = async (code: any, problem: string, outputType: string,
         const response = await USERAPI.post(compiler.submit, data );
         return response
     } catch (error) {
-        
+        return error
     }
 }
 
@@ -19,6 +19,6 @@ export const runCode = async (code: any, problem: string, outputType: string,  l
         const response = await USERAPI.post(compiler.run, data );
         return response
     } catch (error) {
-        
+        return error
     }
 }

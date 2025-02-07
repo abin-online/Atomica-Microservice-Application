@@ -35,6 +35,6 @@ export const collabLists = async()=> {
         console.log("collab lists", response)
         return response
     } catch (error) {
-        
+        return error
     }
 }

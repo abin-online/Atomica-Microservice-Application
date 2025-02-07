@@ -36,3 +36,13 @@ export const like = async (solutionId: string, author: string, ) => {
         console.log(error)
     }
 }
+
+export const replyComment = async(commentId: string, author: string, text: string) => {
+    try {
+        const response = await USERAPI.post(`${community.replyComment}${commentId}/replies` , {author, text})
+        console.log(response)
+        return response
+    } catch (error) {
+        return error
+    }
+}

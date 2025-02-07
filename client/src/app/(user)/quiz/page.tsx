@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { useConfirmationDialog } from '../../customHooks/useConfirmationDialog';
 import { updateTest } from '@/api/badge';
 import LoadingSpinner from '@/components/user/LoadingSpinner';
+import { fetchQuiz } from '@/api/quickTest';
 
 interface Question {
     _id: string;
@@ -117,7 +118,6 @@ export default function QuizPage() {
 
                 try {
                     console.log("|-----------------> user Quiz Data____________|", userQuizData)
-                    // const response = await axios.post('http://localhost:5003/badge/test', userQuizData);
                     const response: any = await updateTest(userQuizData)
                     if (response.data.newBadge) {
                         setNewBadgeData(response.data.badgeData);  // Store badge data
@@ -140,10 +140,9 @@ export default function QuizPage() {
         const url = new URL(window.location.href);
         const tag = url.searchParams.get('tag');
         const difficulty = url.searchParams.get('difficulty');
-        const apiUrl = `http://localhost:5001/mcq/getAllMcq?tag=${tag}&difficulty=${difficulty}`;
 
         try {
-            const response = await axios.get(apiUrl);
+            const response: any = await fetchQuiz(tag, difficulty)
 
             setTimeout(() => {
                 setQuiz(response.data);

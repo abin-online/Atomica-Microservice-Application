@@ -11,6 +11,7 @@ const Modal = ({ isOpen, onClose, badges }) => {
                 <div className="grid grid-cols-2 gap-4">
                     {badges.map((badge) => (
                         <div key={badge._id} className="flex flex-col items-center">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src="https://via.placeholder.com/80"
                                 alt={badge.name}

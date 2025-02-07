@@ -63,3 +63,13 @@ export const updateProblem = async (id : string, data: any)=> {
         return error
     }
 }
+
+export const getTags = async ()=> {
+    try {
+        const response = await ADMINAPI.get(problemRoutes.getTags );
+        return response
+    } catch (error) {
+        
+    }
+}
+

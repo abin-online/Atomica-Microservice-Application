@@ -11,7 +11,8 @@ const badgeRoutes = {
     profilePicture: '/badge/profile/profile/userpic',
     problemStreak: '/badge/profile/profile/streak',
     LeaderBoard: '/badge/badge/analytic/leaderBoard',
-    leaderBoard : '/badge/badge/leaderBoard'
+    leaderBoard : '/badge/badge/leaderBoard',
+    submissionFiltering : '/badge/badge/filter/submission'
 }
 
 export default badgeRoutes

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
 import { useAppDispatch } from "@/lib/hook";

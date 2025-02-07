@@ -1,4 +1,3 @@
-import API from "@/service/axios";
 import badgeRoutes from "./endPoints/badges";
 import ADMINAPI from "@/service/adminAxios";
 import USERAPI from "@/service/axios";
@@ -127,3 +126,11 @@ export const leaderBoardFromBadgeService = async () => {
     }
 }
 
+export const submissionFiltering = async (filters: any) => {
+    try {
+        const response = await ADMINAPI.get(`${badgeRoutes.submissionFiltering}?${filters}`);
+        return response
+    } catch (error) {
+        return error
+    }
+}

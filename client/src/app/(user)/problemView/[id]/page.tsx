@@ -18,6 +18,7 @@ import ActionButtons from '@/components/PlayGround/ActionButton'
 
 import SubmissionResult from '@/components/PlayGround/Submission'
 import Solutions from '@/components/PlayGround/Solutions'
+import { FetchTestCases } from '@/api/testCases'
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState<any>(null)
@@ -293,7 +294,7 @@ const ProblemPage = () => {
         console.log("problem  =====", problem)
         const encodedTitle = encodeURIComponent(problem?.title);
         console.log(encodedTitle)
-        const response = await axios.get(`http://localhost:4001/problem/testCase/testCases/${encodedTitle}`)
+        const response : any = await FetchTestCases(encodedTitle)
         console.log("set test cases", response.data)
 
         if (response.data) {

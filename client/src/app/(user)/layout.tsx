@@ -10,7 +10,11 @@ interface LayoutProps {
 const UserLayout = ({ children }: LayoutProps) => {
     const pathname = usePathname();
 
-    const showNavbar = !pathname?.includes('/login') && !pathname?.includes('/signup');
+    const showNavbar = !pathname?.includes('/login') && !pathname?.includes('/signup')
+            && !pathname?.includes('/forgotPassword') && 
+            !pathname?.includes('/resetPassword') &&
+            !pathname?.includes('/otp')
+            ;
 
       return (
     <div>

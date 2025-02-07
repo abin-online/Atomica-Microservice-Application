@@ -88,13 +88,7 @@ const CreateBadge = () => {
                 console.log(key, value);
             });
             
-            // const response = await axios.post("http://localhost:5003/badge/badge", uploadData, 
-            // // 
-            // {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data',
-            //     },
-            // });
+
             const headers =  {
                 headers: {
                     'Content-Type': 'multipart/form-data',

@@ -10,10 +10,10 @@ import { setUser } from "@/lib/features/users/userSlice";
 import { userGoogleLogin } from "@/api/userAuthentication";
 import { jwtDecode } from 'jwt-decode';
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { userAuth } from "@/api/middleware/middleware";
+// import { userAuth } from "@/api/middleware/middleware";
 function Page() {
 
-  userAuth()
+ // userAuth()
   const router = useRouter();
   const dispatch = useAppDispatch()
   const handleSignup = () => {
@@ -117,121 +117,132 @@ function Page() {
 
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-
-      {/* Centered Container */}
-      <div className="flex flex-col lg:flex-row w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* Left Section - Image */}
-        <div className="hidden lg:block lg:w-1/2 bg-blue-500">
-          <img
-            src="https://cdn.wallpapersafari.com/13/89/wb4WOU.jpg"
-            alt="Login Visual"
-            className="object-cover w-full h-full"
-          />
-        </div>
-
-        {/* Right Section - Login Form */}
-        <div className="flex items-center justify-center w-full lg:w-1/2 p-8 bg-white">
-          <div className="w-full max-w-sm">
-            <h2 className="text-3xl font-bold text-center text-gray-800">
-              Welcome Back!
-            </h2>
-            <p className="text-sm text-center text-gray-500">
-              Login to access your account
-            </p>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
-              {/* Email Input */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email
-                </label>
-                <input
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                      message: "Please enter a valid email address.",
-                    },
-                  })}
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-                <p className="text-red-600">{errors.email?.message as string}</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col lg:flex-row">
+      {/* Left Side - Image */}
+      <div className="lg:w-1/2 relative overflow-hidden">
+        <div className="absolute inset-0  from-black-800 to-black-900 opacity-50"></div>
+        <img
+          src="https://cdn.wallpapersafari.com/13/89/wb4WOU.jpg"
+          alt="Login Visual"
+          className="object-cover w-full h-full opacity-"
+        />
+        <div className="absolute inset-0 flex flex-col justify-center p-12 text-white">
+          <h2 className="text-4xl font-bold mb-6">Welcome Back!</h2>
+          <p className="text-lg mb-8">Start your journey with us and unlock amazing possibilities.</p>
+          <div className="space-y-4">
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
               </div>
-
-              {/* Password Input */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
-                <input
-                  {...register("password", {
-                    required: "Enter password",
-                    pattern: {
-                      value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*()_+~`|}{[\]:;?><,./-]).{8,}$/,
-                      message:
-                        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character",
-                    },
-                  })}
-                  type="password"
-                  id="password"
-                  name="password"
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-                <p className="text-red-600">{errors.password?.message as string}</p>
-                <div className="flex justify-end text-sm mt-2">
-                  {/* <a href="/forgotPassword" className="text-blue-500 hover:underline">
-                    Forgot Password?
-                  </a> */}
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <div>
-                <button
-                  type="submit"
-                  className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-
-            <div className="flex items-center justify-center space-x-2 mt-6">
-              <span className="h-px w-16 bg-gray-300"></span>
-              <span className="text-sm text-gray-500">or</span>
-              <span className="h-px w-16 bg-gray-300"></span>
+              <p className="ml-4">Secure and reliable platform</p>
             </div>
-
-          
-
-            <GoogleOAuthProvider clientId="419017382512-dhm3aao5ojq7lkshbpm5buablq016piq.apps.googleusercontent.com">
-              <div>
-                <GoogleLogin
-                  onSuccess={googleSubmit}
-                  onError={() => console.error("Google Login Failed")}
-                />
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                </svg>
               </div>
-            </GoogleOAuthProvider>
-
-            <p className="text-sm text-center text-gray-500 mt-6">
-              Are you new?{" "}
-              <a href="/signup" className="text-blue-500 hover:underline">
-                Please Sign Up
-              </a>
-            </p>
+              <p className="ml-4">Join our growing community</p>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Right Side - Form */}
+      <div className="lg:w-1/2 p-12 lg:p-16">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Sign In</h2>
+          <p className="text-gray-600 mb-8">Please sign in to continue to your account</p>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Please enter a valid email address.",
+                  },
+                })}
+                type="email"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Enter your email"
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                {...register("password", {
+                  required: "Enter password",
+                  pattern: {
+                    value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*()_+~`|}{[\]:;?><,./-]).{8,}$/,
+                    message: "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character",
+                  },
+                })}
+                type="password"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Enter your password"
+              />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02]"
+            >
+              Sign In
+            </button>
+          </form>
+
+      {/* Forgot Password Button */}
+      <div className="mt-4 text-center">
+          <a
+            href="/forgotPassword"
+            className="text-blue-600 hover:text-blue-700 font-medium"
+          >
+            Forgot Password?
+          </a>
+        </div>
+
+          <div className="my-8 flex items-center justify-center space-x-4">
+            <div className="flex-1 h-px bg-gray-300"></div>
+            <span className="text-sm text-gray-500">or continue with</span>
+            <div className="flex-1 h-px bg-gray-300"></div>
+          </div>
+
+          <div className="flex justify-center mb-8">
+            <GoogleOAuthProvider clientId="419017382512-dhm3aao5ojq7lkshbpm5buablq016piq.apps.googleusercontent.com">
+              <GoogleLogin
+                onSuccess={googleSubmit}
+                onError={() => console.error("Google Login Failed")}
+              />
+            </GoogleOAuthProvider>
+          </div>
+
+          <p className="text-center text-gray-600">
+            Don't have an account?{" "}
+            <a href="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
+              Sign up here
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
+  </div>
   );
 }
 

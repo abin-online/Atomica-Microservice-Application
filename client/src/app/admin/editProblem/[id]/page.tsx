@@ -7,7 +7,7 @@ import Sidebar from "@/components/admin/SideBar";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { updateProblem } from "@/api/problem";
+import { getTags, updateProblem } from "@/api/problem";
 
 interface FormData {
   title: string;
@@ -44,7 +44,7 @@ const EditProblem = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/problem/getTags");
+        const response : any = await getTags()
         console.log("Tags fetched:", response.data);
         setTags(response.data);
       } catch (error) {
@@ -115,15 +115,7 @@ const EditProblem = () => {
     e.preventDefault();
     console.log("Form data to be submitted:", formData);
     try {
-      // const response = await axios.put(
-      //   `http://localhost:5002/problem/updateProblem/${id}`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
+
       await updateProblem(id, formData)
       toast.success("Problem updated successfully!");
       router.push("/admin/problem"); // Redirect after successful update

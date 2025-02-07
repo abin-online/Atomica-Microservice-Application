@@ -3,7 +3,6 @@
 import Header from '@/components/admin/Header';
 import Sidebar from '@/components/admin/SideBar';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useConfirmationDialog } from '@/app/customHooks/useConfirmationDialog';
 import toast from 'react-hot-toast';
 import { FaEdit, FaSyncAlt } from 'react-icons/fa';
@@ -43,9 +42,7 @@ const Tags = () => {
     const handleAddTag = async () => {
         if (newTag.trim()) {
             try {
-                // const response = await axios.post('http://localhost:5001/tag/addTag', {
-                //     tag: newTag.trim(),
-                // });
+
                 const response: any = await createTag(newTag.trim())
                 setTags((prevTags) => [...prevTags, response?.data]);
                 setNewTag('');
@@ -58,10 +55,7 @@ const Tags = () => {
 
     const toggleBlockedStatus = async (_id: string, currentStatus: boolean) => {
         try {
-            // await axios.put('http://localhost:5001/tag/blockTag', {
-            //     tag: _id,
-            //     blocked: !currentStatus,
-            // });
+
 
             await blockTag(_id, !currentStatus)
 

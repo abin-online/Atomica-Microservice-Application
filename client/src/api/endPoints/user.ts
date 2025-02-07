@@ -6,7 +6,9 @@ const userRoutes = {
     logOut : '/auth/user/logout',
     googleLogin:'/auth/user/googleLogin',
     resendOtp : '/auth/user/resendOtp',
-    forgotPassword : '/auth/user/password'
+    forgotPassword : '/auth/user/forgotPassword',
+    createPassword: '/auth/user/createNewPassword',
+    resetPassword: '/auth/user/resetPassword'
 }
 
 export default userRoutes

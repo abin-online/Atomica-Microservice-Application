@@ -1,5 +1,6 @@
 import API from "@/service/axios";
 import quickTestRoutes from "./endPoints/quickTest";
+import USERAPI from "@/service/axios";
 
 export const getAllQuestions = async () => {
     try {
@@ -47,6 +48,15 @@ export const updateQuestion = async(questionId : string , formData: any) => {
         return response
     } catch (error) {
         
+    }
+}
+
+export const fetchQuiz = async(tag: string| null, difficulty: string|null )=> {
+    try {
+        const response = await USERAPI.get(`${quickTestRoutes.fetchMCQ}?tag=${tag}&difficulty=${difficulty}`)
+        return response
+    } catch (error) {
+        return error
     }
 }
 

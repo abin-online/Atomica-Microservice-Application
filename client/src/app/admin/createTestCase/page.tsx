@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/admin/Header"; // Assuming you have a Header component
 import Sidebar from "@/components/admin/SideBar"; // Assuming you have a Sidebar component
-import { getUnblockedProblems } from "@/api/problem";
+import { getProblem, getUnblockedProblems } from "@/api/problem";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { createTestCase } from "@/api/testCases";
 
 // Define types for inputFormat and outputFormat
 type InputFormat = {
@@ -80,10 +81,8 @@ const CreateTestCase = () => {
         e.preventDefault();
         console.log("Submitting Test Case: ", testCase);
         try {
-            const response = await axios.post(
-                "http://localhost:4001/problem/testCase/testCase",
-                testCase
-            );
+        
+            const response : any = await createTestCase(testCase)
             console.log(response);
             toast.success("Test case created");
             router.push("/admin/testcases");
@@ -101,9 +100,8 @@ const CreateTestCase = () => {
                     (problem) => problem.title === testCase.problem
                 );
                 if (selectedProblem?._id) {
-                    const response = await axios.get(
-                        `http://localhost:5002/problem/getProblem/${selectedProblem._id}`
-                    );
+
+                    const response : any = await getProblem(selectedProblem._id)
                     console.log("response====> ", response);
                     setFormData(response.data); // Update form data with the fetched problem
 

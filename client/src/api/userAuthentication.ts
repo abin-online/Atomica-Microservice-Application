@@ -75,3 +75,21 @@ export const forgotPassword = async (email : string)=> {
         return error
     }
 }
+
+export const verifyForgotOtp = async (otp : string, email: string)=> {
+    try {
+        const response = await API.post(userRoutes.createPassword, {otp, email});
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const resetPassword = async (email : string, password: string)=> {
+    try {
+        const response = await API.post(userRoutes.resetPassword, {email, password})
+        return response
+    } catch (error) {
+        
+    }
+}

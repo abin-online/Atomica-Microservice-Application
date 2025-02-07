@@ -20,7 +20,7 @@ import {
 } from 'chart.js';
 import axios from 'axios';
 import { userList } from '@/api/contest';
-import { leaderBoardFromBadgeService } from '@/api/badge';
+import { leaderBoardFromBadgeService, submissionFiltering } from '@/api/badge';
 
 // Registering Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -81,14 +81,7 @@ const Dashboard: React.FC = () => {
             router.push(`/admin`);
         }
 
-        // const fetchCounts = async () => {
-        //     try {
-        //         const response = await axios.get('http://localhost:5003/dashboard/stats');
-        //         setCounts(response.data);
-        //     } catch (error) {
-        //         console.error('Error fetching counts:', error);
-        //     }
-        // };
+
 
         const fetchSubmissions = async () => {
             try {
@@ -96,9 +89,8 @@ const Dashboard: React.FC = () => {
                 const filters = new URLSearchParams();
                 if (year) filters.append('year', year);
                 if (month) filters.append('month', month);
-                const response = await axios.get<{ submissions: Submission[] }>(
-                    `http://localhost:5003/badge/filter/submission?${filters.toString()}`
-                );
+           
+                const response : any = await submissionFiltering(filters.toString())
 
                 const data = response.data.submissions;
                 if (Array.isArray(data)) {

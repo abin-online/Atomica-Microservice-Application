@@ -1,7 +1,6 @@
 'use client';
 
 import { adminLogin } from '@/api/adminAuthentication';
-import { adminAuth } from '@/api/middleware/middleware';
 import { setAdmin } from '@/lib/features/users/adminSlice';
 import { useAppDispatch } from '@/lib/hook';
 import { useRouter } from "next/navigation";

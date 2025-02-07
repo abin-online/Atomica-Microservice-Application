@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/admin/Header";
 import Sidebar from "@/components/admin/SideBar";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { FaEdit, FaSyncAlt } from 'react-icons/fa';
+import { listTestCases } from "@/api/testCases";
 
 const Testcases = () => {
     type TestCase = {
@@ -47,12 +47,10 @@ const Testcases = () => {
     useEffect(() => {
         const fetchTestCase = async () => {
             try {
-                const response = await axios.get(
-                    "http://localhost:4001/problem/testCase/admin/testCases"
-                );
-                setTestCases(response?.data);
-                console.log(response?.data)
-                setFilteredTestCases(response?.data);
+                const response: TestCase[] = await listTestCases();
+                setTestCases(response);
+                console.log(response)
+                setFilteredTestCases(response);
                 setLoading(false);
             } catch (error) {
                 toast.error("Error fetching test cases");

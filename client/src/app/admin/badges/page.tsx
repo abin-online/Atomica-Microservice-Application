@@ -47,10 +47,6 @@ const BadgeList = () => {
     try {
       setUpdatingId(id);
       const newStatus = !currentStatus;
-      // await axios.put(
-      //   "http://localhost:5003/badge/blockBadge",
-      //   { id, isActive: newStatus }
-      // );
 
       await blockBadge(id, newStatus)
 
