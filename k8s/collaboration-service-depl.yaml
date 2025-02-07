@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collaboration-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collaboration-service
+  template:
+    metadata:
+      labels:
+        app: collaboration-service
+    spec:
+      containers:
+        - name: collaboration-container
+          image: abinbabu2001/atomica-collaboration-service
+          ports:
+            - containerPort: 5005
+          envFrom:
+            - configMapRef:
+                name: collaboration-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: collaboration-service-srv
+spec:
+  selector:
+    app: collaboration
+  ports:
+    - name: badge-ports
+      protocol: TCP
+      port: 5005
+      targetPort: 5005

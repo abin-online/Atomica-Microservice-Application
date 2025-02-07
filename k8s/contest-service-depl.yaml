@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contest-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contest-service
+  template:
+    metadata:
+      labels:
+        app: contest-service
+    spec:
+      containers:
+        - name: contest-container
+          image: abinbabu2001/atomica-contest-service
+          ports:
+            - containerPort: 5007
+          envFrom:
+            - configMapRef:
+                name: contest-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contest-service-srv
+spec:
+  selector:
+    app: contest
+  ports:
+    - name: contest-ports
+      protocol: TCP
+      port: 5007
+      targetPort: 5007

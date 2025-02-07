@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: badge-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: badge-service
+  template:
+    metadata:
+      labels:
+        app: badge-service
+    spec:
+      containers:
+        - name: badge-container
+          image: abinbabu2001/atomica-badge-service
+          ports:
+            - containerPort: 5003
+          envFrom:
+            - configMapRef:
+                name: badge-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: badge-service-srv
+spec:
+  selector:
+    app: badge
+  ports:
+    - name: badge-ports
+      protocol: TCP
+      port: 5003
+      targetPort: 5003

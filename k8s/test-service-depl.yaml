@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-service
+  template:
+    metadata:
+      labels:
+        app: test-service
+    spec:
+      containers:
+        - name: test-container
+          image: abinbabu2001/atomica-test-service
+          ports:
+            - containerPort: 5001
+          envFrom:
+            - configMapRef:
+                name: test-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service-srv
+spec:
+  selector:
+    app: test
+  ports:
+    - name: test-ports
+      protocol: TCP
+      port: 5001
+      targetPort: 5001

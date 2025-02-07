@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compiler-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: compiler-service
+  template:
+    metadata:
+      labels:
+        app: compiler-service
+    spec:
+      containers:
+        - name: compiler-container
+          image: abinbabu2001/atomica-compiler-service
+          ports:
+            - containerPort: 5004
+          envFrom:
+            - configMapRef:
+                name: compiler-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: compiler-service-srv
+spec:
+  selector:
+    app: compiler
+  ports:
+    - name: compiler-ports
+      protocol: TCP
+      port: 5004
+      targetPort: 5004

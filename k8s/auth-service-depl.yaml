@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service-container
+          image: abinbabu2001/atomica-auth-service
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: auth-service-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service-srv
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - name: auth-service-ports
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

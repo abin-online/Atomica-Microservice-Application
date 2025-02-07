@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: problem-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: problem-service
+  template:
+    metadata:
+      labels:
+        app: problem-service
+    spec:
+      containers:
+        - name: problem-container
+          image: abinbabu2001/atomica-problem-service
+          ports:
+            - containerPort: 5002
+          envFrom:
+            - configMapRef:
+                name: problem-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: problem-service-srv
+spec:
+  selector:
+    app: problem
+  ports:
+    - name: problem-ports
+      protocol: TCP
+      port: 5002
+      targetPort: 5002
