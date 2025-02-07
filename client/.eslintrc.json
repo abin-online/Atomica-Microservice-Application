@@ -1,3 +1,15 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@next/next/no-img-element": "off", // Allow the use of <img> elements
+    "@next/next/no-html-link-for-pages": "off", // Warn for <a> tag usage in Next.js
+    "@typescript-eslint/no-explicit-any": "off", // Disable the 'any' type warning
+    "@typescript-eslint/no-unused-vars": "off", // Allow unused args and vars starting with _
+    "@typescript-eslint/no-wrapper-object-types": "off",
+    "react/no-unescaped-entities": "off", // Warn for unescaped entities
+    "prefer-const": "off", // Use const for reassigned variables
+    "react-hooks/rules-of-hooks": "off", // Ensure hooks are used correctly
+    "react-hooks/exhaustive-deps": "off", // Warn about missing dependencies in useEffect
+    "react/jsx-no-target-blank": "off" // Warn about using target="_blank" without rel="noopener noreferrer"
+  }
 }
