@@ -8,11 +8,13 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter()
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: any) => {
     try {
+      e.preventDefault()
       console.log("forgot password", email)
       const response = await forgotPassword(email)
-      router.push(`/forgotOtpVerify`)
+      console.log(response)
+      router.push(`/forgotPassword/otp/${email}`)
     } catch (error) {
 
     }

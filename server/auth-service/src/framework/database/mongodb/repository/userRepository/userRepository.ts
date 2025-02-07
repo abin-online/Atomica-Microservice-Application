@@ -2,6 +2,7 @@ import { Iuser } from "../../../../../entities/user";
 import { IuserRepository } from "../../../../../usecases/interface/respositoryInterface/userRepository";
 import userModel from "../../model/userModel";
 import {block, createUser, findByEmail, getAllUser, getUser} from './user/index';
+import { updateUserPassword } from "./user/updatePassword";
 
 export class UserRepository implements IuserRepository {
     constructor(
@@ -33,5 +34,8 @@ export class UserRepository implements IuserRepository {
         return await getUser(this.userModels, id)
     }
 
-    
+    async changePassword(email: string, passsword: string): Promise<void> {
+        const data=  await updateUserPassword(this.userModels,email,passsword)
+      console.log(data)
+      }
 }

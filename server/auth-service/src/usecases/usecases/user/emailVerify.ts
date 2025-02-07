@@ -12,7 +12,7 @@ export const emailVerify = async (otpRepository: IotpRepository, userRepository:
         const result = await otpRepository.findOtp(user.email)
         if (!result) return next(new ErrorHandler(400, 'otp expried'))
         if (result.otp !== otp) return next(new ErrorHandler(400, 'invalid otp'))
-        return { message: 'the otp verify success ! ..now you can add new password' }
+        return { message: 'otp verified successfully' }
 
 
     } catch (error) {

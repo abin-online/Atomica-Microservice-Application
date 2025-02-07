@@ -5,7 +5,6 @@ import { IotpRepository } from "../../interface/respositoryInterface/otpReposito
 import { IuserRepository } from "../../interface/respositoryInterface/userRepository";
 import { IhashPassword } from "../../interface/service/hashPassword";
 import { IJwt } from "../../interface/service/jwt";
-import { catchError } from "../../middlewares/catchError";
 import ErrorHandler from "../../middlewares/errorHandler";
 
 export const createUser = async (token: string, otp: string, otpRepository: IotpRepository, userRepository: IuserRepository, hashPassword: IhashPassword, jwt: IJwt, next: Next): Promise<Iuser | void> => {

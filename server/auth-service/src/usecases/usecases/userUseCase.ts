@@ -13,6 +13,7 @@ import { forgotPassword } from "./user/forgotPassword";
 import { googleLogin } from "./user/googleLogin";
 import { emailVerify } from "./user/emailVerify";
 import { resendOtp } from "./user/resendOtp";
+import { updateUserPassword } from "./user/updatePassword";
 
 export class UserUseCase implements Iuser_use_case {
     constructor(
@@ -46,7 +47,7 @@ export class UserUseCase implements Iuser_use_case {
         }
     }
 
-    
+
     async create_user(token: string, otp: string, next: Next): Promise<Iuser | void> {
         try {
             const user = await createUser(
@@ -97,21 +98,30 @@ export class UserUseCase implements Iuser_use_case {
         }
     }
 
-    async resendOtp(email : string , next : Next) : Promise<object | void> {
+    async resendOtp(email: string, next: Next): Promise<object | void> {
         try {
             //export const resendOtp = async ( otpRepository: IotpRepository, userRepository: IuserRepository,otpGenerate: IotpGenerate,sentEmail: IsentEmail,email: string,next: Next
 
-            const result =  await resendOtp(this.otpRepository, this.userRepository, this.otpGenerate , this.sentEmail , email , next)
-            
+            const result = await resendOtp(this.otpRepository, this.userRepository, this.otpGenerate, this.sentEmail, email, next)
+
             if (typeof result === "string") {
                 console.log('otttp')
-                return { message: result }; 
+                return { message: result };
             }
             return result;
 
-              
+
         } catch (error) {
-            
+
+        }
+    }
+
+    async updatePassword(email: string, passsword: string, next: Next): Promise<object | void> {
+        try {
+            return await updateUserPassword(this.userRepository, this.hashPassword, email, passsword, next)
+
+        } catch (error) {
+            catchError(error, next)
         }
     }
 

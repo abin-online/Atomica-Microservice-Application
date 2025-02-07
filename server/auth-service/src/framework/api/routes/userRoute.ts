@@ -31,6 +31,11 @@ export function UserRoute(router:  Route) {
         userController.createNewPassword(req, res, next)
     })
 
+    router.post('/resetPassword', async (req: Req, res: Res, next: Next) => {
+        console.log('reset PW')
+        userController.addNewPassword(req, res, next);
+    })
+
     router.post('/googleLogin', async (req: Req, res: Res, next: Next) => {
         console.log('comming in google login')
         userController.googleLogin(req, res, next);
@@ -40,4 +45,6 @@ export function UserRoute(router:  Route) {
         console.log('coming into logout')
         userController.logout(req, res, next);
     })
+
+
 }

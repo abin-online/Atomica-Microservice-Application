@@ -115,6 +115,18 @@ export class UserController {
 
     }
 
+    async addNewPassword(req: Req, res: Res, next: Next) {
+        try {
+            console.log('new passsword controller', req.body)
+            const result = await this.userUserCase.updatePassword(req.body.email, req.body.password, next)
+            if (result) {
+                res.send(result).status(200)
+            }
+        } catch (error: any) {
+            return next(new ErrorHandler(error.status, error.message))
+        }
+    }
+
     async googleLogin(req: Req, res: Res, next: Next) {
         try {
             console.log('google login in controller', req.body)

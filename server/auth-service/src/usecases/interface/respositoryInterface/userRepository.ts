@@ -7,4 +7,5 @@ export interface IuserRepository {
     getAllUser():Promise<Iuser[]|void>
     blockUser(id:string):Promise<Iuser|void>
     getUser(id:string):Promise<Iuser|undefined>
+    changePassword(password:string,email:string):Promise<void>
 }
