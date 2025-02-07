@@ -67,9 +67,17 @@ services.forEach((service) => {
     }))
 })
 
-app.get('/', (req, res) => {
-    res.json(COMMAND)
-})
+app.use(
+    "/",
+    createProxyMiddleware({
+      target: "http://frontend-srv:3000",
+      changeOrigin: true,
+    })
+  );
+
+// app.get('/', (req, res) => {
+//     res.json(COMMAND)
+// })
 
 
 app.get('/services', (req, res) => {
