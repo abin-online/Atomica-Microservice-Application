@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,3 +21,17 @@ spec:
           envFrom:
             - configMapRef:
                 name: api-gateway-env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-srv
+spec:
+  selector:
+    app: api-gateway
+  ports:
+    - protocol: TCP
+      port: 4001
+      targetPort: 4001
+  type: ClusterIP
