@@ -35,4 +35,4 @@ app.get('/', (req, res) => {
 })
 const PORT = process.env.PORT || 5006
 app.listen(PORT, () => {
-    console.log(`Community service is running at http://localhost:${PORT}`);})
+    console.log(`Community service is running at  http://localhost:${PORT}`);})
