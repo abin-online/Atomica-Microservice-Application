@@ -36,5 +36,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5007
 app.listen(PORT, () => {
-    console.log(`Community service is running at http://localhost:${PORT}`)
+    console.log(`Contest service is running at http://localhost:${PORT}`)
 })
