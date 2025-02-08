@@ -87,5 +87,5 @@ app.get('/services', (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`ATOMICA RUNNING ON= http://locahost:${PORT} 🍃`);
+    console.log(`ATOMICA RUNNING ON =| http://localhost:${PORT} 🍃`);
 })
