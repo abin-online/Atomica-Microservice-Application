@@ -3,7 +3,7 @@ import config from "@/config";
 import { removeUser } from "@/lib/features/users/userSlice";
 import { store } from "@/lib/store";
 const USERAPI = axios.create({
-    baseURL: config.BASEURL,
+    baseURL: 'https://atomica.live',
     headers: {
         "Content-Type": 'application/json',
         "withCredentials": true
