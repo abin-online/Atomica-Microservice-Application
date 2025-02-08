@@ -41,7 +41,7 @@ const services = [{
 },
 {
     path: COMMUNITY_SERVICE,
-    route: '/community'
+    route: '/api/community'
 }, {
     path: CONTEST_SERVICE,
     route: '/contest'
