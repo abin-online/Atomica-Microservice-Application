@@ -60,7 +60,7 @@ const BOOLEAN = 1 + 2 == Number(SECURITY_NUMBER)
 
 services.forEach((service) => {
     const isCollaboration = service.route === '/collaboration'
-    console.log(service.path)
+    console.log('services route ',service.path)
     app.use(service?.route, createProxyMiddleware({
         target: service?.path,
         changeOrigin: BOOLEAN,
