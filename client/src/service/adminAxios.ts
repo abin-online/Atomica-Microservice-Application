@@ -4,7 +4,7 @@ import { removeAdmin } from "@/lib/features/users/adminSlice";
 import { store } from "@/lib/store";
 
 const ADMINAPI = axios.create({
-    baseURL: config.BASEURL,
+    baseURL: 'http://35.200.186.106/',
     headers: {
         "Content-Type": "application/json",
         "withCredentials": true,
