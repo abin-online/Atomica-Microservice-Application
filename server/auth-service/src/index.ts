@@ -20,7 +20,7 @@ UserRoute(userRouter)
 
 app.use(cors({
     credentials: true,
-    origin: process.env.CORS_ORIGIN
+    origin: 'https://atomica.live'
 }))
 
 app.use(cookieParser())

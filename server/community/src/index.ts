@@ -14,7 +14,7 @@ const communityRouter = express.Router()
 CommunityRoute(communityRouter);
 
 const corsOptions ={
-    origin: 'http://localhost:3000',
+    origin: 'https://atomica.live',
     credentials: true
 }
 

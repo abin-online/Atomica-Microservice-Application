@@ -20,7 +20,7 @@ if (!PORT) {
 connectDb();
 initSocket(server);
 
-app.use(cors({ origin: CORS_ORIGIN || "http://localhost:3000" }));
+app.use(cors({ origin: CORS_ORIGIN || "https://atomica.live" }));
 app.use(express.json());
 
 const router = express.Router();

@@ -4,7 +4,7 @@ import { removeAdmin } from "@/lib/features/users/adminSlice";
 import { store } from "@/lib/store";
 
 const ADMINAPI = axios.create({
-    baseURL: 'http://35.200.186.106/',
+    baseURL: 'https://atomica.live',
     headers: {
         "Content-Type": "application/json",
         "withCredentials": true,

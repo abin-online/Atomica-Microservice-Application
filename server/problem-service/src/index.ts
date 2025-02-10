@@ -23,7 +23,7 @@ TestCaseRoute(testCaseRouter);
 
 // CORS Options Configuration
 const corsOptions = {
-    origin: 'http://localhost:3000', // Allow the frontend app to make requests
+    origin: 'https://atomica.live', // Allow the frontend app to make requests
     credentials: true, // Allow credentials (cookies, headers)
 }
 

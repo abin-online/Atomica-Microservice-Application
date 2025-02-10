@@ -20,10 +20,10 @@ compilerRouter(router)
 app.use('/compiler' , router)
 
 
-// app.use(cors({
-//     credentials: true,
-//     origin: process.env.CORS_ORIGIN
-// }))
+const corsOptions = {
+    origin: 'https://atomica.live',
+    credentials: true
+}
 
 
 app.get('/', (req, res)=> {

@@ -14,7 +14,7 @@ const contestRouter = express.Router()
 ContestRoute(contestRouter);
 
 const corsOptions = {
-    origin: 'http://35.200.186.106/',
+    origin: 'https://atomica.live',
     credentials: true
 }
 
