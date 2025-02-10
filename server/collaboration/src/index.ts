@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
-const { PORT, CORS_ORIGIN } = process.env;
+const { PORT } = process.env;
 
 if (!PORT) {
     throw new Error("Missing required environment variable: PORT");
@@ -20,7 +20,7 @@ if (!PORT) {
 connectDb();
 initSocket(server);
 
-app.use(cors({ origin: CORS_ORIGIN || "https://atomica.live" }));
+app.use(cors({ origin: "https://atomica.live" }));
 app.use(express.json());
 
 const router = express.Router();

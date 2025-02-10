@@ -4,7 +4,7 @@ export const initSocket = (server: any): void => {
     //console.log(process.env.CORS_ORIGIN)
     const io = new Server(server, {
         cors: {
-            origin: process.env.CORS_ORIGIN ,
+            origin: 'https://atomica.live' ,
         },
     });
 
