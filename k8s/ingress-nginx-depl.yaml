@@ -4,9 +4,13 @@ metadata:
   name: ingress-controller
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://atomica.live"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: "nginx"
   rules:
+    - host: atomica.live
     - http:
         paths:
           - path: /
