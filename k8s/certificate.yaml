@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wenet-life-tls
+  name: atomica-live-tls
   namespace: default
 spec:
-  secretName: wenet-life-tls
+  secretName: atomica-live-tls
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: wenet.life
+  commonName: atomica.live
   dnsNames:
-    - wenet.life
+    - atomica.live
