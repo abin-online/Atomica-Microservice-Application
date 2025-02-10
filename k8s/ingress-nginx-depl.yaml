@@ -5,7 +5,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://atomica.live"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "http://atomica.live, https://atomica.live"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: "nginx"
@@ -20,3 +20,7 @@ spec:
                 name: api-gateway-srv
                 port:
                   number: 4001
+  tls:
+    - hosts:
+        - atomica.live
+      secretName: atomica-live-tls
