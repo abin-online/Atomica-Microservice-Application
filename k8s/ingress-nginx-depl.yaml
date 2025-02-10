@@ -4,23 +4,15 @@ metadata:
   name: ingress-controller
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "http://frontend-srv:3000"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: "nginx"
   rules:
-    - host: atomica.live
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: api-gateway-srv # Route all traffic to API Gateway
+                name: api-gateway-srv
                 port:
-                  number: 4001        # Port where the API Gateway is running
-  tls:
-    - hosts:
-        - atomica.live
-      secretName: atomica-live-tls
+                  number: 4001

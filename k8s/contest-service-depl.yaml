@@ -15,6 +15,7 @@ spec:
       containers:
         - name: contest-container
           image: abinbabu2001/atomica-contest-service
+          imagePullPolicy: Always
           ports:
             - containerPort: 5007
           envFrom:

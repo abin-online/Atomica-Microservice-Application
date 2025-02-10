@@ -15,6 +15,7 @@ spec:
       containers:
         - name: frontend
           image: abinbabu2001/client
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: frontend-env
