@@ -11,7 +11,7 @@ spec:
   ingressClassName: "nginx"
   rules:
     - host: atomica.live
-    - http:
+      http:
         paths:
           - path: /
             pathType: Prefix
