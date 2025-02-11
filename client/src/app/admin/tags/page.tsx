@@ -28,8 +28,9 @@ const Tags = () => {
         const fetchTags = async () => {
             setLoading(true); // Set loading to true before fetching
             try {
-                const response: any = await getAllTags()
-                setTags(response?.data);
+                const response: any = await getAllTags();
+                const fetchedTags = Array.isArray(response?.data) ? response.data : [];
+                setTags(fetchedTags);
             } catch (err) {
                 console.error('Error fetching tags:', err);
             } finally {
