@@ -35,6 +35,10 @@ app.get('/', (req, res)=>{
     res.json("TEST SERVICE")
 })
 
+app.use((req, res, next) => {
+    console.log(`LOGGING 📝 : ${req.method} request to: ${req.originalUrl}`);
+    next();
+});
 const PORT = process.env.PORT || 5001
 
 app.listen(PORT, () => {
