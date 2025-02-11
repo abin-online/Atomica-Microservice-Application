@@ -148,13 +148,14 @@ const QuickTestHome = () => {
                       onChange={(e: any) => setSelectedTag(e.target.value)}
                       label="Select Topic"
                     >
-                      {tags.map((tag) => (
-                        !tag.blocked && (
-                          <MenuItem key={tag._id} value={tag._id}>
-                            {tag.name}
-                          </MenuItem>
-                        )
-                      ))}
+{Array.isArray(tags) && tags.map((tag) => (
+  !tag.blocked && (
+    <MenuItem key={tag._id} value={tag._id}>
+      {tag.name}
+    </MenuItem>
+  )
+))}
+
                     </Select>
                   </FormControl>
 
