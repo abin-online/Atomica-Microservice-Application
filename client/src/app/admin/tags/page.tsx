@@ -81,7 +81,7 @@ const Tags = () => {
 
     const indexOfLastTag = currentPage * tagsPerPage;
     const indexOfFirstTag = indexOfLastTag - tagsPerPage;
-    const currentTags = tags.slice(indexOfFirstTag, indexOfLastTag);
+    const currentTags = Array.isArray(tags) ? tags.slice(indexOfFirstTag, indexOfLastTag) : [];
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 

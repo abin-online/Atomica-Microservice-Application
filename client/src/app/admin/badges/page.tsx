@@ -72,7 +72,7 @@ const BadgeList = () => {
   // Pagination logic
   const indexOfLastBadge = currentPage * badgesPerPage;
   const indexOfFirstBadge = indexOfLastBadge - badgesPerPage;
-  const currentBadges = badges.slice(indexOfFirstBadge, indexOfLastBadge);
+  const currentBadges = Array.isArray(badges) ? badges.slice(indexOfFirstBadge, indexOfLastBadge) : [];
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
