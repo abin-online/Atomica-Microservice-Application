@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IProblemUseCase } from "../../application/interfaces/useCaseInterface/problemUseCaseInterface";
 import ErrorHandler from "../../application/useCases/middleware/errorHandler";
+import { HttpStatusCode } from "../framework/HttpStatusCode";
 
 export default class ProblemController {
   private problemUseCase: IProblemUseCase;
