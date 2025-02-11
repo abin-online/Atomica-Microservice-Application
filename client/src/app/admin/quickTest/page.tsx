@@ -145,7 +145,7 @@ const QuickTest = () => {
               </table>
 
               {/* Pagination */}
-              <div className="flex justify-center mt-4">
+              {/* <div className="flex justify-center mt-4">
                 <ul className="flex space-x-2">
                   {Array.from(
                     { length: Math.ceil(questions.length / questionsPerPage) },
@@ -165,7 +165,7 @@ const QuickTest = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
             </>
           )}
         </div>
