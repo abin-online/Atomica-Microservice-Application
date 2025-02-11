@@ -118,38 +118,47 @@ const Tags = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {Array.isArray(currentTags) && currentTags.map((tag) => (
-                                        <tr key={tag._id} className="hover:bg-gray-700">
-                                            <td className="p-4 border-b border-gray-600">{tag.name}</td>
-                                            <td className="p-4 border-b border-gray-600">
-                                                {tag.blocked ? (
-                                                    <span className="text-red-400 font-semibold">Blocked</span>
-                                                ) : (
-                                                    <span className="text-green-400 font-semibold">Active</span>
-                                                )}
-                                            </td>
-                                            <td className="p-4 border-b border-gray-600">
-                                                <div className="flex items-center space-x-3 justify-center">
-                                                    <button
-                                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center space-x-2"
-                                                    >
-                                                        <FaEdit />
-                                                        <span>Edit</span>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => confirmBlock(tag._id, tag.blocked)}
-                                                        className={`w-32 py-2 px-4 rounded-lg font-semibold text-white transition duration-200 flex items-center justify-center space-x-2 ${tag.blocked
-                                                            ? 'bg-green-500 hover:bg-green-600'
-                                                            : 'bg-red-500 hover:bg-red-700'
-                                                            }`}
-                                                    >
-                                                        {tag.blocked ? 'Unblock' : 'Block'}
-                                                    </button>
-                                                </div>
+                                    {Array.isArray(currentTags) && currentTags.length > 0 ? (
+                                        currentTags.map((tag) => (
+                                            <tr key={tag._id} className="hover:bg-gray-700">
+                                                <td className="p-4 border-b border-gray-600">{tag.name}</td>
+                                                <td className="p-4 border-b border-gray-600">
+                                                    {tag.blocked ? (
+                                                        <span className="text-red-400 font-semibold">Blocked</span>
+                                                    ) : (
+                                                        <span className="text-green-400 font-semibold">Active</span>
+                                                    )}
+                                                </td>
+                                                <td className="p-4 border-b border-gray-600">
+                                                    <div className="flex items-center space-x-3 justify-center">
+                                                        <button
+                                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center space-x-2"
+                                                        >
+                                                            <FaEdit />
+                                                            <span>Edit</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => confirmBlock(tag._id, tag.blocked)}
+                                                            className={`w-32 py-2 px-4 rounded-lg font-semibold text-white transition duration-200 flex items-center justify-center space-x-2 ${tag.blocked
+                                                                ? 'bg-green-500 hover:bg-green-600'
+                                                                : 'bg-red-500 hover:bg-red-700'
+                                                                }`}
+                                                        >
+                                                            {tag.blocked ? 'Unblock' : 'Block'}
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={3} className="p-4 text-center text-gray-400">
+                                                No tags available.
                                             </td>
                                         </tr>
-                                    ))}
+                                    )}
                                 </tbody>
+
                             </table>
 
                             {/* Pagination */}
@@ -163,8 +172,8 @@ const Tags = () => {
                                             <button
                                                 onClick={() => paginate(pageNumber)}
                                                 className={`px-4 py-2 rounded-lg ${currentPage === pageNumber
-                                                        ? "bg-blue-600 text-white"
-                                                        : "bg-gray-600 text-gray-300 hover:bg-gray-700"
+                                                    ? "bg-blue-600 text-white"
+                                                    : "bg-gray-600 text-gray-300 hover:bg-gray-700"
                                                     }`}
                                             >
                                                 {pageNumber}
