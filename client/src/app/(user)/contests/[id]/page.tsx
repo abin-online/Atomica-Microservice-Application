@@ -105,7 +105,7 @@ const DoContest = () => {
     useEffect(() => {
         const fetchTestCases = async () => {
             try {
-                const response : any = await FetchTestCases(problems[currentProblemIndex]?.title)
+                const response: any = await FetchTestCases(problems[currentProblemIndex]?.title)
                 if (response.data) {
                     setTestCases(response.data);
                 }
@@ -225,7 +225,7 @@ const DoContest = () => {
         try {
             // Submit the code with the selected language, problem title, and output format type
 
-            const response: any = await submitCode(code, problems[currentProblemIndex]?.title, problems[currentProblemIndex]?.outputFormat?.type, language , problems[currentProblemIndex]?.functionName);
+            const response: any = await submitCode(code, problems[currentProblemIndex]?.title, problems[currentProblemIndex]?.outputFormat?.type, language, problems[currentProblemIndex]?.functionName);
             console.log("Submit response for problem submision:", response);
 
             if (response.status === 200) {
@@ -277,16 +277,16 @@ const DoContest = () => {
         toast.error("Time's up! The contest has ended.");
     };
     const finish = () => {
-        
-        const postResult = async()=> {
+
+        const postResult = async () => {
 
             try {
                 console.log("MCQ  RESULT ", mcqResult)
                 console.log("PROBLSEM ", problemResult)
-                const earned = problemResult.length + mcqResult.reduce((acc, curr)=> curr == 1 ? acc + 1 : acc , 0)
+                const earned = problemResult.length + mcqResult.reduce((acc, curr) => curr == 1 ? acc + 1 : acc, 0)
                 const total = selectedMCQs.length + problems.length;
 
-                const point = Math.floor((earned/total)* points )
+                const point = Math.floor((earned / total) * points)
                 console.log("pointsss", point)
                 const payload = {
                     name: USER?.name,
@@ -294,11 +294,11 @@ const DoContest = () => {
                     points: point
                 }
                 const response = await updateResult(contestId, payload);
-                if(response?.status == 201){
+                if (response?.status == 201) {
                     setShowResults(true);
                 }
             } catch (error) {
-                
+
             }
         }
         postResult()
@@ -565,8 +565,8 @@ const DoContest = () => {
                         </div>
 
                         <p className="mb-4">
-                        Time Taken: {Math.floor(elapsedTime / 60)} mins {elapsedTime % 60} secs
-                    </p>
+                            Time Taken: {Math.floor(elapsedTime / 60)} mins {elapsedTime % 60} secs
+                        </p>
 
                         {/* Optionally, you can add a 'Close' button to hide the results */}
                         <button
