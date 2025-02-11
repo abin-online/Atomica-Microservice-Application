@@ -27,7 +27,7 @@ metadata:
   name: community-service-srv
 spec:
   selector:
-    app: community
+    app: community-service
   ports:
     - name: community-ports
       protocol: TCP

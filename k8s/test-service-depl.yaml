@@ -27,7 +27,7 @@ metadata:
   name: test-service-srv
 spec:
   selector:
-    app: test
+    app: test-service
   ports:
     - name: test-ports
       protocol: TCP

@@ -27,7 +27,7 @@ metadata:
   name: problem-service-srv
 spec:
   selector:
-    app: problem
+    app: problem-service
   ports:
     - name: problem-ports
       protocol: TCP

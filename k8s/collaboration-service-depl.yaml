@@ -27,7 +27,7 @@ metadata:
   name: collaboration-service-srv
 spec:
   selector:
-    app: collaboration
+    app: collaboration-service
   ports:
     - name: badge-ports
       protocol: TCP

@@ -28,7 +28,7 @@ metadata:
   name: contest-service-srv
 spec:
   selector:
-    app: contest
+    app: contest-service
   ports:
     - name: contest-ports
       protocol: TCP

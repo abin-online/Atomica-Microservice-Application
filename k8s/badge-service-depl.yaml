@@ -27,7 +27,7 @@ metadata:
   name: badge-service-srv
 spec:
   selector:
-    app: badge
+    app: badge-service
   ports:
     - name: badge-ports
       protocol: TCP

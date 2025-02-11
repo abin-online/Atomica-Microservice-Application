@@ -27,7 +27,7 @@ metadata:
   name: compiler-service-srv
 spec:
   selector:
-    app: compiler
+    app: compiler-service
   ports:
     - name: compiler-ports
       protocol: TCP
