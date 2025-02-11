@@ -77,6 +77,10 @@ const BOOLEAN = 1 + 2 == Number(SECURITY_NUMBER)
 //     }
 // });
 
+app.use('/test', createProxyMiddleware({
+  target: "http://test-service-srv:5001",
+  changeOrigin: true,
+}));
 
 if (AUTH_SERVICE) {
     app.use('/auth', createProxyMiddleware({
@@ -95,9 +99,6 @@ if (AUTH_SERVICE) {
 app.use('/test', createProxyMiddleware({
     target: "http://test-service-srv:5001",
     changeOrigin: true,
-    pathRewrite: {
-      '^/test': '/test'  // Ensure the `/test` prefix remains in the forwarded request.
-    },
   }));
 
 
