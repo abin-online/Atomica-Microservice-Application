@@ -10,12 +10,12 @@
 // export default socket
 
 import { io } from 'socket.io-client';
-const socketURL = 'wss://atomica.live/collaboration';  // Public WebSocket URL via the proxy
-console.log(socketURL);
+const socketURL = 'https://atomica.live/collaboration';
 
 const socket = io(socketURL, {
-  reconnectionDelayMax: 10000,
-  transports: ['websocket'],  // Use WebSocket only
+    reconnectionDelayMax: 10000,
+    transports: ['websocket'], // Ensure it's using WebSocket for communication
 });
 
 export default socket;
+
