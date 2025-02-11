@@ -7,17 +7,17 @@ import morgan from 'morgan'
 const app = express()
 
 const {
-    PORT,
-    AUTH_SERVICE,
-    TEST_SERVICE,
-    PROBLEM_SERVICE,
-    BADGE_SERVICE,
-    COMPILER_SERVICE,
-    COLLABORATION_SERVICE,
-    COMMUNITY_SERVICE,
-    CONTEST_SERVICE,
-    SECURITY_NUMBER,
-    COMMAND
+  PORT,
+  AUTH_SERVICE,
+  TEST_SERVICE,
+  PROBLEM_SERVICE,
+  BADGE_SERVICE,
+  COMPILER_SERVICE,
+  COLLABORATION_SERVICE,
+  COMMUNITY_SERVICE,
+  CONTEST_SERVICE,
+  SECURITY_NUMBER,
+  COMMAND
 } = process.env
 
 // const services = [{
@@ -52,8 +52,8 @@ const {
 app.use(morgan('dev'))
 
 app.use((req, res, next) => {
-    console.log(`LOGGING 📝 : ${req.method} request to: ${req.originalUrl}`);
-    next();
+  console.log(`LOGGING 📝 : ${req.method} request to: ${req.originalUrl}`);
+  next();
 });
 
 const BOOLEAN = 1 + 2 == Number(SECURITY_NUMBER)
@@ -80,81 +80,81 @@ const BOOLEAN = 1 + 2 == Number(SECURITY_NUMBER)
 
 
 if (AUTH_SERVICE) {
-    app.use('/auth', createProxyMiddleware({
-      target: AUTH_SERVICE,
-      changeOrigin: true
-    }));
-  }
-  
+  app.use('/auth', createProxyMiddleware({
+    target: AUTH_SERVICE,
+    changeOrigin: true
+  }));
+}
+
 //   if (TEST_SERVICE) {
 //     app.use('/test', createProxyMiddleware({
 //       target: TEST_SERVICE,
 //       changeOrigin: true
 //     }));
 //   }
-  
+
 app.use('/test', createProxyMiddleware({
   target: "http://test-service-srv:5001",
   changeOrigin: true,
 }));
 
 
-  
-
-    app.use('/problem', createProxyMiddleware({
-      target: "http://problem-service-srv:5002",
-      changeOrigin: true
-    }));
-
-  
-
-    app.use('/badge', createProxyMiddleware({
-      target: "http://badge-service-srv:5003",
-      changeOrigin: true
-    }));
-
-  
-
-    app.use('/compiler', createProxyMiddleware({
-      target: "http://compiler-service-srv:5004",
-      changeOrigin: true
-    }));
-
-  
-
-    app.use('/collaboration', createProxyMiddleware({
-      target: "http://collaboration-service-srv:5005",
-      changeOrigin: true,
-      ws: true  // WebSocket support
-    }));
-  
-
-    app.use('/api/community', createProxyMiddleware({
-      target: "http://community-service-srv:5006",
-      changeOrigin: true
-    }));
-  
 
 
-    app.use('/contest', createProxyMiddleware({
-      target: "http://contest-service-srv:5007",
-      changeOrigin: true
-    }));
-  
+app.use('/problem', createProxyMiddleware({
+  target: "http://problem-service-srv:5002",
+  changeOrigin: true
+}));
+
+
+
+app.use('/badge', createProxyMiddleware({
+  target: "http://badge-service-srv:5003",
+  changeOrigin: true
+}));
+
+
+
+app.use('/compiler', createProxyMiddleware({
+  target: "http://compiler-service-srv:5004",
+  changeOrigin: true
+}));
+
+
+
+app.use('/collaboration', createProxyMiddleware({
+  target: "http://collaboration-service-srv:5005",
+  changeOrigin: true,
+  ws: true  // WebSocket support
+}));
+
+
+app.use('/api/community', createProxyMiddleware({
+  target: "http://community-service-srv:5006",
+  changeOrigin: true
+}));
+
+
+
+app.use('/contest', createProxyMiddleware({
+  target: "http://contest-service-srv:5007",
+  changeOrigin: true
+}));
+
 
 
 
 
 app.use(
-    "/",
-    createProxyMiddleware({
-        target: "http://frontend-srv:3000",
-        changeOrigin: true,
-    })
+  "/",
+  createProxyMiddleware({
+    target: "http://frontend-srv:3000",
+    changeOrigin: true,
+  })
 );
 
 app.get('/', (req, res) => {
-    res.json(COMMAND)
+  res.json(COMMAND)
 })
 
 
@@ -165,5 +165,5 @@ app.get('/', (req, res) => {
 // })
 
 app.listen(PORT, () => {
-    console.log(`ATOMICA RUNNING ON http://localhost:${PORT} 🍃`);
+  console.log(`ATOMICA RUNNING ON http://localhost:${PORT} 🍃`);
 })

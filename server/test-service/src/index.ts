@@ -19,10 +19,13 @@ const tagRouter = express.Router()
 TagRoute(tagRouter)
 QuestionRoute(questionRouter)
 
-app.use(cors({
-    credentials: true,
-    origin: 'https://atomica.live'
-}))
+const corsOptions = {
+    origin: 'https://atomica.live', // Allow the frontend app to make requests
+    credentials: true, // Allow credentials (cookies, headers)
+}
+app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))  
+
 
 app.use(cookieParser())
 app.use(express.json())
