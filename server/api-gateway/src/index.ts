@@ -96,10 +96,6 @@ if (AUTH_SERVICE) {
 //     }));
 //   }
   
-app.use('/test', createProxyMiddleware({
-    target: "http://test-service-srv:5001",
-    changeOrigin: true,
-  }));
 
 
 
