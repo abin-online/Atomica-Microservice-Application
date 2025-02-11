@@ -144,7 +144,7 @@ const CreateTestCase = () => {
                                 <option value="" disabled>
                                     Select a problem
                                 </option>
-                                {problems.map((problem) => (
+                                {Array.isArray(problems) && problems.map((problem) => (
                                     <option key={problem._id} value={problem.title}>
                                         {problem.title}
                                     </option>
@@ -152,7 +152,7 @@ const CreateTestCase = () => {
                             </select>
                         </div>
 
-                        {formData && formData.inputFormat.map((inputParam: InputFormat, index: number) => (
+                        {formData && Array.isArray(formData.inputFormat) && formData.inputFormat.map((inputParam: InputFormat, index: number) => (
                             <div key={index} className="flex flex-col mb-4">
                                 <label htmlFor={`input-${index}`} className="text-sm font-medium mb-1">
                                     {inputParam?.name} ({inputParam?.type})
