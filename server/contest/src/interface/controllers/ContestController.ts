@@ -69,14 +69,24 @@ export class ContestController {
     async getContest(req: Req, res: Res, next: Next): Promise<void> {
         try {
             const { contestId } = req.params;
+            
+            if (!contestId) {
+                 res.status(400).json({ message: "contestId is required" });
+            }
+    
             const contest = await this.ContestUseCase.getContest(contestId);
-            console.log("contest   ", contest)
-            res.status(201).json(contest);
-        } catch (error : any) {
-            next(new ErrorHandler(error.status, error.message))
-
+    
+            if (!contest) {
+                 res.status(404).json({ message: "Contest not found" });
+            }
+    
+            console.log("contest:", contest);
+            res.status(200).json(contest); // 200 OK if the contest is found
+        } catch (error: any) {
+            next(new ErrorHandler(error.status || 500, error.message || "Internal Server Error"));
         }
     }
+    
 
     async getUserContestData(req: Req, res: Res, next: Next): Promise<void> {
         try {
