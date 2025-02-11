@@ -31,7 +31,12 @@ const BadgeList = () => {
       try {
         setLoading(true);
         const response  : any = await fetchBadge()
-        setBadges(response.data);
+        if (response.data && Array.isArray(response.data)) {
+          setBadges(response.data);
+        } else {
+          console.error("Invalid response format:", response);
+          toast.error("Failed to load badges. Invalid data format.");
+        }
       } catch (error) {
         console.error("Error fetching badges:", error);
         toast.error("Failed to load badges");
