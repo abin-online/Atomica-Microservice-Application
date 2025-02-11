@@ -85,12 +85,23 @@ if (AUTH_SERVICE) {
     }));
   }
   
-  if (TEST_SERVICE) {
-    app.use('/test', createProxyMiddleware({
-      target: TEST_SERVICE,
-      changeOrigin: true
-    }));
-  }
+//   if (TEST_SERVICE) {
+//     app.use('/test', createProxyMiddleware({
+//       target: TEST_SERVICE,
+//       changeOrigin: true
+//     }));
+//   }
+  
+app.use('/test', createProxyMiddleware({
+    target: TEST_SERVICE,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/test': '/test'  // Ensure the `/test` prefix remains in the forwarded request.
+    },
+  }));
+
+
+
   
   if (PROBLEM_SERVICE) {
     app.use('/problem', createProxyMiddleware({
