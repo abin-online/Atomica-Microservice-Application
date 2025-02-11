@@ -71,7 +71,7 @@ export class ContestController {
             const { contestId } = req.params;
             const contest = await this.ContestUseCase.getContest(contestId);
             console.log("contest   ", contest)
-            res.status(HttpStatusCode.Created).json(contest);
+            res.status(201).json(contest);
         } catch (error : any) {
             next(new ErrorHandler(error.status, error.message))
 
