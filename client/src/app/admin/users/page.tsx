@@ -107,7 +107,7 @@ const UsersPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentUsers.map((user) => (
+                  {Array.isArray(currentUsers) && currentUsers.map((user) => (
                     <tr key={user._id} className="hover:bg-gray-700">
                       <td className="p-4 border-b border-gray-600">{user.name}</td>
                       <td className="p-4 border-b border-gray-600">{user.email}</td>

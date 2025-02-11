@@ -110,7 +110,7 @@ const BadgeList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentBadges.map((badge) => (
+                  {Array.isArray(currentBadges) && currentBadges.map((badge) => (
                     <tr key={badge._id} className="hover:bg-gray-700">
                       <td className="p-4 border-b border-gray-600">{badge.name}</td>
                       <td className="p-4 border-b border-gray-600">{badge.description}</td>

@@ -106,7 +106,7 @@ const QuickTest = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentQuestions.map((q) => (
+                  {Array.isArray(currentQuestions) && currentQuestions.map((q) => (
                     <tr key={q._id} className="hover:bg-gray-700">
                       <td className="p-4 border-b border-gray-600">{q.question}</td>
                       <td className="p-4 border-b border-gray-600">

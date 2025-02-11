@@ -111,7 +111,7 @@ const Testcases = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {currentTestCases.map((testCase, index) => (
+                                    {Array.isArray(currentTestCases) && currentTestCases.map((testCase, index) => (
                                         <tr key={index} className="hover:bg-gray-700">
                                             <td className="p-4 border-b border-gray-600">{testCase.problem}</td>
                                             <td className="p-4 border-b border-gray-600">{testCase.expectedOutput}</td>
