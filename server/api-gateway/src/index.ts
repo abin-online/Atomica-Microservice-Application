@@ -20,33 +20,33 @@ const {
     COMMAND
 } = process.env
 
-const services = [{
-    path: AUTH_SERVICE,
-    route: '/auth'
-}, {
-    path: TEST_SERVICE,
-    route: '/test'
-}, {
-    path: PROBLEM_SERVICE,
-    route: '/problem'
-}, {
-    path: BADGE_SERVICE,
-    route: '/badge'
-}, {
-    path: COMPILER_SERVICE,
-    route: '/compiler'
-}, {
-    path: COLLABORATION_SERVICE,
-    route: '/collaboration'
-},
-{
-    path: COMMUNITY_SERVICE,
-    route: '/api/community'
-}, {
-    path: CONTEST_SERVICE,
-    route: '/contest'
-}
-]
+// const services = [{
+//     path: AUTH_SERVICE,
+//     route: '/auth'
+// }, {
+//     path: TEST_SERVICE,
+//     route: '/test'
+// }, {
+//     path: PROBLEM_SERVICE,
+//     route: '/problem'
+// }, {
+//     path: BADGE_SERVICE,
+//     route: '/badge'
+// }, {
+//     path: COMPILER_SERVICE,
+//     route: '/compiler'
+// }, {
+//     path: COLLABORATION_SERVICE,
+//     route: '/collaboration'
+// },
+// {
+//     path: COMMUNITY_SERVICE,
+//     route: '/api/community'
+// }, {
+//     path: CONTEST_SERVICE,
+//     route: '/contest'
+// }
+// ]
 
 //LOGGING 
 app.use(morgan('dev'))
@@ -67,15 +67,78 @@ const BOOLEAN = 1 + 2 == Number(SECURITY_NUMBER)
 //     }))
 // })
 
-services.forEach((service) => {
-    if (service.path) {
-        app.use(service.route, createProxyMiddleware({
-            target: service.path,
-            changeOrigin: true,  // Set this to true always
-            ws: service.route === '/collaboration'
-        }))
-    }
-});
+// services.forEach((service) => {
+//     if (service.path) {
+//         app.use(service.route, createProxyMiddleware({
+//             target: service.path,
+//             changeOrigin: true,  // Set this to true always
+//             ws: service.route === '/collaboration'
+//         }))
+//     }
+// });
+
+
+if (AUTH_SERVICE) {
+    app.use('/auth', createProxyMiddleware({
+      target: AUTH_SERVICE,
+      changeOrigin: true
+    }));
+  }
+  
+  if (TEST_SERVICE) {
+    app.use('/test', createProxyMiddleware({
+      target: TEST_SERVICE,
+      changeOrigin: true
+    }));
+  }
+  
+  if (PROBLEM_SERVICE) {
+    app.use('/problem', createProxyMiddleware({
+      target: PROBLEM_SERVICE,
+      changeOrigin: true
+    }));
+  }
+  
+  if (BADGE_SERVICE) {
+    app.use('/badge', createProxyMiddleware({
+      target: BADGE_SERVICE,
+      changeOrigin: true
+    }));
+  }else{
+    console.log('nOT founD' , BADGE_SERVICE)
+  }
+  
+  if (COMPILER_SERVICE) {
+    app.use('/compiler', createProxyMiddleware({
+      target: COMPILER_SERVICE,
+      changeOrigin: true
+    }));
+  }
+  
+  if (COLLABORATION_SERVICE) {
+    app.use('/collaboration', createProxyMiddleware({
+      target: COLLABORATION_SERVICE,
+      changeOrigin: true,
+      ws: true  // WebSocket support
+    }));
+  }
+  
+  if (COMMUNITY_SERVICE) {
+    app.use('/api/community', createProxyMiddleware({
+      target: COMMUNITY_SERVICE,
+      changeOrigin: true
+    }));
+  }
+  
+  if (CONTEST_SERVICE) {
+    app.use('/contest', createProxyMiddleware({
+      target: CONTEST_SERVICE,
+      changeOrigin: true
+    }));
+  }
+
+
+
 
 app.use(
     "/",
@@ -90,11 +153,11 @@ app.get('/', (req, res) => {
 })
 
 
-app.get('/services', (req, res) => {
-    res.json(
-        services
-    )
-})
+// app.get('/services', (req, res) => {
+//     res.json(
+//         services
+//     )
+// })
 
 app.listen(PORT, () => {
     console.log(`ATOMICA RUNNING ON http://localhost:${PORT} 🍃`);

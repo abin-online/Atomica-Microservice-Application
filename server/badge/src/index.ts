@@ -22,7 +22,7 @@ app.use(morgan('dev'))
 const corsOptions = {
     origin: 'https://atomica.live', 
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] // Add 'PATCH' here
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] // Add PATCH here
 };
 
 app.use(cors(corsOptions))
