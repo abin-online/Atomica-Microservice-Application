@@ -6,7 +6,7 @@ dotenv.config();
 import { QuestionRoute } from './infrastructure/routes/questionRoutes';
 //import { errorMiddleware } from './usecases/middlewares/errorMiddleware'
 import { TagRoute } from './infrastructure/routes/tagRoutes';
-
+import morgan from 'morgan'
 import connectDb from './infrastructure/database/db';
 connectDb()
 
@@ -34,6 +34,8 @@ app.use('/tag', tagRouter)
 app.get('/', (req, res)=>{
     res.json("TEST SERVICE")
 })
+
+app.use(morgan('dev'))
 
 app.use((req, res, next) => {
     console.log(`LOGGING 📝 : ${req.method} request to: ${req.originalUrl}`);

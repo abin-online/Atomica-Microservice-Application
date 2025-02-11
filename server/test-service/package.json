@@ -25,12 +25,14 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@types/morgan": "^1.9.9",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "kafkajs": "^2.2.4",
-    "mongoose": "^8.9.1"
+    "mongoose": "^8.9.1",
+    "morgan": "^1.10.0"
   }
 }
