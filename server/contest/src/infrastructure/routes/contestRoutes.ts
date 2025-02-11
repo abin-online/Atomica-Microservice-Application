@@ -16,7 +16,7 @@ export const ContestRoute = (router: Router) => {
         contestController.listContests(req, res, next)
     );
 
-    router.get('/contest/:contestId', isAdmin, (req: Req, res: Res, next: Next) =>
+    router.get('/contest/:contestId', (req: Req, res: Res, next: Next) =>
         contestController.getContest(req, res, next)
     );
 
