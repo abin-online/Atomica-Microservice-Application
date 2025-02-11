@@ -18,7 +18,7 @@ const navigation = [
   { name: 'ABOUT US', href: '/about', path: '/about' },
   { name: 'QUICK TEST', href: '/quickTest', path: '/quickTest' },
   { name: 'PROBLEM', href: '/problems', path: '/problems' },
-  { name: 'CONTEST', href: '/contest', path: '/contest' }
+  { name: 'CONTEST', href: '/contest', path: '/contests' }
 ];
 
 function classNames(...classes: string[]) {
