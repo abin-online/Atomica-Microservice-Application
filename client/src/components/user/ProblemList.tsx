@@ -78,7 +78,7 @@ const ProblemList = ({ selectedTags }: ProblemListProps) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentProblems.map((problem, index) => (
+                            {Array.isArray(currentProblems) && currentProblems.map((problem, index) => (
                                 <tr key={problem._id} className="border-b hover:bg-gray-50">
                                     <td className="px-6 py-4 text-sm text-gray-700">
                                         <a href={`/problemView/${problem._id}`}>{index + 1}</a>

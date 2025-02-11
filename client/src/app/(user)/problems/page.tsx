@@ -62,9 +62,15 @@ const Page = () => {
                 </div>
 
                 {/* Tags Section */}
-
+                {/* {Array.isArray(tags) && tags.map((tag) => (
+  !tag.blocked && (
+    <MenuItem key={tag._id} value={tag._id}>
+      {tag.name}
+    </MenuItem>
+  )
+))} */}
                 <div className="flex flex-wrap gap-2 justify-center items-center max-w-4xl">
-                    {tags.map((tag: any, index: number) => (
+                    {Array.isArray(tags) && tags.map((tag: any, index: number) => (
                         <span
                             key={index}
                             onClick={() => handleTagClick(tag.name)}
