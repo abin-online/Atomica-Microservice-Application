@@ -93,7 +93,7 @@ if (AUTH_SERVICE) {
 //   }
   
 app.use('/test', createProxyMiddleware({
-    target: TEST_SERVICE,
+    target: "http://test-service-srv:5001",
     changeOrigin: true,
     pathRewrite: {
       '^/test': '/test'  // Ensure the `/test` prefix remains in the forwarded request.
@@ -103,50 +103,47 @@ app.use('/test', createProxyMiddleware({
 
 
   
-  if (PROBLEM_SERVICE) {
+
     app.use('/problem', createProxyMiddleware({
-      target: PROBLEM_SERVICE,
+      target: "http://problem-service-srv:5002",
       changeOrigin: true
     }));
-  }
+
   
-  if (BADGE_SERVICE) {
+
     app.use('/badge', createProxyMiddleware({
-      target: BADGE_SERVICE,
+      target: "http://badge-service-srv:5003",
       changeOrigin: true
     }));
-  }else{
-    console.log('nOT founD' , BADGE_SERVICE)
-  }
+
   
-  if (COMPILER_SERVICE) {
+
     app.use('/compiler', createProxyMiddleware({
-      target: COMPILER_SERVICE,
+      target: "http://compiler-service-srv:5004",
       changeOrigin: true
     }));
-  }
+
   
-  if (COLLABORATION_SERVICE) {
+
     app.use('/collaboration', createProxyMiddleware({
-      target: COLLABORATION_SERVICE,
+      target: "http://collaboration-service-srv:5005",
       changeOrigin: true,
       ws: true  // WebSocket support
     }));
-  }
   
-  if (COMMUNITY_SERVICE) {
+
     app.use('/api/community', createProxyMiddleware({
-      target: COMMUNITY_SERVICE,
+      target: "http://community-service-srv:5006",
       changeOrigin: true
     }));
-  }
   
-  if (CONTEST_SERVICE) {
+
+
     app.use('/contest', createProxyMiddleware({
-      target: CONTEST_SERVICE,
+      target: "http://contest-service-srv:5007",
       changeOrigin: true
     }));
-  }
+  
 
 
 
