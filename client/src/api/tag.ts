@@ -30,6 +30,7 @@ export const blockTag = async (tag: string, blocked: boolean) => {
 export const createTag = async (tag: string) =>{
     try {
         const response = API.post(tagRoutes.addTag, {tag})
+        console.log("create tag",response)
         return response
     } catch (error) {
         return error
