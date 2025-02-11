@@ -118,7 +118,7 @@ const Tags = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {currentTags.map((tag) => (
+                                    {Array.isArray(currentTags) && currentTags.map((tag) => (
                                         <tr key={tag._id} className="hover:bg-gray-700">
                                             <td className="p-4 border-b border-gray-600">{tag.name}</td>
                                             <td className="p-4 border-b border-gray-600">
