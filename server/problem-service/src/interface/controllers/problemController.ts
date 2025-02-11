@@ -21,7 +21,7 @@ export default class ProblemController {
       const problemData = req.body;
       console.log(problemData)
       const newProblem = await this.problemUseCase.createProblem(problemData);
-      res.status(201).json({ message: "Problem created", problem: newProblem });
+      res.status(HttpStatusCode.Created).json({ message: "Problem created", problem: newProblem });
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
     }
@@ -30,7 +30,7 @@ export default class ProblemController {
   async getTags(req: Request, res: Response, next: NextFunction) : Promise<void> {
     try {
         const tags = await this.problemUseCase.getAllTags();
-        res.status(200).json(tags)
+        res.status(HttpStatusCode.OK).json(tags)
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));     
     }
@@ -42,7 +42,7 @@ export default class ProblemController {
       const { id } = req.params;
       const problemData = req.body;
       const updatedProblem = await this.problemUseCase.updateProblem(id, problemData);
-      res.status(200).json(updatedProblem);
+      res.status(HttpStatusCode.OK).json(updatedProblem);
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
     }
@@ -52,7 +52,7 @@ export default class ProblemController {
     try {
       const { problemId, blocked } = req.body;
       const updatedProblem = await this.problemUseCase.blockProblem(problemId, blocked);
-      res.status(200).json(updatedProblem);
+      res.status(HttpStatusCode.OK).json(updatedProblem);
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
     }
@@ -62,7 +62,7 @@ export default class ProblemController {
     try {
       const { id } = req.params;
       const problem = await this.problemUseCase.getProblemById(id);
-      res.status(200).json(problem);
+      res.status(HttpStatusCode.OK).json(problem);
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
     }
@@ -71,7 +71,7 @@ export default class ProblemController {
   async getAllProblems(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const problems = await this.problemUseCase.getAllProblems();
-      res.status(200).json(problems);
+      res.status(HttpStatusCode.OK).json(problems);
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
     }
@@ -81,7 +81,7 @@ export default class ProblemController {
     try {
       const problems = await this.problemUseCase.getProblems(); //only unblocked problems, especially for client side
       console.log("get unblocked problems==========++++-----",problems)
-      res.status(200).json(problems);
+      res.status(HttpStatusCode.OK).json(problems);
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
     }
@@ -91,7 +91,7 @@ export default class ProblemController {
     try {
         const { id } = req.params;
         const problem = await this.problemUseCase.viewProblem(id);
-        res.status(200).json(problem);
+        res.status(HttpStatusCode.OK).json(problem);
     } catch (error: any) {
       return next(new ErrorHandler(error.status, error.message));
     }
@@ -104,7 +104,7 @@ export default class ProblemController {
 
         const problems = await this.problemUseCase.getProblemsForContest(question);
         console.log(problems)
-        res.status(200).json(problems)
+        res.status(HttpStatusCode.OK).json(problems)
     } catch (error : any) {
       return next(new ErrorHandler(error.status, error.message))
     }
