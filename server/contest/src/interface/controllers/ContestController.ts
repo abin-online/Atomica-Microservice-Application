@@ -2,6 +2,7 @@ import { Next, Req, Res } from "../framework/serverTypes";
 import { IContestUseCase } from "../../application/interface/useCase/ContestUseCase";
 import { IContest } from "../../domain/entities/IContest";
 import ErrorHandler from "../middlewares/errorMiddleware/errorHandler";
+import { HttpStatusCode } from "../framework/HttpStatusCode";
 
 export class ContestController {
     private ContestUseCase: IContestUseCase;
