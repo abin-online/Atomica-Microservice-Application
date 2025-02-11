@@ -92,7 +92,7 @@ const Contest = () => {
                 </p>
               </div>
               <button
-                onClick={()=> router.push(`/contest/${contest._id}`)}
+                onClick={()=> router.push(`/contests/${contest._id}`)}
                 className="w-full py-3 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-xl font-semibold hover:from-green-500 hover:to-green-700 focus:ring-4 focus:ring-green-300 transition-all duration-200 mt-4 shadow-md hover:shadow-lg"
               >
                 Join Contest
