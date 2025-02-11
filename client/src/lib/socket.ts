@@ -10,10 +10,11 @@
 // export default socket
 
 import { io } from 'socket.io-client';
-const socketURL = 'https://atomica.live/collaboration';
+const socketURL = 'https://atomica.live';
 
 const socket = io(socketURL, {
     reconnectionDelayMax: 10000,
+    path: "/collaboration",
     transports: ['websocket'], // Ensure it's using WebSocket for communication
 });
 
