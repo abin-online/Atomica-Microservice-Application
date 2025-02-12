@@ -125,7 +125,7 @@ app.use('/compiler', createProxyMiddleware({
 app.use('/collaboration', createProxyMiddleware({
   target: "http://collaboration-service-srv:5005",
   changeOrigin: true,
-  ws: true  // WebSocket support
+  ws: true  
 }));
 
 
