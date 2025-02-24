@@ -1,10 +1,12 @@
 import { io } from 'socket.io-client';
 import config from '@/config';
-const socketURL = 'ws://localhost:5005';
+const socketURL = 'wss://atomica.live/collaboration';
 console.log(socketURL)
 console.log(config.SOCKET_URL)
 const socket = io(socketURL, {
     reconnectionDelayMax: 10000,
+    transports: ['websocket'],
+    secure: true
 })
 
 export default socket
