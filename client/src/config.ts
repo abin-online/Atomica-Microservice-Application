@@ -1,15 +1,15 @@
 const config = {
     development: {
         BASEURL: "http://localhost:4001/",
-        SOCKET_URL: "ws://localhost:4001/collaboration",
+        SOCKET_URL: "ws://localhost:4001/socket.io",
     },
     production: {
         BASEURL: "https://atomica.live/",
-        SOCKET_URL: "wss://atomica.live/collaboration",
+        SOCKET_URL: "wss://atomica.live/socket.io",
     },
     test: {
         BASEURL: "http://localhost:4001/",
-        SOCKET_URL: "ws://localhost:4001/collaboration",
+        SOCKET_URL: "ws://localhost:4001/socket.io",
     },
 };
 
