@@ -72,5 +72,5 @@ app.use(
 
 // 🚀 Start the server
 app.listen(PORT, () => {
-  console.log(`🧠 ATOMICA API GATEWAY RUNNING on http://localhost:${PORT} 🍃`);
+  console.log(`ATOMICA API GATEWAY RUNNING on http://localhost:${PORT} 🍃`);
 });
