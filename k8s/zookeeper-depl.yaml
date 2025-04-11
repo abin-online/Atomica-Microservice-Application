@@ -1,3 +1,4 @@
+# zookeeper-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,23 +15,23 @@ spec:
     spec:
       containers:
         - name: zookeeper
-          image: confluentinc/cp-zookeeper:latest
+          image: bitnami/zookeeper:latest
           ports:
             - containerPort: 2181
           env:
-            - name: ZOOKEEPER_CLIENT_PORT
-              value: "2181"
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: "yes"
+
 ---
+# zookeeper-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: zookeeper
+  name: zookeeper  # <- Kafka will connect to this
 spec:
   selector:
     app: zookeeper
   ports:
-    - name: zookeeper-port
-      protocol: TCP
-      port: 2181
+    - port: 2181
       targetPort: 2181
   type: ClusterIP
