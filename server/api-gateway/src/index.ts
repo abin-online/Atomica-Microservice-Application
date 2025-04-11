@@ -69,10 +69,6 @@ app.use(
 );
 
 
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: "Welcome to Atomica 🚀", command: COMMAND });
-});
 
 // 🚀 Start the server
 app.listen(PORT, () => {
