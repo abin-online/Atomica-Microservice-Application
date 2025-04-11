@@ -12,6 +12,8 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { getProfilePicture } from '@/api/badge';
 import { PROFILE_PIC } from '@/lib/constants';
+import { LOGO } from '@/lib/constants';
+
 
 const navigation = [
   { name: 'ATOMICA', href: '/', path: '/' },
@@ -104,7 +106,7 @@ export default function NavBar() {
             <div className="flex shrink-0 items-center">
               <img
                 alt="Your Company"
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                src={LOGO}
                 className="h-8 w-auto"
               />
             </div>
