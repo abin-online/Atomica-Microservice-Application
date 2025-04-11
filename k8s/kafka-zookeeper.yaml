@@ -66,7 +66,7 @@ spec:
     spec:
       containers:
         - name: kafka
-          image: bitnami/kafka:latest
+          image: bitnami/kafka:3.5.1-debian-11-r45
           ports:
             - containerPort: 9092 # Kafka port
           env:
