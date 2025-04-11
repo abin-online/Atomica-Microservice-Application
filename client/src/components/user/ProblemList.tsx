@@ -20,7 +20,7 @@ const ProblemList = ({ selectedTags }: ProblemListProps) => {
     const [problems, setProblems] = useState<Problem[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [problemsPerPage] = useState(2);
+    const [problemsPerPage] = useState(10);
 
     useEffect(() => {
         const fetchUnblockedProblems = async () => {
