@@ -60,6 +60,15 @@ Object.entries(services).forEach(([route, target]) => {
   }));
 });
 
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: "http://frontend-srv:3000",
+    changeOrigin: true,
+  })
+);
+
+
 // Root route
 app.get('/', (req, res) => {
   res.json({ message: "Welcome to Atomica 🚀", command: COMMAND });
