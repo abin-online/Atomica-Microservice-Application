@@ -6,6 +6,7 @@ export const initSocket = (server: any): void => {
         cors: {
             origin: 'https://atomica.live' ,
         },
+        path: '/socket.io'
     });
 
     io.on("connection", (socket) => {
