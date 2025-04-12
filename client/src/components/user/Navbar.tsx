@@ -105,7 +105,7 @@ export default function NavBar() {
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
               <img
-                alt="ATOMICA"
+                alt="ATOMICA_"
                 src={LOGO}
                 className="h-8 w-auto"
               />
