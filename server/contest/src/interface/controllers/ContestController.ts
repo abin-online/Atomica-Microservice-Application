@@ -56,6 +56,7 @@ export class ContestController {
     async listContests(req: Req, res: Res, next: Next): Promise<void> {
         try {
             const { username } = req.params
+            console.log('username ', username)
             const contests = await this.ContestUseCase.listContests(username);
             res.status(HttpStatusCode.Created).json({ contests, message: 'contest listed successfully' });
         } catch (error : any) {

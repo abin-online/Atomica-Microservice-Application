@@ -12,16 +12,17 @@ export class ContestRepository implements IContestRepository {
     }
 
     async listContests(username: string): Promise<IContest[]> {
+        console.log('username in repository', username)
         return await Contest.find({
             expiryDate: { $gt: new Date() },
             $or: [
-              { candidate: { $exists: false } },
-              { candidate: { $size: 0 } },
-              { candidate: { $not: { $elemMatch: { name: username } } } }
+                { candidate: { $exists: false } },
+                { candidate: { $size: 0 } },
+                { candidate: { $not: { $elemMatch: { name: username } } } }
             ]
-          });
-          
+        });
     }
+    
 
 
     async getContest(id: string): Promise<IContest | null> {
