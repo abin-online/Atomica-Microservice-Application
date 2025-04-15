@@ -14,8 +14,13 @@ export class ContestRepository implements IContestRepository {
     async listContests(username: string): Promise<IContest[]> {
         return await Contest.find({
             expiryDate: { $gt: new Date() },
-            candidate: { $not: { $elemMatch: { name: username } } }
-        });
+            $or: [
+              { candidate: { $exists: false } },
+              { candidate: { $size: 0 } },
+              { candidate: { $not: { $elemMatch: { name: username } } } }
+            ]
+          });
+          
     }
 
 
