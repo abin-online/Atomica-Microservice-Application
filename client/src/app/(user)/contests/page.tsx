@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { showContest } from '@/api/contest';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { showContest } from "@/api/contest";
+import { useRouter } from "next/navigation";
 
 export interface Contest {
   _id: string;
@@ -17,19 +17,19 @@ export interface Contest {
 }
 
 const Contest = () => {
-  const user: any = localStorage.getItem('user');
+  const user: any = localStorage.getItem("user");
   const USER = JSON.parse(user);
   const [contests, setContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [timers, setTimers] = useState<{ [key: string]: string }>({});
-    const router = useRouter()
+  const router = useRouter();
   useEffect(() => {
     const fetchContests = async () => {
       try {
         const response: any = await showContest(USER.name);
         setContests(response?.data.contests || []);
       } catch (error) {
-        console.error('Failed to fetch contests:', error);
+        console.error("Failed to fetch contests:", error);
       } finally {
         setLoading(false);
       }
@@ -48,13 +48,19 @@ const Contest = () => {
         const timeLeft = expiry - now;
 
         if (timeLeft <= 0) {
-          newTimers[contest._id] = 'Expired';
+          newTimers[contest._id] = "Expired";
         } else {
           const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const hours = Math.floor(
+            (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+          );
           const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-          newTimers[contest._id] = `${days > 0 ? `${days}d ` : ''}${hours}h ${minutes}m ${seconds}s`;
+          newTimers[contest._id] = `${
+            days > 0 ? `${days}d ` : ""
+          }${hours}h ${minutes}m ${seconds}s`;
         }
       });
 
@@ -63,17 +69,22 @@ const Contest = () => {
 
     const intervalId = setInterval(updateTimers, 1000);
 
-
-
     return () => clearInterval(intervalId);
   }, [contests]);
 
   return (
     <div className="flex flex-col items-center bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen text-white py-10">
-      <h1 className="text-5xl font-extrabold mb-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 animate-pulse">Contests</h1>
+      <h1 className="text-5xl font-extrabold mb-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 animate-pulse">
+        Contests
+      </h1>
+
       {loading ? (
         <div className="flex items-center justify-center h-full">
           <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+        </div>
+      ) : contests.length === 0 ? ( // Check if no contests available
+        <div className="text-xl font-semibold text-gray-400">
+          No contests available now
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full px-10">
@@ -88,13 +99,19 @@ const Contest = () => {
               <div className="flex flex-col items-center">
                 <p className="mb-4 text-gray-300 text-lg">
                   <strong>Time Left: </strong>
-                  <span className={`font-semibold text-${timers[contest._id] === 'Expired' ? 'red-500' : 'yellow-400'}`}>
-                    {timers[contest._id] || 'Calculating...'}
+                  <span
+                    className={`font-semibold text-${
+                      timers[contest._id] === "Expired"
+                        ? "red-500"
+                        : "yellow-400"
+                    }`}
+                  >
+                    {timers[contest._id] || "Calculating..."}
                   </span>
                 </p>
               </div>
               <button
-                onClick={()=> router.push(`/contests/${contest._id}`)}
+                onClick={() => router.push(`/contests/${contest._id}`)}
                 className="w-full py-3 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-xl font-semibold hover:from-green-500 hover:to-green-700 focus:ring-4 focus:ring-green-300 transition-all duration-200 mt-4 shadow-md hover:shadow-lg"
               >
                 Join Contest
