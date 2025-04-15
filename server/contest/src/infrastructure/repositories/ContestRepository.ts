@@ -13,14 +13,18 @@ export class ContestRepository implements IContestRepository {
 
     async listContests(username: string): Promise<IContest[]> {
         return await Contest.find({
-          expiryDate: { $gt: new Date() },
-          candidate: { $not: { $elemMatch: { name: username } } }
+            expiryDate: { $gt: new Date() },
+            candidate: { $not: { $elemMatch: { name: username } } }
         });
-      }
-      
+    }
+
 
     async getContest(id: string): Promise<IContest | null> {
         return await Contest.findById(id)
+    }
+
+    async adminlistContests(): Promise<IContest[]> {
+        return await Contest.find();
     }
 
     async updateResult(contestId: string, formData: any): Promise<any> {
@@ -75,22 +79,22 @@ export class ContestRepository implements IContestRepository {
         }
     }
 
-    async  userList() : Promise<any> {
-        
+    async userList(): Promise<any> {
+
         try {
             const result = await Contest.aggregate([
-                { $unwind: "$candidate" }, 
+                { $unwind: "$candidate" },
                 {
                     $group: {
-                        _id: "$candidate.name", 
+                        _id: "$candidate.name",
                         totalPoints: { $sum: "$candidate.points" },
-                        contestCount: { $sum: 1 } 
+                        contestCount: { $sum: 1 }
                     }
                 },
                 {
                     $project: {
                         _id: 0,
-                        userName: "$_id", 
+                        userName: "$_id",
                         totalPoints: 1,
                         contestCount: 1
                     }
@@ -98,7 +102,7 @@ export class ContestRepository implements IContestRepository {
             ]);
 
             console.log(result)
-    
+
             return result;
         } catch (error) {
             console.error("Error fetching user list:", error);
@@ -106,8 +110,8 @@ export class ContestRepository implements IContestRepository {
         }
     }
 
-   
 
-    
+
+
 
 }

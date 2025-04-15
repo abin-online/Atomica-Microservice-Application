@@ -26,6 +26,11 @@ export class ContestUseCase implements IContestUseCase {
         return listContest
     }
 
+    async adminlistContests(): Promise<IContest[]> {
+        const listContest = await this.contestRepository.adminlistContests();
+        return listContest
+    }
+
     async getContest(id: string): Promise<any> {
         const contest = await this.contestRepository.getContest(id);
         return contest

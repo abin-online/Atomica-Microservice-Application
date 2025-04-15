@@ -14,6 +14,7 @@ export class ContestController {
         this.editContest = this.editContest.bind(this);
         this.listContests = this.listContests.bind(this);
         this.getContest = this.getContest.bind(this);
+        this.adminlistContests = this.adminlistContests.bind(this)
     }
 
     async createContest(req: Req, res: Res, next: Next): Promise<void> {
@@ -35,6 +36,17 @@ export class ContestController {
             const contest: any = req.body
             const updated = await this.ContestUseCase.editContest(contestId, contest);
             res.status(HttpStatusCode.Created).json({ updated, message: 'contest updated successfully' });
+        } catch (error : any) {
+            next(new ErrorHandler(error.status, error.message))
+
+        }
+    }
+
+    async adminlistContests(req: Req, res: Res, next: Next): Promise<void> {
+        try {
+
+            const contests = await this.ContestUseCase.adminlistContests();
+            res.status(HttpStatusCode.Created).json({ contests, message: 'contest listed successfully' });
         } catch (error : any) {
             next(new ErrorHandler(error.status, error.message))
 
