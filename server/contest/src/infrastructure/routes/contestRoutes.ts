@@ -20,7 +20,7 @@ export const ContestRoute = (router: Router) => {
         contestController.getContest(req, res, next)
     );
 
-    router.get('/contests/user', (req: Req, res: Res, next: Next) =>
+    router.get('/contests/user/:username', (req: Req, res: Res, next: Next) =>
         contestController.listContests(req, res, next)
     );
 

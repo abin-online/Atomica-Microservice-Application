@@ -39,9 +39,9 @@ export const updateContest = async (contestId: string, formData: any) => {
     }
 }
 
-export const showContest = async()=> {
+export const showContest = async(username : string)=> {
     try {
-        const response = await USERAPI.get(contest.getContests);
+        const response = await USERAPI.get(`${contest.getContests}/${username}`);
         return response
     } catch (error) {
         

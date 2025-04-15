@@ -17,6 +17,8 @@ export interface Contest {
 }
 
 const Contest = () => {
+  const user: any = localStorage.getItem('user');
+  const USER = JSON.parse(user);
   const [contests, setContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [timers, setTimers] = useState<{ [key: string]: string }>({});
@@ -24,7 +26,7 @@ const Contest = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response: any = await showContest();
+        const response: any = await showContest(USER.name);
         setContests(response?.data.contests || []);
       } catch (error) {
         console.error('Failed to fetch contests:', error);

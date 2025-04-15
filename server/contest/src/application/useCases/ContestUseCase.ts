@@ -21,8 +21,8 @@ export class ContestUseCase implements IContestUseCase {
         return updatedContest
     }
 
-    async listContests(): Promise<IContest[]> {
-        const listContest = await this.contestRepository.listContests();
+    async listContests(username : string): Promise<IContest[]> {
+        const listContest = await this.contestRepository.listContests(username);
         return listContest
     }
 
