@@ -29,7 +29,9 @@ export class ContestRepository implements IContestRepository {
     }
 
     async adminlistContests(): Promise<IContest[]> {
-        return await Contest.find();
+        const contests = await Contest.find();
+        console.log('contest fetched for admin' , contests)
+        return contests
     }
 
     async updateResult(contestId: string, formData: any): Promise<any> {
