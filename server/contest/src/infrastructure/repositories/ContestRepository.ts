@@ -13,17 +13,19 @@ export class ContestRepository implements IContestRepository {
 
     async listContests(username: string): Promise<IContest[]> {
         console.log('username in repository', username)
+        const today = new Date().toISOString().split("T")[0];
         const contestsAvailable = await Contest.find({
-            expiryDate: { $gt: new Date() },
+            expiryDate: { $gt: today },
             $or: [
                 { candidate: { $exists: false } },
                 { candidate: { $size: 0 } },
                 { candidate: { $not: { $elemMatch: { name: username } } } }
             ]
         });
+
         return contestsAvailable
     }
-    
+
 
 
     async getContest(id: string): Promise<IContest | null> {
@@ -32,7 +34,7 @@ export class ContestRepository implements IContestRepository {
 
     async adminlistContests(): Promise<IContest[]> {
         const contests = await Contest.find();
-        console.log('contest fetched for admin' , contests)
+        console.log('contest fetched for admin', contests)
         return contests
     }
 
