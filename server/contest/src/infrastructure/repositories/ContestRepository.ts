@@ -14,6 +14,7 @@ export class ContestRepository implements IContestRepository {
     async listContests(username: string): Promise<IContest[]> {
         console.log('username in repository', username)
         const today = new Date().toISOString().split("T")[0];
+        console.log('current date_',today)
         const contestsAvailable = await Contest.find({
             expiryDate: { $gt: today },
             $or: [
@@ -22,7 +23,7 @@ export class ContestRepository implements IContestRepository {
                 { candidate: { $not: { $elemMatch: { name: username } } } }
             ]
         });
-
+        console.log('contestavailable__', contestsAvailable)
         return contestsAvailable
     }
 
