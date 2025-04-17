@@ -18,7 +18,7 @@ const {
   COMMUNITY_SERVICE,
   CONTEST_SERVICE,
   SECURITY_NUMBER,
-  COMMAND
+  FRONT_END
 } = process.env;
 
 // 📝 Logging
@@ -63,7 +63,7 @@ Object.entries(services).forEach(([route, target]) => {
 app.use(
   "/",
   createProxyMiddleware({
-    target: "http://frontend-srv:3000",
+    target: FRONT_END,
     changeOrigin: true,
   })
 );
