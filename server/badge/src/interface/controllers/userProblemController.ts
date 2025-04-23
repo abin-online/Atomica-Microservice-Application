@@ -64,7 +64,7 @@ export class UserProblemController {
                 const alreadyCompleted = user.completed.some(
                     (entry: { problem: string }) => entry.problem === problem
                 );
-    
+                console.log(alreadyCompleted, problem)
                 if (!alreadyCompleted) {
 
                     user.solved = (user.solved || 0) + 1;
@@ -73,7 +73,7 @@ export class UserProblemController {
                         submissionDate: new Date(),
                     });
     
-
+                    console.log('user_______', user)
                     user.points = (user.points || 0) + 10;
                     
                     const lastCompleted = user.completed[user.completed.length - 1].submissionDate;
